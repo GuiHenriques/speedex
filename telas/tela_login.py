@@ -1,9 +1,9 @@
 import tkinter as tk
 
 class TelaLogin:
-    def __init__(self):
+    def __init__(self, ControladorLogin):
         self.__window = tk.Tk()
-        self.__window.title("Login")
+        self.__controlador_login = ControladorLogin
 
     def abre_tela(self):
         self.tela_principal()
@@ -15,14 +15,12 @@ class TelaLogin:
         senha = tk.Entry(self.__window)
         senha.pack()
         botao = tk.Button(self.__window, text="Login",
-                          command=lambda: self.login(email.get(), senha.get()))
+                          command=lambda: self.retornar_dados(email.get(), senha.get()))
         botao.pack()
         self.__window.mainloop()
 
-    def login(self, email, senha):
-        self.__window.destroy()
-        label1 = tk.Label(text=email)
-        label1.pack()
-        label2 = tk.Label(text=senha)
-        label2.pack()
-        self.__window.mainloop()
+    def retornar_dados(self, email, senha):
+        login_concedido = self.__controlador_login.verificar_entrada(email, senha)
+        if login_concedido:
+            self.__window.destroy()
+            return
