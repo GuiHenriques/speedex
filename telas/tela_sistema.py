@@ -1,4 +1,4 @@
-import tkinter as tk
+import PySimpleGUI as sg
 
 class TelaSistema:
     def __init__(self):
@@ -6,13 +6,23 @@ class TelaSistema:
 
     def abre_tela(self):
         self.tela_principal()
+        evento, valores = self.abrir_janela()
 
     def tela_principal(self):
-        self.__window = tk.Tk()
-        radio1 = tk.Radiobutton(self.__window, text="Tipo de entrega")
-        radio1.pack()
-        radio2 = tk.Radiobutton(self.__window, text="Tipo de caixa")
-        radio2.pack()
-        botao = tk.Button(self.__window, text="Ok")
-        botao.pack()
-        self.__window.mainloop()
+        layout = [
+            [sg.Radio("Tipo de Entrega", "Radio1", key="1")],
+            [sg.Radio("Fechar", "Radio1", default=True, key="0")],
+            [sg.Push(), sg.Button("Confirmar")],
+        ]
+
+        self.__window = sg.Window("Menu Principal", layout)
+
+    def mensagem(self, mensagem):
+        sg.Popup("", mensagem)
+
+    def abrir_janela(self):
+        evento, valores = self.__window.Read()
+        return evento, valores
+    
+    def fechar_janela(self):
+        self.__window.Close()

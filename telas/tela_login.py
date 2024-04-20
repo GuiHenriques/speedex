@@ -1,26 +1,36 @@
-import tkinter as tk
+import PySimpleGUI as sg
 
 class TelaLogin:
     def __init__(self, ControladorLogin):
-        self.__window = tk.Tk()
+        self.__janela = None
         self.__controlador_login = ControladorLogin
 
     def abre_tela(self):
         self.tela_principal()
+        evento, valores = self.abrir_janela()
+        self.fechar_janela()
+
+        if evento == "Login":
+            return valores
+            
+        return None
+
 
     def tela_principal(self):
-        self.__window.title("Login")
-        email = tk.Entry(self.__window)
-        email.pack()
-        senha = tk.Entry(self.__window)
-        senha.pack()
-        botao = tk.Button(self.__window, text="Login",
-                          command=lambda: self.retornar_dados(email.get(), senha.get()))
-        botao.pack()
-        self.__window.mainloop()
+        layout = [
+            [sg.Text("Email: "), sg.InputText("", key="email")],
+            [sg.Text("Senha: "), sg.InputText("", key="senha")],
+            [sg.Push(), sg.Button("Login"), sg.Push()]
+        ]
 
-    def retornar_dados(self, email, senha):
-        login_concedido = self.__controlador_login.verificar_entrada(email, senha)
-        if login_concedido:
-            self.__window.destroy()
-            return
+        self.__janela = sg.Window("Login", layout)
+
+    def mensagem(self, mensagem):
+        sg.Popup("", mensagem)
+
+    def abrir_janela(self):
+        evento, valores = self.__janela.Read()
+        return evento, valores
+
+    def fechar_janela(self):
+        self.__janela.Close()

@@ -8,14 +8,16 @@ class ControladorSistema:
         self.__controlador_login = ControladorLogin()
 
     def inicializa_sistema(self):
-        self.login()
+        if not self.login():
+            return
+
         self.abre_tela()
 
     def abre_tela(self):
         self.__tela_sistema.abre_tela()
 
     def login(self):
-        self.__controlador_login.abre_tela()
+        return self.__controlador_login.abre_tela()
 
     def menu_tipo_de_entrega(self):
         ...
