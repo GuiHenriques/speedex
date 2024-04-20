@@ -1,17 +1,25 @@
 from telas.tela_sistema import TelaSistema
 from controladores.controlador_login import ControladorLogin
-
+from controladores.controlador_tipo_de_entrega import ControladorTiposDeEntrega
 
 class ControladorSistema:
     def __init__(self):
-        self.__tela_sistema = TelaSistema();
+        self.__tela_sistema = TelaSistema()
         self.__controlador_login = ControladorLogin()
+        self.__controlador_tipo_de_entrega = ControladorTiposDeEntrega()
+
+    @property
+    def controlador_tipo_de_entrega(self):
+        return self.__controlador_tipo_de_entrega
 
     def inicializa_sistema(self):
-        if not self.login():
-            return
+        # if not self.login():
+        #     return
 
         self.abre_tela()
+
+    def encerra_sistema(self):
+        exit()
 
     def abre_tela(self):
         self.__tela_sistema.abre_tela()
@@ -20,11 +28,12 @@ class ControladorSistema:
         return self.__controlador_login.abre_tela()
 
     def menu_tipo_de_entrega(self):
-        ...
+        return self.__controlador_tipo_de_entrega.abre_tela()
 
     def tela_principal(self):
         lista_opcoes = {
-            1: self.menu_tipo_de_entrega
+            1: self.menu_tipo_de_entrega, 
+            0: self.encerra_sistema,
         }
 
         while True:
