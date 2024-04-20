@@ -1,5 +1,6 @@
 import PySimpleGUI as sg
 
+
 class TelaLogin:
     def __init__(self, ControladorLogin):
         self.__janela = None
@@ -12,18 +13,31 @@ class TelaLogin:
 
         if evento == "Login":
             return valores
-            
-        return None
+        
+        elif evento == "cadastro":
+            return "cadastro"
 
+        return None
 
     def tela_principal(self):
         layout = [
             [sg.Text("Email: "), sg.InputText("", key="email")],
             [sg.Text("Senha: "), sg.InputText("", key="senha")],
-            [sg.Push(), sg.Button("Login"), sg.Push()]
+            [sg.Push(), sg.Button("Login"), sg.Push()],
+            [
+                sg.Text(
+                    "Ou clique aqui para cadastrar-se",
+                    text_color="blue",
+                    font=("Arial", 11, "underline"),
+                    justification="center",
+                    enable_events=True,
+                    pad=((0, 0), (10, 0)),
+                    key="cadastro",
+                )
+            ],
         ]
 
-        self.__janela = sg.Window("Login", layout)
+        self.__janela = sg.Window("Login", layout, element_justification="c")
 
     def mensagem(self, mensagem):
         sg.Popup("", mensagem)
