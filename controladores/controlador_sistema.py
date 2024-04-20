@@ -13,8 +13,8 @@ class ControladorSistema:
         return self.__controlador_tipo_de_entrega
 
     def inicializa_sistema(self):
-        # if not self.login():
-        #     return
+        if not self.login():
+            return
 
         self.abre_tela()
 
