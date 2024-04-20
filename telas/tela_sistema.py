@@ -7,6 +7,12 @@ class TelaSistema:
     def abre_tela(self):
         self.tela_principal()
         evento, valores = self.abrir_janela()
+        if evento is None or valores["0"]:
+            opcao_escolhida = 0
+        elif valores["1"]:
+            opcao_escolhida = 1
+        self.fechar_janela()
+        return opcao_escolhida
 
     def tela_principal(self):
         layout = [
