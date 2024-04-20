@@ -3,11 +3,12 @@ from telas.tela_login import TelaLogin
 
 class ControladorLogin:
     def __init__(self):
-        self.__tela_login = TelaLogin(self)
+        self.__tela_login = TelaLogin()
 
     def abre_tela(self):
         while True:
             valores = self.__tela_login.abre_tela()
+            
             if valores == None:
                 return False
 
