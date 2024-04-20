@@ -1,24 +1,18 @@
 from telas.tela_funcionario import TelaFuncionario
 from entidades.funcionario import Funcionario
 
+from psycopg2 import extensions
+import hashlib
 
 class ControladorFuncionario:
     def __init__(self, controlador_sistema):
         self.__tela_funcionario = TelaFuncionario()
         self.__controlador_sistema = controlador_sistema
-        self.__funcionarios = []
+        self.__cursor: extensions.cursor = controlador_sistema.database.cursor()
 
     @property
     def tela_funcionario(self):
         return self.__tela_funcionario
-
-    @property
-    def funcionarios(self):
-        return self.__funcionarios
-
-    @funcionarios.setter
-    def funcionarios(self, funcionarios):
-        self.__funcionarios = funcionarios
 
     def abre_tela_login(self):
         while True:
@@ -50,7 +44,7 @@ class ControladorFuncionario:
 
             else:
                 self.cadastrar_funcionario(
-                    valores["nome"], valores["cpf"], valores["email"], valores["senha"]
+                    valores["cpf"], valores["nome"], valores["email"], valores["senha"]
                 )
                 return True
 
@@ -65,7 +59,11 @@ class ControladorFuncionario:
             return True
         return False
 
-    def cadastrar_funcionario(self, nome, cpf, email, senha):
-        self.funcionarios.append(Funcionario(nome, cpf, email, senha))
+    def cadastrar_funcionario(self, cpf: str, nome: str, email: str, senha: str):        
+        hash_senha = hashlib.sha256(senha.encode('utf-8')).hexdigest()
+        self.__cursor.execute(f"INSERT INTO funcionarios(cpf, nome, email, senha)\
+                              VALUES ('{cpf}', '{nome}', '{email}', '{hash_senha}');")
+
+        self.__controlador_sistema.database.commit()
         self.tela_funcionario.mensagem("Funcionário cadastrado com sucesso.")
         return True
