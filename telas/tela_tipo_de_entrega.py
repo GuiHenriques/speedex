@@ -57,9 +57,13 @@ class TelaTiposDeEntrega:
             self.fechar_janela()
             return
         
-        # if valores["nome"]==None or valores["taxa"]==None or valores["descricao"]==None:
-        #     sg.popup_error("Todos os campos devem ser preenchidos!")
-        #     entrada_invalida = True
+
+
+        if not all(valores.values()):
+            sg.popup("Você deve preencher todos os campos!")
+            self.fechar_janela()
+            entrada_invalida = True
+            return
 
         self.fechar_janela()
         if entrada_invalida:
@@ -93,6 +97,38 @@ class TelaTiposDeEntrega:
         self.fechar_janela()
         return valores["codigo"]
     
+
+    def mostra_tipo_de_entrega(self, resultados):
+        string_resultados=""
+        if not resultados:
+            string_resultados = "Nenhum tipo de entrega cadastrado!"
+        else:
+            for row in resultados:
+                string_resultados += f"Código:{row[0]} \nNome: {row[1]} \nTaxa: {row[2]} \nDescrição: {row[3]}\n \n"
+
+        width_size = 50
+        height_size = 20
+        layout = [
+            [
+                sg.Multiline(
+                    string_resultados,
+                    size=(width_size, height_size),
+                    disabled=True,
+                    text_color="#000",
+                    background_color="",
+                )
+            ],
+            [sg.Push(), sg.Button("Ok"), sg.Push()],
+        ]
+
+        self.__janela = sg.Window("Lista de tipos de entrega", layout, finalize=True)
+
+        while True:
+            evento, valores = self.abrir_janela()
+            if evento in (None, "Ok"):
+                break
+
+        self.fechar_janela()
 
 
     def mensagem(self, mensagem):

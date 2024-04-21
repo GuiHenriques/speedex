@@ -1,7 +1,7 @@
 
 
 class tipoDeEntrega:
-    def __init__(self, nome, taxa, descricao):
+    def __init__(self, id, nome, taxa, descricao):
         self._id = id
         self._nome = nome
         self._taxa = taxa

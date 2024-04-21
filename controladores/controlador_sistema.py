@@ -12,7 +12,7 @@ class ControladorSistema:
         self.__tela_sistema = TelaSistema()
         self.__database = psycopg2.connect(os.getenv("DB_CONNECTION_STRING"))
         self.__controlador_funcionario = ControladorFuncionario(self)
-        self.__controlador_tipo_de_entrega = ControladorTipoDeEntrega()
+        self.__controlador_tipo_de_entrega = ControladorTipoDeEntrega(self)
 
     @property
     def database(self):
