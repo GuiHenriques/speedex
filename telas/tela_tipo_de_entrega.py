@@ -41,7 +41,16 @@ class TelaTiposDeEntrega:
         ]
         self.__janela = sg.Window("Menu de tipos de entrega", layout, finalize=True)
 
+    
     def pega_dados_tipo_de_entrega(self):
+        
+        def is_float(value):
+            try:
+                float(value)
+                return True
+            except ValueError:
+                return False
+
         layout = [
             [sg.Text("Nome: "), sg.InputText("", key="nome")],
             [sg.Text("Taxa: "), sg.InputText("", key="taxa")],
@@ -64,6 +73,13 @@ class TelaTiposDeEntrega:
             self.fechar_janela()
             entrada_invalida = True
             return
+        
+        if not is_float(valores["taxa"]):
+            sg.popup("A taxa deve ser um número válido!")
+            self.fechar_janela()
+            entrada_invalida = True
+            return
+
 
         self.fechar_janela()
         if entrada_invalida:
@@ -71,7 +87,7 @@ class TelaTiposDeEntrega:
         else:
             return {
                 "nome": valores["nome"],
-                "taxa": valores["taxa"],
+                "taxa": float(valores["taxa"]),
                 "descricao": valores["descricao"],
             }
         

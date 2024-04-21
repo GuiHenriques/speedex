@@ -58,7 +58,19 @@ class ControladorTipoDeEntrega:
 
     def alterar_tipo_de_entrega(self):
         codigo_selecionado = self.__tela_tipo_de_entrega.seleciona_codigo_tipo_de_entrega()
-        
+        tipo_de_entrega = self.pegar_tipo_de_entrega_por_id(codigo_selecionado)
+        if tipo_de_entrega is not None:
+            dados_tipo_de_entrega = self.__tela_tipo_de_entrega.pega_dados_tipo_de_entrega()
+            if dados_tipo_de_entrega == None:
+                return False
+            
+            self.__cursor.execute("UPDATE tipos_de_entrega SET nome = %s, taxa = %s, descricao = %s WHERE id = %s",
+                                  (dados_tipo_de_entrega["nome"], dados_tipo_de_entrega["taxa"], dados_tipo_de_entrega["descricao"], codigo_selecionado))
+            self.__controlador_sistema.database.commit()
+
+            self.__tela_tipo_de_entrega.mensagem("Tipo de entrega alterado com sucesso!")
+            return True
+
     def excluir_tipo_de_entrega(self):
         codigo_selecionado = self.__tela_tipo_de_entrega.seleciona_codigo_tipo_de_entrega()
         tipo_de_entrega = self.pegar_tipo_de_entrega_por_id(codigo_selecionado)
