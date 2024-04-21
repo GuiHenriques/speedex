@@ -37,7 +37,7 @@ class ControladorFuncionario:
 
             if valores == None or evento == "login":
                 return False
-        
+
             if self.verificar_campo_vazio(valores):
                 self.tela_funcionario.mensagem("Por favor, preencha todos os campos.")
                 continue
@@ -49,10 +49,18 @@ class ControladorFuncionario:
                 return True
 
     def verificar_login(self, email, senha):
-        if email == "login" and senha == "senha":
-            return True
-        else:
+        self.__cursor.execute(f"SELECT senha FROM funcionarios WHERE email = '{email}';")
+        senha_hash_armazenada = self.__cursor.fetchone()
+
+        # email não encontrado
+        if not senha_hash_armazenada:
             return False
+
+        # hash da senha para comparar com o hash armazenado
+        senha_hash_fornecida = hashlib.sha256(senha.encode('utf-8')).hexdigest()
+
+        return senha_hash_fornecida == senha_hash_armazenada[0]
+
 
     def verificar_campo_vazio(self, valores):
         if any(value.strip() == "" for value in valores.values()):

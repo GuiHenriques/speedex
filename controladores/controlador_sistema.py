@@ -1,5 +1,4 @@
 from telas.tela_sistema import TelaSistema
-from controladores.controlador_login import ControladorLogin
 from controladores.controlador_funcionario import ControladorFuncionario
 from controladores.controlador_tipo_de_entrega import ControladorTipoDeEntrega
 
