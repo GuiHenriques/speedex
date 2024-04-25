@@ -42,6 +42,14 @@ class ControladorFuncionario:
                 self.tela_funcionario.mensagem("Por favor, preencha todos os campos.")
                 continue
 
+            if not self.verificar_email_valido(valores["email"]):
+                self.tela_funcionario.mensagem("Por favor, insira um email válido.")
+                continue
+            
+            if self.verificar_email_existente(valores["email"]):
+                self.tela_funcionario.mensagem("Email já cadastrado.")
+                continue
+
             else:
                 self.cadastrar_funcionario(
                     valores["cpf"], valores["nome"], valores["email"], valores["senha"]
@@ -61,16 +69,26 @@ class ControladorFuncionario:
 
         return senha_hash_fornecida == senha_hash_armazenada[0]
 
-
     def verificar_campo_vazio(self, valores):
         if any(value.strip() == "" for value in valores.values()):
             return True
         return False
+    
+    def verificar_email_valido(self, email):
+        if "@" in email:
+            return True
+        return False
+    
+    def verificar_email_existente(self, email):
+        self.__cursor.execute(f"SELECT email FROM funcionarios WHERE email = '{email}';")
+        email_existente = self.__cursor.fetchone()
+        return email_existente
 
     def cadastrar_funcionario(self, cpf: str, nome: str, email: str, senha: str):        
         hash_senha = hashlib.sha256(senha.encode('utf-8')).hexdigest()
+        funcionario = Funcionario(cpf, nome, email, hash_senha)
         self.__cursor.execute(f"INSERT INTO funcionarios(cpf, nome, email, senha)\
-                              VALUES ('{cpf}', '{nome}', '{email}', '{hash_senha}');")
+                              VALUES ('{funcionario.cpf}', '{funcionario.nome}', '{funcionario.email}', '{funcionario.hash_senha}');")
 
         self.__controlador_sistema.database.commit()
         self.tela_funcionario.mensagem("Funcionário cadastrado com sucesso.")
