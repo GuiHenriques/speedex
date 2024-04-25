@@ -1,6 +1,7 @@
 from telas.tela_sistema import TelaSistema
 from controladores.controlador_funcionario import ControladorFuncionario
 from controladores.controlador_tipo_de_entrega import ControladorTipoDeEntrega
+from controladores.controlador_encomenda import ControladorEncomenda
 
 import os
 import psycopg2
@@ -13,18 +14,27 @@ class ControladorSistema:
         self.__database = psycopg2.connect(os.getenv("DB_CONNECTION_STRING"))
         self.__controlador_funcionario = ControladorFuncionario(self)
         self.__controlador_tipo_de_entrega = ControladorTipoDeEntrega(self)
+        self.__controlador_encomenda = ControladorEncomenda(self)
 
     @property
     def database(self):
         return self.__database
+    
+    @property
+    def controlador_funcionario(self):
+        return self.__controlador_funcionario
 
     @property
     def controlador_tipo_de_entrega(self):
         return self.__controlador_tipo_de_entrega
+    
+    @property
+    def controlador_encomenda(self):
+        return self.__controlador_encomenda
 
     def inicializa_sistema(self):
-        if not self.login():
-            return
+        # if not self.login():
+        #     return
 
         self.abre_tela()
 
