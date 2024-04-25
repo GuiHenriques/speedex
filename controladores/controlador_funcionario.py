@@ -1,6 +1,7 @@
 from telas.tela_funcionario import TelaFuncionario
 from entidades.modelos.funcionario import Funcionario
 from entidades.repositorios.funcionario_repositorio import FuncionarioRepositorio
+from utils.valildadores import cpf_validador
 
 import hashlib
 
@@ -21,8 +22,7 @@ class ControladorFuncionario:
                 return False
 
             if evento == "cadastro":
-                if self.abre_tela_cadastro():
-                    return False
+                self.abre_tela_cadastro()
                 continue
 
             if self.verificar_login(valores["email"], valores["senha"]):
@@ -68,6 +68,8 @@ class ControladorFuncionario:
 
     def cadastrar_funcionario(self, cpf: str, nome: str, email: str, senha: str) -> bool:
         hash_senha = hashlib.sha256(senha.encode('utf-8')).hexdigest()
+        if cpf_validador(cpf):
+            self.tela_funcionario.mensagem("CPF inválido.")
         novoFuncionario = Funcionario(cpf, nome, email, hash_senha)
         cadastrado, msg_error = self.__repositorio.registrar_funcionario(novoFuncionario)
         if cadastrado:
