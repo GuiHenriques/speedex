@@ -1,7 +1,7 @@
-from entidades.pessoa import Pessoa
+from entidades.modelos.pessoa import Pessoa
 
 class Funcionario(Pessoa):
-    def __init__(self, nome, cpf, email, senha):
+    def __init__(self, cpf, nome, email, senha):
         super().__init__(nome, cpf)
         self._email = email
         self._senha = senha

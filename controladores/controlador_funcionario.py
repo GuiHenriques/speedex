@@ -1,14 +1,13 @@
 from telas.tela_funcionario import TelaFuncionario
-from entidades.funcionario import Funcionario
+from entidades.modelos.funcionario import Funcionario
+from entidades.repositorios.funcionario_repositorio import FuncionarioRepositorio
 
-from psycopg2 import extensions
 import hashlib
 
 class ControladorFuncionario:
     def __init__(self, controlador_sistema):
         self.__tela_funcionario = TelaFuncionario()
-        self.__controlador_sistema = controlador_sistema
-        self.__cursor: extensions.cursor = controlador_sistema.database.cursor()
+        self.__repositorio = FuncionarioRepositorio(controlador_sistema)
 
     @property
     def tela_funcionario(self):
@@ -67,11 +66,13 @@ class ControladorFuncionario:
             return True
         return False
 
-    def cadastrar_funcionario(self, cpf: str, nome: str, email: str, senha: str):        
+    def cadastrar_funcionario(self, cpf: str, nome: str, email: str, senha: str) -> bool:
         hash_senha = hashlib.sha256(senha.encode('utf-8')).hexdigest()
-        self.__cursor.execute(f"INSERT INTO funcionarios(cpf, nome, email, senha)\
-                              VALUES ('{cpf}', '{nome}', '{email}', '{hash_senha}');")
-
-        self.__controlador_sistema.database.commit()
-        self.tela_funcionario.mensagem("Funcionário cadastrado com sucesso.")
-        return True
+        novoFuncionario = Funcionario(cpf, nome, email, hash_senha)
+        cadastrado, msg_error = self.__repositorio.registrar_no_banco(novoFuncionario)
+        if cadastrado:
+            self.tela_funcionario.mensagem("Funcionário cadastrado com sucesso.")
+            return True
+        else:
+            self.tela_funcionario.mensagem(f"Não foi possível cadastrar o funcionário:\n{msg_error}")
+            return False
