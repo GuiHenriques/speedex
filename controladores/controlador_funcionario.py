@@ -22,7 +22,7 @@ class ControladorFuncionario:
 
             if evento == "cadastro":
                 if self.abre_tela_cadastro():
-                    return True
+                    return False
                 continue
 
             if self.verificar_login(valores["email"], valores["senha"]):
@@ -42,10 +42,10 @@ class ControladorFuncionario:
                 continue
 
             else:
-                self.cadastrar_funcionario(
-                    valores["cpf"], valores["nome"], valores["email"], valores["senha"]
-                )
-                return True
+                if self.cadastrar_funcionario(valores["cpf"], valores["nome"], valores["email"], valores["senha"]):
+                    break
+                else:
+                    continue
 
     def verificar_login(self, email, senha):
         self.__cursor.execute(f"SELECT senha FROM funcionarios WHERE email = '{email}';")
@@ -69,7 +69,7 @@ class ControladorFuncionario:
     def cadastrar_funcionario(self, cpf: str, nome: str, email: str, senha: str) -> bool:
         hash_senha = hashlib.sha256(senha.encode('utf-8')).hexdigest()
         novoFuncionario = Funcionario(cpf, nome, email, hash_senha)
-        cadastrado, msg_error = self.__repositorio.registrar_no_banco(novoFuncionario)
+        cadastrado, msg_error = self.__repositorio.registrar_funcionario(novoFuncionario)
         if cadastrado:
             self.tela_funcionario.mensagem("Funcionário cadastrado com sucesso.")
             return True
