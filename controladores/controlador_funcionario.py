@@ -1,14 +1,15 @@
 from telas.tela_funcionario import TelaFuncionario
-from entidades.funcionario import Funcionario
+from entidades.modelos.funcionario import Funcionario
+from entidades.repositorios.funcionario_repositorio import FuncionarioRepositorio
+from utils.valildadores import cpf_validador
+from utils.formatadores import cpf_formatador
 
-from psycopg2 import extensions
 import hashlib
 
 class ControladorFuncionario:
     def __init__(self, controlador_sistema):
         self.__tela_funcionario = TelaFuncionario()
-        self.__controlador_sistema = controlador_sistema
-        self.__cursor: extensions.cursor = controlador_sistema.database.cursor()
+        self.__repositorio = FuncionarioRepositorio(controlador_sistema)
 
     @property
     def tela_funcionario(self):
@@ -22,8 +23,7 @@ class ControladorFuncionario:
                 return False
 
             if evento == "cadastro":
-                if self.abre_tela_cadastro():
-                    return True
+                self.abre_tela_cadastro()
                 continue
 
             if self.verificar_login(valores["email"], valores["senha"]):
@@ -43,10 +43,10 @@ class ControladorFuncionario:
                 continue
 
             else:
-                self.cadastrar_funcionario(
-                    valores["cpf"], valores["nome"], valores["email"], valores["senha"]
-                )
-                return True
+                if self.cadastrar_funcionario(valores["cpf"], valores["nome"], valores["email"], valores["senha"]):
+                    break
+                else:
+                    continue
 
     def verificar_login(self, email, senha):
         self.__cursor.execute(f"SELECT senha FROM funcionarios WHERE email = '{email}';")
@@ -61,17 +61,44 @@ class ControladorFuncionario:
 
         return senha_hash_fornecida == senha_hash_armazenada[0]
 
-
+    # itera por todos os valores recebidos na tela para verificar se nenhum deles é vazio.
     def verificar_campo_vazio(self, valores):
         if any(value.strip() == "" for value in valores.values()):
             return True
         return False
 
-    def cadastrar_funcionario(self, cpf: str, nome: str, email: str, senha: str):        
-        hash_senha = hashlib.sha256(senha.encode('utf-8')).hexdigest()
-        self.__cursor.execute(f"INSERT INTO funcionarios(cpf, nome, email, senha)\
-                              VALUES ('{cpf}', '{nome}', '{email}', '{hash_senha}');")
+    def __verificar_se_cpf_existe(self, cpf: str):
+        if self.__repositorio.pegar_funcionario(cpf) == None:
+            return False
+        else:
+            return True
 
-        self.__controlador_sistema.database.commit()
-        self.tela_funcionario.mensagem("Funcionário cadastrado com sucesso.")
-        return True
+    def __verificar_se_email_existe(self, email: str) -> bool:
+        if self.__repositorio.pegar_funcionario(email) == None:
+            return False
+        else:
+            return True
+
+    def cadastrar_funcionario(self, cpf: str, nome: str, email: str, senha: str) -> bool:
+        if not cpf_validador(cpf):
+            self.tela_funcionario.mensagem("CPF inválido.")
+            return False
+
+        if self.__verificar_se_cpf_existe(cpf):
+            self.__tela_funcionario.mensagem("CPF já cadastrado.")
+            return False
+
+        if self.__verificar_se_email_existe(email):
+            self.__tela_funcionario.mensagem("Email já cadastrado.")
+            return False
+
+        hash_senha = hashlib.sha256(senha.encode('utf-8')).hexdigest()
+        cpf_formatado = cpf_formatador(cpf)
+        novoFuncionario = Funcionario(cpf_formatado, nome, email, hash_senha)
+        cadastrado, msg_error = self.__repositorio.registrar_funcionario(novoFuncionario)
+        if cadastrado:
+            self.tela_funcionario.mensagem("Funcionário cadastrado com sucesso.")
+            return True
+        else:
+            self.tela_funcionario.mensagem(f"Não foi possível cadastrar o funcionário:\n{msg_error}")
+            return False
