@@ -32,8 +32,8 @@ class TelaFuncionario:
     def tela_cadastro(self):
         layout = [
             [sg.Text("Cadastro", font=("Helvetica", 18), justification="center")],
-            [sg.Text("Nome", size=(6, 1)), sg.InputText("", key="nome", size=(30, 1))],
             [sg.Text("CPF", size=(6, 1)), sg.InputText("", key="cpf", size=(30, 1))],
+            [sg.Text("Nome", size=(6, 1)), sg.InputText("", key="nome", size=(30, 1))],
             [sg.Text("Email", size=(6, 1)), sg.InputText("", key="email", size=(30, 1))],
             [sg.Text("Senha", size=(6, 1)), sg.InputText("", key="senha", password_char="*", size=(30, 1))],
             [sg.Button("Cadastrar", size=(8, 1))],

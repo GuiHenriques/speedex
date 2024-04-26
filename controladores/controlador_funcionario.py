@@ -2,6 +2,7 @@ from telas.tela_funcionario import TelaFuncionario
 from entidades.modelos.funcionario import Funcionario
 from entidades.repositorios.funcionario_repositorio import FuncionarioRepositorio
 from utils.valildadores import cpf_validador
+from utils.formatadores import cpf_formatador
 
 import hashlib
 
@@ -60,17 +61,40 @@ class ControladorFuncionario:
 
         return senha_hash_fornecida == senha_hash_armazenada[0]
 
-
+    # itera por todos os valores recebidos na tela para verificar se nenhum deles é vazio.
     def verificar_campo_vazio(self, valores):
         if any(value.strip() == "" for value in valores.values()):
             return True
         return False
 
+    def __verificar_se_cpf_existe(self, cpf: str):
+        if self.__repositorio.pegar_funcionario(cpf) == None:
+            return False
+        else:
+            return True
+
+    def __verificar_se_email_existe(self, email: str) -> bool:
+        if self.__repositorio.pegar_funcionario(email) == None:
+            return False
+        else:
+            return True
+
     def cadastrar_funcionario(self, cpf: str, nome: str, email: str, senha: str) -> bool:
-        hash_senha = hashlib.sha256(senha.encode('utf-8')).hexdigest()
-        if cpf_validador(cpf):
+        if not cpf_validador(cpf):
             self.tela_funcionario.mensagem("CPF inválido.")
-        novoFuncionario = Funcionario(cpf, nome, email, hash_senha)
+            return False
+
+        if self.__verificar_se_cpf_existe(cpf):
+            self.__tela_funcionario.mensagem("CPF já cadastrado.")
+            return False
+
+        if self.__verificar_se_email_existe(email):
+            self.__tela_funcionario.mensagem("Email já cadastrado.")
+            return False
+
+        hash_senha = hashlib.sha256(senha.encode('utf-8')).hexdigest()
+        cpf_formatado = cpf_formatador(cpf)
+        novoFuncionario = Funcionario(cpf_formatado, nome, email, hash_senha)
         cadastrado, msg_error = self.__repositorio.registrar_funcionario(novoFuncionario)
         if cadastrado:
             self.tela_funcionario.mensagem("Funcionário cadastrado com sucesso.")

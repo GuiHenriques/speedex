@@ -1,3 +1,5 @@
+from utils.formatadores import cpf_formatador
+
 def cpf_validador(cpf: str) -> bool:
     numbers = [int(digit) for digit in cpf if digit.isdigit()]
 

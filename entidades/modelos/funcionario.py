@@ -2,22 +2,22 @@ from entidades.modelos.pessoa import Pessoa
 
 class Funcionario(Pessoa):
     def __init__(self, cpf, nome, email, senha):
-        super().__init__(nome, cpf)
-        self._email = email
-        self._senha = senha
+        super().__init__(cpf, nome)
+        self.__email = email
+        self.__senha = senha
 
     @property
     def email(self):
-        return self._email
+        return self.__email
     
     @email.setter
     def email(self, email):
-        self._email = email
+        self.__email = email
 
     @property
     def senha(self):
-        return self._senha
+        return self.__senha
     
     @senha.setter
     def senha(self, senha):
-        self._senha = senha
+        self.__senha = senha
