@@ -3,6 +3,7 @@ from entidades.modelos.funcionario import Funcionario
 from entidades.repositorios.funcionario_repositorio import FuncionarioRepositorio
 from utils.valildadores import cpf_validador
 from utils.formatadores import cpf_formatador
+from utils.valildadores import email_validador
 
 import hashlib
 
@@ -42,15 +43,11 @@ class ControladorFuncionario:
                 self.tela_funcionario.mensagem("Por favor, preencha todos os campos.")
                 continue
 
-            else:
-                if self.cadastrar_funcionario(valores["cpf"], valores["nome"], valores["email"], valores["senha"]):
-                    break
-                else:
-                    continue
+            if self.cadastrar_funcionario(valores["cpf"], valores["nome"], valores["email"], valores["senha"]):
+                break
 
     def verificar_login(self, email, senha):
-        self.__cursor.execute(f"SELECT senha FROM funcionarios WHERE email = '{email}';")
-        senha_hash_armazenada = self.__cursor.fetchone()
+        senha_hash_armazenada = self.__repositorio.pegar_senha(email)
 
         # email não encontrado
         if not senha_hash_armazenada:
@@ -59,7 +56,7 @@ class ControladorFuncionario:
         # hash da senha para comparar com o hash armazenado
         senha_hash_fornecida = hashlib.sha256(senha.encode('utf-8')).hexdigest()
 
-        return senha_hash_fornecida == senha_hash_armazenada[0]
+        return senha_hash_fornecida == senha_hash_armazenada
 
     # itera por todos os valores recebidos na tela para verificar se nenhum deles é vazio.
     def verificar_campo_vazio(self, valores):
@@ -82,6 +79,10 @@ class ControladorFuncionario:
     def cadastrar_funcionario(self, cpf: str, nome: str, email: str, senha: str) -> bool:
         if not cpf_validador(cpf):
             self.tela_funcionario.mensagem("CPF inválido.")
+            return False
+        
+        if not email_validador(email):
+            self.tela_funcionario.mensagem("Email inválido.")
             return False
 
         if self.__verificar_se_cpf_existe(cpf):

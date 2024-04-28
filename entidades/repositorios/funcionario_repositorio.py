@@ -1,7 +1,6 @@
 from entidades.modelos.funcionario import Funcionario
 
 from psycopg2 import extensions
-from psycopg2.errors import UniqueViolation
 
 class FuncionarioRepositorio:
     def __init__(self, controlador_sistema):
@@ -32,3 +31,15 @@ class FuncionarioRepositorio:
         if dados_funcionario != None:
             funcionario = Funcionario(*dados_funcionario)
             return funcionario
+    
+    # busca a senha de um funcionario no banco de dados por email
+    def pegar_senha(self, email):
+        senha: str = None
+        try:
+            self.__cursor.execute(f"SELECT senha FROM Funcionarios WHERE email='{email}'")
+            senha = self.__cursor.fetchone()
+        except Exception as e:
+            print(e)
+        
+        if senha != None:
+            return senha[0]

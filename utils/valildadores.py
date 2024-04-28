@@ -1,4 +1,5 @@
 from utils.formatadores import cpf_formatador
+import re
 
 def cpf_validador(cpf: str) -> bool:
     numbers = [int(digit) for digit in cpf if digit.isdigit()]
@@ -17,3 +18,7 @@ def cpf_validador(cpf: str) -> bool:
         return False
 
     return True
+
+def email_validador(email: str) -> bool:
+    pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+    return re.match(pattern, email) is not None
