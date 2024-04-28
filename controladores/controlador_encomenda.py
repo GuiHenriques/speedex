@@ -1,7 +1,7 @@
 from telas.tela_encomenda import TelaEncomenda
 
 class ControladorEncomenda:
-    def __init___(self, controlador_sistema):
+    def __init__(self, controlador_sistema):
         self.__tela_encomenda = TelaEncomenda()
         self.__controlador_sistema = controlador_sistema
 
@@ -15,5 +15,4 @@ class ControladorEncomenda:
 
             if valores == None:
                 return False
-            
             

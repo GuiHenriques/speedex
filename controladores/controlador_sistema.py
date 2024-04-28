@@ -45,7 +45,10 @@ class ControladorSistema:
         return self.__controlador_funcionario.abre_tela_login()
 
     def menu_tipo_de_entrega(self):
-        return self.__controlador_tipo_de_entrega.abre_tela()
+        return self.__controlador_tipo_de_entrega.abre_tela_encomenda()
+    
+    def menu_encomenda(self):
+        return self.__controlador_encomenda.abre_tela()
     
     def encerra_sistema(self):
         self.__database.close()
@@ -53,7 +56,8 @@ class ControladorSistema:
 
     def abre_tela(self):
         lista_opcoes = {
-            1: self.menu_tipo_de_entrega, 
+            1: self.menu_tipo_de_entrega,
+            2: self.menu_encomenda,
             0: self.encerra_sistema,
         }
 
