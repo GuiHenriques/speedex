@@ -12,6 +12,7 @@ class ControladorSistema:
     def __init__(self):
         self.__tela_sistema = TelaSistema()
         self.__database = psycopg2.connect(os.getenv("DB_CONNECTION_STRING"))
+        self.__database.autocommit = True
         self.__controlador_funcionario = ControladorFuncionario(self)
         self.__controlador_tipo_de_entrega = ControladorTipoDeEntrega(self)
         self.__controlador_encomenda = ControladorEncomenda(self)
@@ -33,8 +34,8 @@ class ControladorSistema:
         return self.__controlador_encomenda
 
     def inicializa_sistema(self):
-        # if not self.login():
-        #     return
+        if not self.login():
+            return
 
         self.abre_tela()
 
@@ -45,10 +46,10 @@ class ControladorSistema:
         return self.__controlador_funcionario.abre_tela_login()
 
     def menu_tipo_de_entrega(self):
-        return self.__controlador_tipo_de_entrega.abre_tela_encomenda()
+        return self.__controlador_tipo_de_entrega.abre_tela()
     
     def menu_encomenda(self):
-        return self.__controlador_encomenda.abre_tela()
+        return self.__controlador_encomenda.abre_tela_encomenda()
     
     def encerra_sistema(self):
         self.__database.close()

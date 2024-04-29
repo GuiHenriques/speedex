@@ -9,8 +9,11 @@ class TelaSistema:
         evento, valores = self.abrir_janela()
         if evento is None or valores["0"]:
             opcao_escolhida = 0
-        elif valores["1"]:
-            opcao_escolhida = 1
+        else:
+            for i in range(1, len(valores)):
+                if valores[str(i)]:
+                    opcao_escolhida = i
+                    break
         self.fechar_janela()
         return opcao_escolhida
 

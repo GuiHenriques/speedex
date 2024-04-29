@@ -1,5 +1,5 @@
 from telas.tela_tipo_de_entrega import TelaTiposDeEntrega
-from entidades.tipo_de_entrega import tipoDeEntrega
+from entidades.modelos.tipo_de_entrega import tipoDeEntrega
 
 
 from psycopg2 import extensions
