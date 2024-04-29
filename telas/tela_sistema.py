@@ -1,8 +1,10 @@
+from telas.tela import Tela
+
 import PySimpleGUI as sg
 
-class TelaSistema:
+class TelaSistema(Tela):
     def __init__(self):
-        self.__window = None
+        super().__init__()
 
     def abre_tela(self):
         self.tela_principal()
@@ -25,14 +27,4 @@ class TelaSistema:
             [sg.Push(), sg.Button("Confirmar")],
         ]
 
-        self.__window = sg.Window("Menu Principal", layout)
-
-    def mensagem(self, mensagem):
-        sg.Popup("", mensagem)
-
-    def abrir_janela(self):
-        evento, valores = self.__window.Read()
-        return evento, valores
-    
-    def fechar_janela(self):
-        self.__window.Close()
+        self.janela = sg.Window("Menu Principal", layout)
