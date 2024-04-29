@@ -1,9 +1,11 @@
+from telas.tela import Tela
+
 import PySimpleGUI as sg
 
 
-class TelaFuncionario:
+class TelaFuncionario(Tela):
     def __init__(self):
-        self.__janela = None
+        super().__init__()
 
     def tela_login(self):
         layout = [
@@ -16,7 +18,7 @@ class TelaFuncionario:
         ]
 
 
-        self.__janela = sg.Window("Login", layout, element_justification="c")
+        self.janela = sg.Window("Login", layout, element_justification="c")
 
         evento, valores = self.abrir_janela()
         self.fechar_janela()
@@ -42,7 +44,7 @@ class TelaFuncionario:
         ]
 
 
-        self.__janela = sg.Window("Cadastro", layout, element_justification="c")
+        self.janela = sg.Window("Cadastro", layout, element_justification="c")
 
         evento, valores = self.abrir_janela()
         self.fechar_janela()
@@ -54,13 +56,3 @@ class TelaFuncionario:
             return evento, valores
 
         return evento, None
-
-    def mensagem(self, mensagem):
-        sg.Popup("", mensagem)
-
-    def abrir_janela(self):
-        evento, valores = self.__janela.Read()
-        return evento, valores
-
-    def fechar_janela(self):
-        self.__janela.Close()

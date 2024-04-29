@@ -1,8 +1,9 @@
+from telas.tela import Tela
+
 import PySimpleGUI as sg
 
-class TelaTiposDeEntrega:
+class TelaTiposDeEntrega(Tela):
     def __init__(self, ControladorTipoDeEntrega):
-        self.__janela = None
         self.__controlador_tipo_de_entrega = ControladorTipoDeEntrega
 
     def abre_tela(self):
@@ -39,7 +40,7 @@ class TelaTiposDeEntrega:
             ],
             [sg.Push(), sg.Button("Confirmar"), sg.Cancel("Cancelar")],
         ]
-        self.__janela = sg.Window("Menu de tipos de entrega", layout, finalize=True)
+        self.janela = sg.Window("Menu de tipos de entrega", layout, finalize=True)
 
     
     def pega_dados_tipo_de_entrega(self):
@@ -58,7 +59,7 @@ class TelaTiposDeEntrega:
             [sg.Push(), sg.Button("Cadastrar"), sg.Cancel("Cancelar")]
         ]
 
-        self.__janela = sg.Window("Cadastro de tipos de entrega", layout)
+        self.janela = sg.Window("Cadastro de tipos de entrega", layout)
         evento , valores = self.abrir_janela()
         entrada_invalida = False
 
@@ -96,7 +97,7 @@ class TelaTiposDeEntrega:
             [sg.Text("Código: "), sg.InputText("", key="codigo")],
             [sg.Push(), sg.Button("Confirmar"), sg.Cancel("Cancelar")],
         ]
-        self.__janela = sg.Window("Selecionar código de um tipo de entrega", layout)
+        self.janela = sg.Window("Selecionar código de um tipo de entrega", layout)
         evento, valores = self.abrir_janela()
 
         if evento in (None, "Cancelar"):
@@ -137,7 +138,7 @@ class TelaTiposDeEntrega:
             [sg.Push(), sg.Button("Ok"), sg.Push()],
         ]
 
-        self.__janela = sg.Window("Lista de tipos de entrega", layout, finalize=True)
+        self.janela = sg.Window("Lista de tipos de entrega", layout, finalize=True)
 
         while True:
             evento, valores = self.abrir_janela()
@@ -145,14 +146,3 @@ class TelaTiposDeEntrega:
                 break
 
         self.fechar_janela()
-
-
-    def mensagem(self, mensagem):
-        sg.Popup("", mensagem)
-
-    def abrir_janela(self):
-        evento, valores = self.__janela.Read()
-        return evento, valores
-
-    def fechar_janela(self):
-        self.__janela.Close()
