@@ -10,17 +10,17 @@ class Tela(ABC):
     @property
     def janela(self):
         return self.__janela
-    
+
     @janela.setter
     def janela(self, janela):
         self.__janela = janela
 
-    def mensagem(self, mensagem):
-        sg.Popup("", mensagem)
+    def mensagem(self, titulo: str, mensagem: str):
+        sg.Popup(f"{mensagem:40}", title=titulo)
 
     def abrir_janela(self):
         evento, valores = self.__janela.Read()
         return evento, valores
-    
+
     def fechar_janela(self):
         self.__janela.Close()

@@ -34,8 +34,8 @@ class ControladorSistema:
         return self.__controlador_encomenda
 
     def inicializa_sistema(self):
-        if not self.login():
-            return
+        # if not self.login():
+        #     return
 
         self.abre_tela()
 
