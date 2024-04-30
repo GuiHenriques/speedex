@@ -9,7 +9,7 @@ import hashlib
 
 class ControladorFuncionario:
     def __init__(self, controlador_sistema):
-        self.__tela_funcionario = TelaFuncionario()
+        self.__tela_funcionario = TelaFuncionario() if not controlador_sistema.development_mode else None
         self.__repositorio = FuncionarioRepositorio(controlador_sistema)
 
     @property
@@ -74,22 +74,28 @@ class ControladorFuncionario:
             return False
         else:
             return True
+        
+    def mensagem(self, mensagem):
+        try:
+            self.tela_funcionario.mensagem(mensagem)
+        except AttributeError as e: # Quando em ambiente de teste, já que None vai chamar o método mensagem.
+            pass
 
     def cadastrar_funcionario(self, cpf: str, nome: str, email: str, senha: str) -> bool:
         if not cpf_validador(cpf):
-            self.tela_funcionario.mensagem("CPF inválido.")
+            self.mensagem("CPF inválido.")
             return False
         
         if not email_validador(email):
-            self.tela_funcionario.mensagem("Email inválido.")
+            self.mensagem("Email inválido.")
             return False
 
         if self.__verificar_se_cpf_existe(cpf):
-            self.__tela_funcionario.mensagem("CPF já cadastrado.")
+            self.mensagem("CPF já cadastrado.")
             return False
 
         if self.__verificar_se_email_existe(email):
-            self.__tela_funcionario.mensagem("Email já cadastrado.")
+            self.mensagem("Email já cadastrado.")
             return False
 
         hash_senha = hashlib.sha256(senha.encode('utf-8')).hexdigest()
@@ -97,8 +103,8 @@ class ControladorFuncionario:
         novo_funcionario = Funcionario(cpf_formatado, nome, email, hash_senha)
         cadastrado, msg_error = self.__repositorio.registrar_funcionario(novo_funcionario)
         if cadastrado:
-            self.tela_funcionario.mensagem("Funcionário cadastrado com sucesso.")
+            self.mensagem("Funcionário cadastrado com sucesso.")
             return True
         else:
-            self.tela_funcionario.mensagem(f"Não foi possível cadastrar o funcionário:\n{msg_error}")
+            self.mensagem(f"Não foi possível cadastrar o funcionário:\n{msg_error}")
             return False

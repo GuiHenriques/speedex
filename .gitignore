@@ -3,3 +3,4 @@
 .env
 *.pyc
 **/__init__.py
+.vscode/
