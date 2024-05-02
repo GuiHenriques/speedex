@@ -11,7 +11,7 @@ class TelaEncomenda(Tela):
             [sg.Text("Encomenda", font=("Arial", 24), justification="center")],
             [
                 sg.Text("CPF do Remetente:", size=(15, 1)),
-                sg.InputText("", key="cpf_cliente", size=(30, 1)),
+                sg.InputText("", key="cpf_remetente", size=(30, 1)),
             ],
             [
                 sg.Text("CPF do Destinatário:", size=(15, 1)),
@@ -57,7 +57,7 @@ class TelaEncomenda(Tela):
 
         if evento == "Proximo":
             # {
-            #     "cpf_cliente": "15645692845",
+            #     "cpf_remetente": "15645692845",
             #     "cpf_destinatario": "54766065808",
             #     "descricao": "Bola",
             #     "opcao_entrega": "Expressa",
@@ -72,16 +72,17 @@ class TelaEncomenda(Tela):
     def tela_possui_caixa(self):
         layout = [
             [sg.Text("Caixa", font=("Arial", 24), justification="center")],
+            [sg.Text("Digite as dimensões da caixa (cm):", size=(30, 1))],
             [
-                sg.Text("Altura:", size=(15, 1)),
+                sg.Text("Altura:", size=(10, 1)),
                 sg.InputText("", key="altura", size=(30, 1)),
             ],
             [
-                sg.Text("Largura:", size=(15, 1)),
+                sg.Text("Largura:", size=(10, 1)),
                 sg.InputText("", key="largura", size=(30, 1)),
             ],
             [
-                sg.Text("Comprimento:", size=(15, 1)),
+                sg.Text("Comprimento:", size=(10, 1)),
                 sg.InputText("", key="comprimento", size=(30, 1)),
             ],
             [sg.Button("Proximo", size=(8, 1))],
