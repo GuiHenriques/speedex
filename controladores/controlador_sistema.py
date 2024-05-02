@@ -3,7 +3,7 @@ from controladores.controlador_funcionario import ControladorFuncionario
 from controladores.controlador_tipo_de_entrega import ControladorTipoDeEntrega
 from controladores.controlador_encomenda import ControladorEncomenda
 
-import os
+import os, sys
 import psycopg2
 from dotenv import load_dotenv
 load_dotenv()
@@ -11,8 +11,9 @@ load_dotenv()
 class ControladorSistema:
     def __init__(self):
         self.__tela_sistema = TelaSistema()
-        self.__database = psycopg2.connect(os.getenv("DB_CONNECTION_STRING"))
+        self.__database = psycopg2.connect(os.getenv(self.get_connection_string()))
         self.__database.autocommit = True
+        self.__development_mode = not self.modo_producao()
         self.__controlador_funcionario = ControladorFuncionario(self)
         self.__controlador_tipo_de_entrega = ControladorTipoDeEntrega(self)
         self.__controlador_encomenda = ControladorEncomenda(self)
@@ -20,7 +21,11 @@ class ControladorSistema:
     @property
     def database(self):
         return self.__database
-    
+
+    @property
+    def development_mode(self):
+        return self.__development_mode
+
     @property
     def controlador_funcionario(self):
         return self.__controlador_funcionario
@@ -54,6 +59,15 @@ class ControladorSistema:
     def encerra_sistema(self):
         self.__database.close()
         exit()
+
+    def modo_producao(self):
+        return "main.py" in sys.argv[0]
+
+    def get_connection_string(self):
+        if self.modo_producao():
+            return "DB_CONNECTION_STRING"
+        else:
+            return "DB_TEST_CONNECTION_STRING"
 
     def abre_tela(self):
         lista_opcoes = {

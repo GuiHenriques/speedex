@@ -10,8 +10,8 @@ import hashlib
 
 class ControladorFuncionario:
     def __init__(self, controlador_sistema):
-        self.__tela_funcionario = TelaFuncionario()
-        self.__repositorio_funcionario = FuncionarioRepositorio(controlador_sistema)
+        self.__tela_funcionario = TelaFuncionario() if not controlador_sistema.development_mode else None
+        self.__repositorio = FuncionarioRepositorio(controlador_sistema)
 
     @property
     def tela_funcionario(self):
@@ -69,10 +69,16 @@ class ControladorFuncionario:
             return False
         else:
             return True
+        
+    def mensagem(self, mensagem):
+        try:
+            self.tela_funcionario.mensagem(mensagem)
+        except AttributeError as e: # Quando em ambiente de teste, já que None vai chamar o método mensagem.
+            pass
 
     def cadastrar_funcionario(self, cpf: str, nome: str, email: str, senha: str) -> bool:
         if not cpf_validador(cpf):
-            self.tela_funcionario.mensagem("Erro", "CPF inválido.")
+            self.mensagem("Erro", "CPF inválido.")
             return False
 
         if not email_validador(email):
