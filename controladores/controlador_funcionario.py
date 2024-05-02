@@ -58,8 +58,6 @@ class ControladorFuncionario:
 
         return senha_hash_fornecida == funcionario.senha
 
-    # itera por todos os valores recebidos na tela para verificar se nenhum deles é vazio.
-
     def __verificar_se_cpf_existe(self, cpf: str):
         if self.__repositorio_funcionario.pegar_funcionario(cpf) == None:
             return False

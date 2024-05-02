@@ -16,3 +16,15 @@ class EncomendaRepositorio:
             return False, "Erro interno no banco de dados."
         
         return True, None
+    
+    def pegar_encomenda(self, id_encomenda):
+        dados_encomenda: tuple = None
+        try:
+            self.__cursor.execute(f"SELECT * FROM encomendas WHERE id_encomenda={id_encomenda}")
+            dados_encomenda = self.__cursor.fetchone()
+        except Exception as e:
+            print(e)
+        
+        if dados_encomenda != None:
+            encomenda = Encomenda(*dados_encomenda)
+            return encomenda
