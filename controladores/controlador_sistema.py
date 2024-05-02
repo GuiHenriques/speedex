@@ -12,7 +12,7 @@ class ControladorSistema:
     def __init__(self):
         self.__tela_sistema = TelaSistema()
         self.__database = psycopg2.connect(os.getenv(self.get_connection_string()))
-        self.__database.autocommit = True
+        self.__database.autocommit = True # Realiza commit no banco sempre depois de executar uma query (psycopg2).
         self.__development_mode = not self.modo_producao()
         self.__controlador_funcionario = ControladorFuncionario(self)
         self.__controlador_tipo_de_entrega = ControladorTipoDeEntrega(self)

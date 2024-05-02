@@ -1,5 +1,6 @@
-import pytest
 from controladores.controlador_sistema import ControladorSistema
+
+import pytest
 
 
 class TestFuncionario:
