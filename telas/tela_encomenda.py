@@ -55,7 +55,6 @@ class TelaEncomenda(Tela):
         evento, valores = self.abrir_janela()
         self.fechar_janela()
 
-        if evento == "Proximo":
             # {
             #     "cpf_remetente": "15645692845",
             #     "cpf_destinatario": "54766065808",
@@ -64,10 +63,7 @@ class TelaEncomenda(Tela):
             #     "caixa_sim": True,
             #     "caixa_nao": False,
             # }
-            return valores
-
-        else:
-            return None
+        return evento, valores
 
     def tela_possui_caixa(self):
         layout = [
@@ -141,11 +137,15 @@ class TelaEncomenda(Tela):
             [
                 sg.Text(
                     "Encomenda cadastrada com sucesso!",
-                    font=("Arial", 24),
+                    font=("Arial", 18),
                     justification="center",
                 )
             ],
-            [sg.Button("Voltar", size=(8, 1))],
+            [sg.Text("Valor total: R$ 30,00")],
+            [sg.Text("Origem: São Paulo")],
+            [sg.Text("Destino: Rio de Janeiro")],
+            [sg.Text("Prazo de entrega: 4 dias 👀")],
+            [sg.Button("OK", size=(8, 1), button_color=('white', 'green'))],
         ]
 
         self.janela = sg.Window("Encomenda", layout, element_justification="c")

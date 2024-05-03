@@ -1,5 +1,5 @@
 from telas.tela_encomenda import TelaEncomenda
-from utils.valildadores import campo_vazio_validador
+from utils.valildadores import campo_vazio_validador, campo_numerico_validador
 from entidades.repositorios.encomenda_repositorio import EncomendaRepositorio
 
 # from entidades.repositorios.cliente_repositorio import ClienteRepositorio
@@ -17,7 +17,10 @@ class ControladorEncomenda:
 
     def abre_tela_encomenda(self):
         while True:
-            valores_encomenda = self.tela_encomenda.tela_encomenda()
+            evento, valores_encomenda = self.tela_encomenda.tela_encomenda()
+
+            if evento == None or evento == "voltar":
+                return False
 
             if not self.__verificar_campos_validos_encomenda(valores_encomenda):
                 continue
@@ -25,6 +28,9 @@ class ControladorEncomenda:
             # se usuario tem caixa
             if valores_encomenda["caixa_sim"] == True:
                 valores_caixa = self.tela_encomenda.tela_possui_caixa()
+
+                if valores_caixa == None:
+                    return False
 
                 # validação dos campos
                 if not self.__verificar_campos_validos_caixa(valores_caixa):
@@ -38,9 +44,6 @@ class ControladorEncomenda:
                 valores_caixa = self.tela_encomenda.tela_nao_possui_caixa()
                 print(valores_caixa)
 
-                if valores_caixa == None:
-                    return False
-
                 # registrar encomenda
                 self.registrar_encomenda(valores_encomenda)
                 break
@@ -48,14 +51,9 @@ class ControladorEncomenda:
     def registrar_encomenda(self, valores_encomenda):
         # registrar encomenda no banco de dados
 
-        # mostrar tela de sucesso
-
-        print("Encomenda registrada com sucesso!")
+        self.tela_encomenda.tela_cadastrada()
 
     def __verificar_campos_validos_encomenda(self, valores_encomenda):
-
-        if valores_encomenda == None:
-            return False
 
         # verificar se todos os campos foram preenchidos
         if campo_vazio_validador(valores_encomenda):
@@ -86,9 +84,6 @@ class ControladorEncomenda:
         return True
 
     def __verificar_campos_validos_caixa(self, valores_caixa):
-
-        if valores_caixa == None:
-            return False
         
         # verificar se todos os campos foram preenchidos
         if campo_vazio_validador(valores_caixa):
@@ -96,11 +91,10 @@ class ControladorEncomenda:
             return False
 
         # verificar se a altura, largura e comprimento são números
-        if not all(val.isnumeric() for val in valores_caixa):
-            self.tela_encomenda.mensagem("Erro", "As dimensões da caixa devem ser números.")
+        if not campo_numerico_validador(valores_caixa):
+            self.tela_encomenda.mensagem("Erro", "As dimensões da caixa devem ser números inteiros positivos.")
             return False
 
-        # ta puro
         return True
 
     def __verificar_cpf_existente(self, cpf: str):

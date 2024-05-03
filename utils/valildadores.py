@@ -28,3 +28,8 @@ def campo_vazio_validador(valores: dict) -> bool:
         not value.strip() if isinstance(value, str) else value is None
         for value in valores.values()
     )
+
+def campo_numerico_validador(valores: dict) -> bool:
+    if all(val.isnumeric() for val in valores.values()):
+        return True
+    return False
