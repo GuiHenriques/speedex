@@ -1,5 +1,5 @@
 class Endereco:
-    def __init__(self, cep, estado, cidade, bairro, rua, numero):
+    def __init__(self, cep: str, estado: str, cidade: str, bairro: str, rua: str, numero: str):
         self._cep = cep
         self._estado = estado
         self._cidade = cidade
@@ -56,9 +56,9 @@ class Endereco:
         self._numero = numero
 
     def __str__(self):
-        return f"CEP: {self._cep},
-                 Estado: {self._estado},
-                 Cidade: {self._cidade},
-                 Bairro: {self._bairro},
-                 Rua: {self._rua},
+        return f"CEP: {self._cep},\
+                 Estado: {self._estado},\
+                 Cidade: {self._cidade},\
+                 Bairro: {self._bairro},\
+                 Rua: {self._rua},\
                  Número: {self._numero}"

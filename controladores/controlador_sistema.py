@@ -2,6 +2,7 @@ from telas.tela_sistema import TelaSistema
 from controladores.controlador_funcionario import ControladorFuncionario
 from controladores.controlador_tipo_de_entrega import ControladorTipoDeEntrega
 from controladores.controlador_encomenda import ControladorEncomenda
+from controladores.controlador_cliente import ControladorCliente
 
 import os, sys
 import psycopg2
@@ -17,6 +18,7 @@ class ControladorSistema:
         self.__controlador_funcionario = ControladorFuncionario(self)
         self.__controlador_tipo_de_entrega = ControladorTipoDeEntrega(self)
         self.__controlador_encomenda = ControladorEncomenda(self)
+        self.__controlador_cliente = ControladorCliente(self)
 
     @property
     def database(self):
@@ -37,6 +39,10 @@ class ControladorSistema:
     @property
     def controlador_encomenda(self):
         return self.__controlador_encomenda
+    
+    @property
+    def controlador_cliente(self):
+        return self.__controlador_cliente
 
     def inicializa_sistema(self):
         if not self.login():
@@ -56,6 +62,9 @@ class ControladorSistema:
     def menu_encomenda(self):
         return self.__controlador_encomenda.abre_tela_encomenda()
     
+    def menu_cliente(self):
+        return self.__controlador_cliente.abre_tela()
+    
     def encerra_sistema(self):
         self.__database.close()
         exit()
@@ -71,8 +80,9 @@ class ControladorSistema:
 
     def abre_tela(self):
         lista_opcoes = {
-            1: self.menu_tipo_de_entrega,
-            2: self.menu_encomenda,
+            1: self.menu_encomenda,
+            2: self.menu_cliente,
+            3: self.menu_tipo_de_entrega,
             0: self.encerra_sistema,
         }
 

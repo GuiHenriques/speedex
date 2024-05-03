@@ -21,8 +21,9 @@ class TelaSistema(Tela):
 
     def tela_principal(self):
         layout = [
-            [sg.Radio("Tipo de Entrega", "Radio1", key="1")],
-            [sg.Radio("Encomenda", "Radio1", key="2")],
+            [sg.Radio("Menu de Encomenda", "Radio1", key="1")],
+            [sg.Radio("Menu de Clientes", "Radio1", key="2")],
+            [sg.Radio("Menu de tipos de Entrega", "Radio1", key="3")],
             [sg.Radio("Fechar", "Radio1", default=True, key="0")],
             [sg.Push(), sg.Button("Confirmar")],
         ]

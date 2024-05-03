@@ -24,7 +24,6 @@ class TelaTiposDeEntrega(Tela):
         elif valores["4"]:
             opcao_escolhida = 4
 
-        self.fechar_janela()
         return opcao_escolhida
 
     def tela_principal(self):

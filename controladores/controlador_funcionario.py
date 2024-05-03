@@ -104,7 +104,7 @@ class ControladorFuncionario:
         cadastrado, msg_error = self.__repositorio.registrar_funcionario(novo_funcionario)
         if cadastrado:
             self.mensagem("Funcionário cadastrado com sucesso.")
-            return True
+            return novo_funcionario
         else:
             self.mensagem(f"Não foi possível cadastrar o funcionário:\n{msg_error}")
             return False
