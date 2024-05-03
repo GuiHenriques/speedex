@@ -22,6 +22,10 @@ class TelaEncomenda(Tela):
                 sg.InputText("", key="descricao", size=(30, 1)),
             ],
             [
+                sg.Text("Peso (kg):", size=(15, 1)),
+                sg.InputText("", key="peso", size=(30, 1)),
+            ],
+            [
                 sg.Text(
                     "Opção de entrega:",
                     size=(15, 1),
@@ -55,14 +59,15 @@ class TelaEncomenda(Tela):
         evento, valores = self.abrir_janela()
         self.fechar_janela()
 
-            # {
-            #     "cpf_remetente": "15645692845",
-            #     "cpf_destinatario": "54766065808",
-            #     "descricao": "Bola",
-            #     "opcao_entrega": "Expressa",
-            #     "caixa_sim": True,
-            #     "caixa_nao": False,
-            # }
+        # {
+        #     "cpf_remetente": "15645692845",
+        #     "cpf_destinatario": "54766065808",
+        #     "descricao": "Bola",
+        #     "peso": "10",
+        #     "opcao_entrega": "Expressa",
+        #     "caixa_sim": True,
+        #     "caixa_nao": False,
+        # }
         return evento, valores
 
     def tela_possui_caixa(self):
@@ -110,7 +115,9 @@ class TelaEncomenda(Tela):
                 sg.Text(f"{10}x{10}x{10} - R$ {10}"),
             ],
             [
-                sg.Radio("Média", "tamanho_caixa", key="media", size=(8, 1), default=True),
+                sg.Radio(
+                    "Média", "tamanho_caixa", key="media", size=(8, 1), default=True
+                ),
                 sg.Text(f"{20}x{20}x{20} - R$ {20}"),
             ],
             [
@@ -124,7 +131,6 @@ class TelaEncomenda(Tela):
 
         evento, valores = self.abrir_janela()
         self.fechar_janela()
-        
 
         if evento == "Proximo":
             return valores
@@ -144,16 +150,12 @@ class TelaEncomenda(Tela):
             [sg.Text("Valor total: R$ 30,00")],
             [sg.Text("Origem: São Paulo")],
             [sg.Text("Destino: Rio de Janeiro")],
-            [sg.Text("Prazo de entrega: 4 dias 👀")],
-            [sg.Button("OK", size=(8, 1), button_color=('white', 'green'))],
+            [sg.Button("OK", size=(8, 1), button_color=("white", "green"))],
         ]
 
         self.janela = sg.Window("Encomenda", layout, element_justification="c")
 
-        evento, valores = self.abrir_janela()
+        self.abrir_janela()
         self.fechar_janela()
-
-        if evento == "Voltar":
-            return None
 
         return None

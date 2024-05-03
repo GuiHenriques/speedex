@@ -36,20 +36,35 @@ class ControladorEncomenda:
                 if not self.__verificar_campos_validos_caixa(valores_caixa):
                     continue
 
-                # registrar encomenda
-                self.registrar_encomenda(valores_encomenda)
-                break
-
             else:
                 valores_caixa = self.tela_encomenda.tela_nao_possui_caixa()
-                print(valores_caixa)
+                
+                if valores_caixa == None:
+                    return False
 
-                # registrar encomenda
-                self.registrar_encomenda(valores_encomenda)
-                break
+            # registrar encomenda
+            valores = {**valores_encomenda, **valores_caixa}
+            print(valores)
+            self.processar_encomenda(valores)
+            break
 
-    def registrar_encomenda(self, valores_encomenda):
+    def processar_encomenda(self, valores):
+
+        # acessar origem pelo id da agencia
+        # origem = self.__repositorio_encomenda.pegar_agencia_por_id(valores["id_agencia_origem"])
+        origem = "Trindade, Florianópolis - SC"
+        
+        # acessar destino pelo cpf destinatario
+        # destino = self.__repositorio_encomenda.pegar_destinatario_por_cpf(valores["cpf_destinatario"])
+
+        
+        # calcular valor total
+        # valor_total = self.__calcular_valor_total(valores)
+       
+        # calcular prazo de entrega usando api
+
         # registrar encomenda no banco de dados
+        # self.__repositorio_encomenda.registrar_encomenda()
 
         self.tela_encomenda.tela_cadastrada()
 
@@ -72,6 +87,11 @@ class ControladorEncomenda:
         # verificar se o cpf do remetente e do destinatario são iguais
         if valores_encomenda["cpf_remetente"] == valores_encomenda["cpf_destinatario"]:
             self.tela_encomenda.mensagem("Erro", "CPF do remetente e do destinatário são iguais.")
+            return False
+        
+        # verificar se o peso é um número
+        if not valores_encomenda["peso"].isnumeric():
+            self.tela_encomenda.mensagem("Erro", "O peso deve ser um número inteiro positivo.")
             return False
 
         # verificar se a opção de entrega é valida
