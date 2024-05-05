@@ -11,7 +11,7 @@ import hashlib
 class ControladorFuncionario:
     def __init__(self, controlador_sistema):
         self.__tela_funcionario = TelaFuncionario() if not controlador_sistema.development_mode else None
-        self.__repositorio = FuncionarioRepositorio(controlador_sistema)
+        self.__repositorio_funcionario = FuncionarioRepositorio(controlador_sistema)
 
     @property
     def tela_funcionario(self):

@@ -10,32 +10,12 @@ class TelaEncomenda(Tela):
         layout = [
             [sg.Text("Encomenda", font=("Arial", 24), justification="center")],
             [
-                sg.Text("CPF do Remetente:", size=(15, 1)),
-                sg.InputText("", key="cpf_remetente", size=(30, 1)),
-            ],
-            [
-                sg.Text("CPF do Destinatário:", size=(15, 1)),
-                sg.InputText("", key="cpf_destinatario", size=(30, 1)),
-            ],
-            [
                 sg.Text("Conteúdo:", size=(15, 1)),
                 sg.InputText("", key="descricao", size=(30, 1)),
             ],
             [
                 sg.Text("Peso (kg):", size=(15, 1)),
                 sg.InputText("", key="peso", size=(30, 1)),
-            ],
-            [
-                sg.Text(
-                    "Opção de entrega:",
-                    size=(15, 1),
-                    justification="center",
-                ),
-                sg.Combo(
-                    ["Expressa", "Normal", "Econômica"],
-                    key="opcao_entrega",
-                    size=(28, 1),
-                ),
             ],
             [
                 sg.Text("Possui caixa?", size=(15, 1)),
@@ -60,11 +40,8 @@ class TelaEncomenda(Tela):
         self.fechar_janela()
 
         # {
-        #     "cpf_remetente": "15645692845",
-        #     "cpf_destinatario": "54766065808",
         #     "descricao": "Bola",
         #     "peso": "10",
-        #     "opcao_entrega": "Expressa",
         #     "caixa_sim": True,
         #     "caixa_nao": False,
         # }
@@ -93,7 +70,7 @@ class TelaEncomenda(Tela):
 
         evento, valores = self.abrir_janela()
         self.fechar_janela()
-
+        # valores = {"altura": "10", "largura": "10", "comprimento": "10"}
         if evento == "Proximo":
             return valores
 
@@ -133,13 +110,12 @@ class TelaEncomenda(Tela):
         self.fechar_janela()
 
         if evento == "Proximo":
-            # pegar dimensões da caixa selecionada e retornar nesse formato
+            # pegar dimensões da caixa selecionada e retornar 
             # valores = {"altura": "10", "largura": "10", "comprimento": "10"}
             return valores
 
         return None
 
-    # defina um bom nome para a tela de encomenda cadastrada com sucesso
     def tela_cadastrada(self):
         layout = [
             [

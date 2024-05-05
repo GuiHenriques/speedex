@@ -42,6 +42,8 @@ class ControladorEncomenda:
                 
                 if valores_caixa == None:
                     return False
+                
+            # instanciar caixa e tipo de caixa
 
             # registrar encomenda
             valores = {**valores_encomenda, **valores_caixa}
