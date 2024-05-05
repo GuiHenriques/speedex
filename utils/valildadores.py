@@ -1,4 +1,3 @@
-from utils.formatadores import cpf_formatador
 import re
 
 def cpf_validador(cpf: str) -> bool:
@@ -22,3 +21,15 @@ def cpf_validador(cpf: str) -> bool:
 def email_validador(email: str) -> bool:
     pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
     return re.match(pattern, email) is not None
+
+
+def campo_vazio_validador(valores: dict) -> bool:
+    return any(
+        not value.strip() if isinstance(value, str) else value is None
+        for value in valores.values()
+    )
+
+def campo_numerico_validador(valores: dict) -> bool:
+    if all(val.isnumeric() for val in valores.values()):
+        return True
+    return False

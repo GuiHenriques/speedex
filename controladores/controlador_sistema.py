@@ -45,8 +45,8 @@ class ControladorSistema:
         return self.__controlador_cliente
 
     def inicializa_sistema(self):
-        if not self.login():
-            return
+        # if not self.login():
+        #     return
 
         self.abre_tela()
 
@@ -85,6 +85,12 @@ class ControladorSistema:
             3: self.menu_tipo_de_entrega,
             0: self.encerra_sistema,
         }
+        # Tipos de Entrega 1
+        # Tipos de Caixa 2
+        # Clientes 3
+        # Encomendas 4 
+        # Entregas 5
+        # Relatórios 6 
 
         while True:
             opcao = self.__tela_sistema.abre_tela()

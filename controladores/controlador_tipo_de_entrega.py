@@ -33,7 +33,7 @@ class ControladorTipoDeEntrega:
         if tipo_de_entrega:
             return tipo_de_entrega
         else:
-            self.__tela_tipo_de_entrega.mensagem("Tipo de entrega não encontrado para o ID fornecido.")
+            self.__tela_tipo_de_entrega.mensagem("Erro", "Tipo de entrega não encontrado para o ID fornecido.")
             return None
     
     def incluir_tipo_de_entrega(self):
@@ -53,7 +53,7 @@ class ControladorTipoDeEntrega:
                               (novo_id, dados_tipo_de_entrega["nome"], dados_tipo_de_entrega["taxa"], dados_tipo_de_entrega["descricao"]))
 
         self.__controlador_sistema.database.commit()
-        self.__tela_tipo_de_entrega.mensagem("Tipo de entrega cadastrado com sucesso.")
+        self.__tela_tipo_de_entrega.mensagem("Sucesso", "Tipo de entrega cadastrado com sucesso.")
         return True
 
     def alterar_tipo_de_entrega(self):
@@ -68,7 +68,7 @@ class ControladorTipoDeEntrega:
                                   (dados_tipo_de_entrega["nome"], dados_tipo_de_entrega["taxa"], dados_tipo_de_entrega["descricao"], codigo_selecionado))
             self.__controlador_sistema.database.commit()
 
-            self.__tela_tipo_de_entrega.mensagem("Tipo de entrega alterado com sucesso!")
+            self.__tela_tipo_de_entrega.mensagem("Sucesso", "Tipo de entrega alterado com sucesso!")
             return True
 
     def excluir_tipo_de_entrega(self):
@@ -77,7 +77,7 @@ class ControladorTipoDeEntrega:
         if tipo_de_entrega is not None:
             self.__cursor.execute("DELETE FROM tipos_de_entrega WHERE id = %s", (codigo_selecionado,))
             self.__controlador_sistema.database.commit()
-            self.__tela_tipo_de_entrega.mensagem("Tipo de entrega excluído com sucesso!")
+            self.__tela_tipo_de_entrega.mensagem("Sucesso", "Tipo de entrega excluído com sucesso!")
 
     def listar_tipo_de_entrega(self):
         self.__cursor.execute("SELECT * FROM tipos_de_entrega")
