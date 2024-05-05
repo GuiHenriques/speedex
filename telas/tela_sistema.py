@@ -1,4 +1,4 @@
-from telas.TelaAbstrata import TelaAbstrata
+from telas.telaAbstrata import TelaAbstrata
 
 import PySimpleGUI as sg
 

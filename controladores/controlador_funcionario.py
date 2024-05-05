@@ -14,12 +14,12 @@ class ControladorFuncionario:
         self.__repositorio = FuncionarioRepositorio(controlador_sistema)
 
     @property
-    def tela_funcionario(self):
+    def tela(self):
         return self.__tela
 
     def abre_tela_login(self):
         while True:
-            evento, valores = self.tela_funcionario.tela_login()
+            evento, valores = self.__tela.tela_login()
 
             if valores == None:
                 return False
@@ -31,7 +31,7 @@ class ControladorFuncionario:
             if self.verificar_login(valores["email"], valores["senha"]):
                 return True
             else:
-                self.tela_funcionario.mensagem("Erro", "Login ou senha incorreto.")
+                self.__tela.mensagem("Login ou senha incorreto.")
 
     def abre_tela_cadastro(self):
         while True:
@@ -41,7 +41,7 @@ class ControladorFuncionario:
                 return False
 
             if campo_vazio_validador(valores):
-                self.tela_funcionario.mensagem("Erro", "Por favor, preencha todos os campos.")
+                self.__tela.mensagem("Por favor, preencha todos os campos.")
                 continue
 
             if self.cadastrar_funcionario(valores["cpf"], valores["nome"], valores["email"], valores["senha"]):
@@ -70,36 +70,34 @@ class ControladorFuncionario:
         else:
             return True
         
-    def mensagem(self, mensagem):
+    def __mensagem(self, mensagem):
         try:
-            self.tela_funcionario.mensagem(mensagem)
+            self.__tela.mensagem(mensagem)
         except AttributeError as e: # Quando em ambiente de teste, já que None vai chamar o método mensagem.
             pass
 
     def cadastrar_funcionario(self, cpf: str, nome: str, email: str, senha: str) -> bool:
         if not cpf_validador(cpf):
-            self.mensagem("Erro", "CPF inválido.")
+            self.__mensagem("CPF inválido.")
             return False
 
         if not email_validador(email):
-            self.tela_funcionario.mensagem("Erro", "Email inválido.")
+            self.__mensagem("Email inválido.")
             return False
 
         if self.__verificar_se_cpf_existe(cpf):
-            self.__tela.mensagem("Erro", "CPF já cadastrado.")
+            self.__mensagem("CPF já cadastrado.")
             return False
 
         if self.__verificar_se_email_existe(email):
-            self.__tela.mensagem("Erro", "Email já cadastrado.")
+            self.__mensagem("Email já cadastrado.")
             return False
 
-        hash_senha = hashlib.sha256(senha.encode('utf-8')).hexdigest()
-        cpf_formatado = cpf_formatador(cpf)
-        novo_funcionario = Funcionario(cpf_formatado, nome, email, hash_senha)
+        novo_funcionario = Funcionario(cpf, nome, email, senha)
         cadastrado, msg_error = self.__repositorio.registrar_funcionario(novo_funcionario)
         if cadastrado:
-            self.mensagem("Funcionário cadastrado com sucesso.")
+            self.__mensagem("Funcionário cadastrado com sucesso.")
             return novo_funcionario
         else:
-            self.tela_funcionario.mensagem("Não foi possível cadastrar o funcionário", msg_error)
+            self.__mensagem(f"Não foi possível cadastrar o funcionário:\n{msg_error}")
             return False

@@ -33,8 +33,8 @@ class TelaAbstrata(ABC):
         )
         return layout
 
-    def mensagem(self, titulo: str, mensagem: str):
-        sg.Popup(f"{mensagem:40}", title=titulo)
+    def mensagem(self, mensagem: str):
+        sg.Popup(f"{mensagem:40}")
 
     def abrir_janela(self):
         evento, valores = self.__janela.Read()

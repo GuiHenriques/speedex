@@ -1,4 +1,5 @@
 from controladores.controlador_sistema import ControladorSistema
+from entidades.modelos.funcionario import Funcionario
 
 import pytest
 
@@ -16,10 +17,11 @@ class TestFuncionario:
     def test_passar_em_cadastro_correto(self):
         cpf_valido = "909.580.950-19"
         email_valido = "emailvalido1@gmail.com"
+        funcionario_esperado = Funcionario(cpf_valido, self.nome_valido, email_valido, self.senha_valida)
         funcionario_cadastrado = self.controlador_sistema.controlador_funcionario.cadastrar_funcionario(
             cpf_valido, self.nome_valido, email_valido, self.senha_valida
         )
-        assert funcionario_cadastrado == True
+        assert funcionario_cadastrado == funcionario_esperado
 
     def test_falhar_cadastro_com_cpf_invalido(self):
         cpf_invalido = "123456789"
