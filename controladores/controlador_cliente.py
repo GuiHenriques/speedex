@@ -35,7 +35,7 @@ class ControladorCliente:
         cliente_cadastrado, msg_error = self.__repositorio.registrar_cliente(cliente)
         if cliente_cadastrado:
             self.mensagem("Cliente cadastrado!")
-            return cliente_cadastrado
+            return cliente
         else:
             self.mensagem(f"Não foi possível cadastrar o cliente!\n{msg_error}")
             return False
