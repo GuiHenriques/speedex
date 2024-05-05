@@ -72,9 +72,15 @@ class ControladorSistema:
     def abre_tela(self):
         lista_opcoes = {
             1: self.menu_tipo_de_entrega,
-            2: self.menu_encomenda,
+            4: self.menu_encomenda,
             0: self.encerra_sistema,
         }
+        # Tipos de Entrega 1
+        # Tipos de Caixa 2
+        # Clientes 3
+        # Encomendas 4 
+        # Entregas 5
+        # Relatórios 6 
 
         while True:
             opcao = self.__tela_sistema.abre_tela()

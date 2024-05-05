@@ -133,6 +133,8 @@ class TelaEncomenda(Tela):
         self.fechar_janela()
 
         if evento == "Proximo":
+            # pegar dimensões da caixa selecionada e retornar nesse formato
+            # valores = {"altura": "10", "largura": "10", "comprimento": "10"}
             return valores
 
         return None

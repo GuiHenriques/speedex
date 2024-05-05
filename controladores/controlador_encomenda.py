@@ -26,9 +26,9 @@ class ControladorEncomenda:
                 continue
             
             # se usuario tem caixa
-            if valores_encomenda["caixa_sim"] == True:
+            if valores_encomenda["caixa_sim"]:
                 valores_caixa = self.tela_encomenda.tela_possui_caixa()
-
+                # valores_caixa = {"altura": "10", "largura": "10", "comprimento": "10"}
                 if valores_caixa == None:
                     return False
 
@@ -38,6 +38,7 @@ class ControladorEncomenda:
 
             else:
                 valores_caixa = self.tela_encomenda.tela_nao_possui_caixa()
+                # pegar dimensões da caixa selecionada
                 
                 if valores_caixa == None:
                     return False
@@ -48,20 +49,7 @@ class ControladorEncomenda:
             self.processar_encomenda(valores)
             break
 
-    def processar_encomenda(self, valores):
-
-        # acessar origem pelo id da agencia
-        # origem = self.__repositorio_encomenda.pegar_agencia_por_id(valores["id_agencia_origem"])
-        origem = "Trindade, Florianópolis - SC"
-        
-        # acessar destino pelo cpf destinatario
-        # destino = self.__repositorio_encomenda.pegar_destinatario_por_cpf(valores["cpf_destinatario"])
-
-        
-        # calcular valor total
-        # valor_total = self.__calcular_valor_total(valores)
-       
-        # calcular prazo de entrega usando api
+    def registrar_encomenda(self, valores):
 
         # registrar encomenda no banco de dados
         # self.__repositorio_encomenda.registrar_encomenda()
