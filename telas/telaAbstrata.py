@@ -3,7 +3,7 @@ from abc import ABC
 import PySimpleGUI as sg
 
 
-class Tela(ABC):
+class TelaAbstrata(ABC):
     def __init__(self):
         self.__janela = None
 

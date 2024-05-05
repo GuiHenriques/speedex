@@ -7,7 +7,7 @@ from entidades.modelos.endereco import Endereco
 
 class ControladorCliente:
     def __init__(self, controlador_sistema):
-        self.__tela_cliente = TelaCliente() if not controlador_sistema.development_mode else None
+        self.__tela = TelaCliente() if not controlador_sistema.development_mode else None
         self.__controlador_sistema = controlador_sistema
         self.__repositorio = ClienteRepositorio(controlador_sistema)
 
@@ -18,7 +18,7 @@ class ControladorCliente:
         }
 
         while True:
-            opcao = self.__tela_cliente.abre_tela()
+            opcao = self.__tela.abre_tela()
             if opcao == 0:
                 return
 
@@ -42,6 +42,6 @@ class ControladorCliente:
 
     def mensagem(self, msg):
         try:
-            self.__tela_cliente.mensagem(msg)
+            self.__tela.mensagem(msg)
         except AttributeError:
             pass

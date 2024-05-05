@@ -1,8 +1,8 @@
-from telas.tela import Tela
+from telas.telaAbstrata import TelaAbstrata
 
 import PySimpleGUI as sg
 
-class TelaTiposDeEntrega(Tela):
+class TelaTiposDeEntrega(TelaAbstrata):
     def __init__(self, ControladorTipoDeEntrega):
         self.__controlador_tipo_de_entrega = ControladorTipoDeEntrega
 

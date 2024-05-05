@@ -1,9 +1,9 @@
-from telas.tela import Tela
+from telas.TelaAbstrata import TelaAbstrata
 
 import PySimpleGUI as sg
 
 
-class TelaSistema(Tela):
+class TelaSistema(TelaAbstrata):
     def __init__(self):
         super().__init__()
 

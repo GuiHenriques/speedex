@@ -10,12 +10,12 @@ import hashlib
 
 class ControladorFuncionario:
     def __init__(self, controlador_sistema):
-        self.__tela_funcionario = TelaFuncionario() if not controlador_sistema.development_mode else None
+        self.__tela = TelaFuncionario() if not controlador_sistema.development_mode else None
         self.__repositorio = FuncionarioRepositorio(controlador_sistema)
 
     @property
     def tela_funcionario(self):
-        return self.__tela_funcionario
+        return self.__tela
 
     def abre_tela_login(self):
         while True:
@@ -35,7 +35,7 @@ class ControladorFuncionario:
 
     def abre_tela_cadastro(self):
         while True:
-            evento, valores = self.__tela_funcionario.tela_cadastro()
+            evento, valores = self.__tela.tela_cadastro()
 
             if valores == None or evento == "login":
                 return False
@@ -48,7 +48,7 @@ class ControladorFuncionario:
                 break
 
     def verificar_login(self, email, senha):
-        funcionario = self.__repositorio_funcionario.pegar_funcionario(email)
+        funcionario = self.__repositorio.pegar_funcionario(email)
 
         if funcionario == None: # email não encontrado
             return False
@@ -59,13 +59,13 @@ class ControladorFuncionario:
         return senha_hash_fornecida == funcionario.senha
 
     def __verificar_se_cpf_existe(self, cpf: str):
-        if self.__repositorio_funcionario.pegar_funcionario(cpf) == None:
+        if self.__repositorio.pegar_funcionario(cpf) == None:
             return False
         else:
             return True
 
     def __verificar_se_email_existe(self, email: str) -> bool:
-        if self.__repositorio_funcionario.pegar_funcionario(email) == None:
+        if self.__repositorio.pegar_funcionario(email) == None:
             return False
         else:
             return True
@@ -86,17 +86,17 @@ class ControladorFuncionario:
             return False
 
         if self.__verificar_se_cpf_existe(cpf):
-            self.__tela_funcionario.mensagem("Erro", "CPF já cadastrado.")
+            self.__tela.mensagem("Erro", "CPF já cadastrado.")
             return False
 
         if self.__verificar_se_email_existe(email):
-            self.__tela_funcionario.mensagem("Erro", "Email já cadastrado.")
+            self.__tela.mensagem("Erro", "Email já cadastrado.")
             return False
 
         hash_senha = hashlib.sha256(senha.encode('utf-8')).hexdigest()
         cpf_formatado = cpf_formatador(cpf)
         novo_funcionario = Funcionario(cpf_formatado, nome, email, hash_senha)
-        cadastrado, msg_error = self.__repositorio_funcionario.registrar_funcionario(novo_funcionario)
+        cadastrado, msg_error = self.__repositorio.registrar_funcionario(novo_funcionario)
         if cadastrado:
             self.mensagem("Funcionário cadastrado com sucesso.")
             return novo_funcionario

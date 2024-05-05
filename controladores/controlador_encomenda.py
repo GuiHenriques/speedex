@@ -7,13 +7,13 @@ from entidades.repositorios.encomenda_repositorio import EncomendaRepositorio
 
 class ControladorEncomenda:
     def __init__(self, controlador_sistema):
-        self.__tela_encomenda = TelaEncomenda()
-        self.__repositorio_encomenda = EncomendaRepositorio(controlador_sistema)
+        self.__tela = TelaEncomenda() if not controlador_sistema.development_mode else None
+        self.__repositorio = EncomendaRepositorio(controlador_sistema)
         # self.__repositorio_cliente = ClienteRepositorio(controlador_sistema)
 
     @property
     def tela_encomenda(self):
-        return self.__tela_encomenda
+        return self.__tela
 
     def abre_tela_encomenda(self):
         while True:
@@ -52,7 +52,7 @@ class ControladorEncomenda:
     def registrar_encomenda(self, valores):
 
         # registrar encomenda no banco de dados
-        # self.__repositorio_encomenda.registrar_encomenda()
+        # self.__repositorio.registrar_encomenda()
 
         self.tela_encomenda.tela_cadastrada()
 

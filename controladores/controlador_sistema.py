@@ -11,7 +11,7 @@ load_dotenv()
 
 class ControladorSistema:
     def __init__(self):
-        self.__tela_sistema = TelaSistema()
+        self.__tela = TelaSistema()
         self.__database = psycopg2.connect(os.getenv(self.get_connection_string()))
         self.__database.autocommit = True # Realiza commit no banco sempre depois de executar uma query (psycopg2).
         self.__development_mode = not self.modo_producao()
@@ -51,7 +51,7 @@ class ControladorSistema:
         self.abre_tela()
 
     def abre_tela(self):
-        self.__tela_sistema.abre_tela()
+        self.__tela.abre_tela()
 
     def login(self):
         return self.__controlador_funcionario.abre_tela_login()
@@ -93,6 +93,6 @@ class ControladorSistema:
         # Relatórios 6 
 
         while True:
-            opcao = self.__tela_sistema.abre_tela()
+            opcao = self.__tela.abre_tela()
             funcao_escolhida = lista_opcoes[opcao]
             funcao_escolhida()

@@ -1,4 +1,4 @@
-from telas.tela import Tela
+from telas.telaAbstrata import TelaAbstrata
 
 import PySimpleGUI as sg
 
@@ -6,7 +6,7 @@ import PySimpleGUI as sg
 SIZE_TEXT = (5, 1)
 SIZE_INPUT_TEXT = (30, 1)
 
-class TelaCliente(Tela):
+class TelaCliente(TelaAbstrata):
     def __init__(self):
         super().__init__()
 
