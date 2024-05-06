@@ -8,7 +8,7 @@ class FuncionarioRepositorio:
 
     def registrar_funcionario(self, funcionario: Funcionario):
         try:
-            self.__cursor.execute(f"INSERT INTO funcionarios(cpf, nome, email, senha)\
+            self.__cursor.execute(f"INSERT INTO funcionarios(cpf, nome, email, senha) \
                                 VALUES ('{funcionario.cpf}', '{funcionario.nome}', '{funcionario.email}', '{funcionario.senha}');")
         except Exception as e:
             print(e)

@@ -1,8 +1,8 @@
 import PySimpleGUI as sg
-from telas.tela import Tela
+from telas.telaAbstrata import TelaAbstrata
 
 
-class TelaEncomenda(Tela):
+class TelaEncomenda(TelaAbstrata):
     def __init__(self):
         super().__init__()
 

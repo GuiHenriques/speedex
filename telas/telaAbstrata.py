@@ -3,7 +3,7 @@ from abc import ABC
 import PySimpleGUI as sg
 
 
-class Tela(ABC):
+class TelaAbstrata(ABC):
     def __init__(self):
         self.__janela = None
 
@@ -33,8 +33,8 @@ class Tela(ABC):
         )
         return layout
 
-    def mensagem(self, titulo: str, mensagem: str):
-        sg.Popup(f"{mensagem:40}", title=titulo)
+    def mensagem(self, mensagem: str):
+        sg.Popup(f"{mensagem:40}")
 
     def abrir_janela(self):
         evento, valores = self.__janela.Read()
