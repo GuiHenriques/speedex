@@ -14,3 +14,9 @@ class Destinatario(Pessoa):
     @endereco.setter
     def endereco(self, endereco):
         self.__endereco = endereco
+
+    def __eq__(self, other):
+        if isinstance(other, Destinatario):
+            return self.cpf == other.cpf and self.nome == other.nome and self.endereco == other.endereco
+        else:
+            return False

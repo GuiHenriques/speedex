@@ -62,3 +62,10 @@ class Endereco:
                  Bairro: {self._bairro},\
                  Rua: {self._rua},\
                  Número: {self._numero}"
+
+    def __eq__(self, other):
+        if isinstance(other, Endereco):
+            return self.cep == other.cep and self.estado == other.estado and self.cidade == other.cidade\
+                and self.bairro == other.bairro and self.rua == other.rua and self.numero == other.numero
+        else:
+            return False

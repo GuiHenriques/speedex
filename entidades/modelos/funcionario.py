@@ -24,7 +24,7 @@ class Funcionario(Pessoa):
         self.__senha_hash = senha
 
     def __eq__(self, other):
-        if other is not None:
+        if isinstance(other, Funcionario):
             return self.cpf == other.cpf and self.nome == other.nome\
                 and self.email == other.email and self.senha_hash == other.senha_hash
         else:

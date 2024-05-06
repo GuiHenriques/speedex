@@ -25,7 +25,7 @@ class ControladorCliente:
             opcao_escolhida = lista_opcoes[opcao]
             opcao_escolhida()
 
-    def cadastrar_cliente(self, cpf: str, nome: str, endereco: Endereco) -> bool:
+    def cadastrar_cliente(self, cpf: str, nome: str, endereco: Endereco = None) -> bool:
         cliente = None
         if endereco is None:
             cliente = Remetente(cpf, nome)

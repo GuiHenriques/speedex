@@ -1,16 +1,17 @@
 from controladores.controlador_sistema import ControladorSistema
 from entidades.modelos.funcionario import Funcionario
+from tests.conftest import controlador_sistema as cs
 
 import pytest
 
 
 class TestFuncionario:
-    controlador_sistema = ControladorSistema()
+    controlador_sistema = cs
     nome_valido = "Taylor Swift"
     senha_valida = "123"
 
     # Sempre antes de realizar a bateria de testes de funcionário, ele limpa a tabela de funcionários
-    @pytest.fixture(scope="session", autouse=True)
+    @pytest.fixture(scope="class", autouse=True)
     def limpar_banco(self):
         self.controlador_sistema.database.cursor().execute("TRUNCATE TABLE funcionarios;")
 
@@ -30,7 +31,7 @@ class TestFuncionario:
         funcionario_cadastrado = self.controlador_sistema.controlador_funcionario.cadastrar_funcionario(
             cpf_invalido, self.nome_valido, email_valido, self.senha_valida
         )
-        assert funcionario_cadastrado == False
+        assert not funcionario_cadastrado
 
     def test_falhar_cadastro_com_cpf_ja_cadastrado(self):
         cpf_repetido = "627.975.840-07"
@@ -44,7 +45,7 @@ class TestFuncionario:
         funcionario_repetido_cadastrado = self.controlador_sistema.controlador_funcionario.cadastrar_funcionario(
             cpf_repetido, self.nome_valido, email_valido2, self.senha_valida
         )
-        assert funcionario_repetido_cadastrado == False
+        assert not funcionario_repetido_cadastrado
 
     def test_falhar_cadastro_com_email_ja_cadastrado(self):
         cpf_valido = "991.889.610-87"
@@ -59,4 +60,4 @@ class TestFuncionario:
             cpf_valido2, self.nome_valido, email_repetido, self.senha_valida
         )
 
-        assert funcionario_repetido_cadastrado == False
+        assert not funcionario_repetido_cadastrado
