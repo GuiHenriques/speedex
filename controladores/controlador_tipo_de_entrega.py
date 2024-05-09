@@ -1,5 +1,6 @@
 from telas.tela_tipo_de_entrega import TelaTiposDeEntrega
 from entidades.modelos.tipo_de_entrega import tipoDeEntrega
+from entidades.repositorios.tipo_de_entrega_repositorio import tipoDeEntregaRepositorio
 
 
 from psycopg2 import extensions
@@ -10,6 +11,8 @@ class ControladorTipoDeEntrega:
         self.__tela = TelaTiposDeEntrega(self)
         self.__controlador_sistema = controlador_sistema
         self.__cursor: extensions.cursor = controlador_sistema.database.cursor()
+        self.__repositorio = tipoDeEntregaRepositorio(controlador_sistema)
+
 
     def abre_tela(self):
         lista_opcoes = {
@@ -27,13 +30,19 @@ class ControladorTipoDeEntrega:
             funcao_escolhida = lista_opcoes[opcao]
             funcao_escolhida()
 
+    def __mensagem(self, mensagem):
+        try:
+            self.__tela.mensagem(mensagem)
+        except AttributeError as e: # Quando em ambiente de teste, já que None vai chamar o método mensagem.
+            pass
+
     def pegar_tipo_de_entrega_por_id(self, id):
         self.__cursor.execute("SELECT * FROM tipos_de_entrega WHERE id = %s", (id,))
         tipo_de_entrega = self.__cursor.fetchone()
         if tipo_de_entrega:
             return tipo_de_entrega
         else:
-            self.__tela.mensagem("Erro", "Tipo de entrega não encontrado para o ID fornecido.")
+            self.__mensagem("Tipo de entrega não encontrado para o ID fornecido.")
             return None
     
     def incluir_tipo_de_entrega(self):
@@ -48,13 +57,16 @@ class ControladorTipoDeEntrega:
         novo_id = max_id + 1 if max_id is not None else 1
 
         
+        novo_tipo_de_entrega = tipoDeEntrega(novo_id, dados_tipo_de_entrega["nome"], dados_tipo_de_entrega["taxa"], dados_tipo_de_entrega["descricao"])
 
-        self.__cursor.execute("INSERT INTO tipos_de_entrega (id, nome, taxa, descricao) VALUES (%s, %s, %s, %s)",
-                              (novo_id, dados_tipo_de_entrega["nome"], dados_tipo_de_entrega["taxa"], dados_tipo_de_entrega["descricao"]))
+        cadastrado, msg_error = self.__repositorio.registrar_tipo_de_entrega(novo_tipo_de_entrega)
+        if cadastrado:
+            self.__mensagem("Tipo de entrega cadastrado com sucesso.")
+            return novo_tipo_de_entrega
+        else:
+            self.__mensagem(f"Não foi possível cadastrar o tipo de entrega:\n{msg_error}")
+            return False
 
-        self.__controlador_sistema.database.commit()
-        self.__tela.mensagem("Sucesso", "Tipo de entrega cadastrado com sucesso.")
-        return True
 
     def alterar_tipo_de_entrega(self):
         codigo_selecionado = self.__tela.seleciona_codigo_tipo_de_entrega()
@@ -68,7 +80,7 @@ class ControladorTipoDeEntrega:
                                   (dados_tipo_de_entrega["nome"], dados_tipo_de_entrega["taxa"], dados_tipo_de_entrega["descricao"], codigo_selecionado))
             self.__controlador_sistema.database.commit()
 
-            self.__tela.mensagem("Sucesso", "Tipo de entrega alterado com sucesso!")
+            self.__mensagem("Tipo de entrega alterado com sucesso!")
             return True
 
     def excluir_tipo_de_entrega(self):
@@ -77,7 +89,7 @@ class ControladorTipoDeEntrega:
         if tipo_de_entrega is not None:
             self.__cursor.execute("DELETE FROM tipos_de_entrega WHERE id = %s", (codigo_selecionado,))
             self.__controlador_sistema.database.commit()
-            self.__tela.mensagem("Sucesso", "Tipo de entrega excluído com sucesso!")
+            self.__mensagem("Tipo de entrega excluído com sucesso!")
 
     def listar_tipo_de_entrega(self):
         self.__cursor.execute("SELECT * FROM tipos_de_entrega")
