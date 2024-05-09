@@ -17,7 +17,7 @@ class tipoDeEntregaRepositorio:
         return True, ""
     
     def pegar_tipo_de_entrega_por_id(self, id):
-        dados_tipo_de_entrga: tuple = None
+        dados_tipo_de_entrega: tuple = None
         try:
             self.__cursor.execute(f"SELECT * FROM tipos_de_entrega\
                                   WHERE id='{id}'")
@@ -25,6 +25,6 @@ class tipoDeEntregaRepositorio:
         except Exception as e:
             self.__tela.mensagem("Erro", "Tipo de entrega não encontrado para o ID fornecido.")
         
-        if dados_tipo_de_entrga != None:
-            tipodeentrega = tipoDeEntrega(*dados_tipo_de_entrga)
+        if dados_tipo_de_entrega != None:
+            tipodeentrega = tipoDeEntrega(*dados_tipo_de_entrega)
             return tipodeentrega
