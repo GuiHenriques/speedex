@@ -1,7 +1,8 @@
 from telas.tela_sistema import TelaSistema
 from controladores.controlador_funcionario import ControladorFuncionario
 from controladores.controlador_tipo_de_entrega import ControladorTipoDeEntrega
-from controladores.controlador_encomenda import ControladorEncomenda
+from controladores.controlador_entrega import ControladorEntrega
+from controladores.controlador_cliente import ControladorCliente
 
 import os, sys
 import psycopg2
@@ -10,13 +11,14 @@ load_dotenv()
 
 class ControladorSistema:
     def __init__(self):
-        self.__tela_sistema = TelaSistema()
+        self.__tela = TelaSistema()
         self.__database = psycopg2.connect(os.getenv(self.get_connection_string()))
-        self.__database.autocommit = True
+        self.__database.autocommit = True # Realiza commit no banco sempre depois de executar uma query (psycopg2).
         self.__development_mode = not self.modo_producao()
         self.__controlador_funcionario = ControladorFuncionario(self)
         self.__controlador_tipo_de_entrega = ControladorTipoDeEntrega(self)
-        self.__controlador_encomenda = ControladorEncomenda(self)
+        self.__controlador_encomenda = ControladorEntrega(self)
+        self.__controlador_cliente = ControladorCliente(self)
 
     @property
     def database(self):
@@ -37,6 +39,10 @@ class ControladorSistema:
     @property
     def controlador_encomenda(self):
         return self.__controlador_encomenda
+    
+    @property
+    def controlador_cliente(self):
+        return self.__controlador_cliente
 
     def inicializa_sistema(self):
         # if not self.login():
@@ -45,7 +51,7 @@ class ControladorSistema:
         self.abre_tela()
 
     def abre_tela(self):
-        self.__tela_sistema.abre_tela()
+        self.__tela.abre_tela()
 
     def login(self):
         return self.__controlador_funcionario.abre_tela_login()
@@ -53,8 +59,11 @@ class ControladorSistema:
     def menu_tipo_de_entrega(self):
         return self.__controlador_tipo_de_entrega.abre_tela()
     
-    def menu_encomenda(self):
-        return self.__controlador_encomenda.abre_tela_encomenda()
+    def menu_entrega(self):
+        return self.__controlador_encomenda.abre_tela()
+    
+    def menu_cliente(self):
+        return self.__controlador_cliente.abre_tela()
     
     def encerra_sistema(self):
         self.__database.close()
@@ -71,8 +80,9 @@ class ControladorSistema:
 
     def abre_tela(self):
         lista_opcoes = {
-            1: self.menu_tipo_de_entrega,
-            4: self.menu_encomenda,
+            1: self.menu_entrega,
+            2: self.menu_cliente,
+            3: self.menu_tipo_de_entrega,
             0: self.encerra_sistema,
         }
         # Tipos de Entrega 1
@@ -83,6 +93,6 @@ class ControladorSistema:
         # Relatórios 6 
 
         while True:
-            opcao = self.__tela_sistema.abre_tela()
+            opcao = self.__tela.abre_tela()
             funcao_escolhida = lista_opcoes[opcao]
             funcao_escolhida()

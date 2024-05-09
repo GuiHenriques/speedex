@@ -1,9 +1,9 @@
-from telas.tela import Tela
+from telas.telaAbstrata import TelaAbstrata
 
 import PySimpleGUI as sg
 
 
-class TelaSistema(Tela):
+class TelaSistema(TelaAbstrata):
     def __init__(self):
         super().__init__()
 
@@ -20,11 +20,10 @@ class TelaSistema(Tela):
     def tela_principal(self):
         layout = self.layout_button(
             [
+                "Entregas",
+                "Clientes",
                 "Tipos de Entrega",
                 "Tipos de Caixa",
-                "Clientes",
-                "Encomendas",
-                "Entregas",
                 "Relatórios",
             ]
         )

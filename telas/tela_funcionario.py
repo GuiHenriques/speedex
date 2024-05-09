@@ -1,9 +1,9 @@
-from telas.tela import Tela
+from telas.telaAbstrata import TelaAbstrata
 
 import PySimpleGUI as sg
 
 
-class TelaFuncionario(Tela):
+class TelaFuncionario(TelaAbstrata):
     def __init__(self):
         super().__init__()
 
@@ -23,10 +23,10 @@ class TelaFuncionario(Tela):
         evento, valores = self.abrir_janela()
         self.fechar_janela()
 
-        if evento == "Login":
+        if evento == "Login": # Se o funcionário quiser voltar para a tela de login
             return evento, valores
 
-        elif evento == "cadastro":
+        elif evento == "cadastro": # Quando o usuário clicar em cadastrar
             return evento, valores
 
         return evento, None

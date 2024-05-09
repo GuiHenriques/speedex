@@ -1,16 +1,22 @@
-from pessoa import Pessoa
-from endereco import Endereco
+from entidades.modelos.pessoa import Pessoa
+from entidades.modelos.endereco import Endereco
 
 
 class Destinatario(Pessoa):
-    def __init__(self, nome, cpf, endereco: Endereco):
-        super().__init__(nome, cpf)
-        self._endereco = endereco
+    def __init__(self, cpf: str, nome: str, endereco: Endereco):
+        super().__init__(cpf, nome)
+        self.__endereco = endereco
 
     @property
     def endereco(self):
-        return self._endereco
+        return self.__endereco
 
     @endereco.setter
     def endereco(self, endereco):
-        self._endereco = endereco
+        self.__endereco = endereco
+
+    def __eq__(self, other):
+        if isinstance(other, Destinatario):
+            return self.cpf == other.cpf and self.nome == other.nome and self.endereco == other.endereco
+        else:
+            return False
