@@ -58,6 +58,35 @@ class ControladorFuncionario:
 
         return senha_hash_fornecida == funcionario.senha
 
+    def cadastrar_funcionario(self, cpf: str, nome: str, email: str, senha: str) -> bool:
+        
+        if not cpf_validador(cpf):
+            self.__mensagem("CPF inválido.")
+            return False
+
+        if not email_validador(email):
+            self.__mensagem("Email inválido.")
+            return False
+
+        # Criando funcionario com cpf e emails validos.
+        novo_funcionario = Funcionario(cpf, nome, email, senha)
+
+        if self.__verificar_se_cpf_existe(novo_funcionario.cpf):
+            self.__mensagem("CPF já cadastrado.")
+            return False
+
+        if self.__verificar_se_email_existe(novo_funcionario.email):
+            self.__mensagem("Email já cadastrado.")
+            return False
+
+        cadastrado, msg_error = self.__repositorio.registrar_funcionario(novo_funcionario)
+        if cadastrado:
+            self.__mensagem("Funcionário cadastrado com sucesso.")
+            return novo_funcionario
+        else:
+            self.__mensagem(f"Não foi possível cadastrar o funcionário:\n{msg_error}")
+            return False
+
     def __verificar_se_cpf_existe(self, cpf: str):
         if self.__repositorio.pegar_funcionario(cpf) == None:
             return False
@@ -75,29 +104,3 @@ class ControladorFuncionario:
             self.__tela.mensagem(mensagem)
         except AttributeError as e: # Quando em ambiente de teste, já que None vai chamar o método mensagem.
             pass
-
-    def cadastrar_funcionario(self, cpf: str, nome: str, email: str, senha: str) -> bool:
-        if not cpf_validador(cpf):
-            self.__mensagem("CPF inválido.")
-            return False
-
-        if not email_validador(email):
-            self.__mensagem("Email inválido.")
-            return False
-
-        if self.__verificar_se_cpf_existe(cpf):
-            self.__mensagem("CPF já cadastrado.")
-            return False
-
-        if self.__verificar_se_email_existe(email):
-            self.__mensagem("Email já cadastrado.")
-            return False
-
-        novo_funcionario = Funcionario(cpf, nome, email, senha)
-        cadastrado, msg_error = self.__repositorio.registrar_funcionario(novo_funcionario)
-        if cadastrado:
-            self.__mensagem("Funcionário cadastrado com sucesso.")
-            return novo_funcionario
-        else:
-            self.__mensagem(f"Não foi possível cadastrar o funcionário:\n{msg_error}")
-            return False

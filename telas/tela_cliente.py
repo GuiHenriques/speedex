@@ -25,7 +25,7 @@ class TelaCliente(TelaAbstrata):
         elif valores["4"]:
             return 4
 
-    def tela_cadastro(self):
+    def pega_dados_de_cadastro(self):
         layout = [
             [sg.Text("Cadastrar cliente", font=("Arial", 24), justification="center")],
             [sg.Text("Nome:", size=SIZE_TEXT), sg.InputText("", key="nome", size=SIZE_INPUT_TEXT)],

@@ -36,3 +36,11 @@ class TestCliente:
             cpf_invalido, self.nome_valido
         )
         assert not cliente_cadastrado
+
+    def test_falhar_em_cadastro_com_cpf_ja_cadastrado(self):
+        cpf_valido = "689.993.210-53"
+        self.controlador_sistema.controlador_cliente.cadastrar_cliente(cpf_valido, self.nome_valido)
+        cliente_cadastrado = self.controlador_sistema.controlador_cliente.cadastrar_cliente(
+            cpf_valido, self.nome_valido
+        )
+        assert not cliente_cadastrado

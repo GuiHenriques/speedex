@@ -1,67 +1,67 @@
 class Endereco:
     def __init__(self, cep: str, estado: str, cidade: str, bairro: str, rua: str, numero: str):
-        self._cep = cep
-        self._estado = estado
-        self._cidade = cidade
-        self._bairro = bairro
-        self._rua = rua
-        self._numero = numero
+        self.__cep = cep
+        self.__estado = estado
+        self.__cidade = cidade
+        self.__bairro = bairro
+        self.__rua = rua
+        self.__numero = numero
 
     @property
     def cep(self):
-        return self._cep
+        return self.__cep
 
     @cep.setter
     def cep(self, cep):
-        self._cep = cep
+        self.__cep = cep
 
     @property
     def estado(self):
-        return self._estado
+        return self.__estado
 
     @estado.setter
     def estado(self, estado):
-        self._estado = estado
+        self.__estado = estado
 
     @property
     def cidade(self):
-        return self._cidade
+        return self.__cidade
 
     @cidade.setter
     def cidade(self, cidade):
-        self._cidade = cidade
+        self.__cidade = cidade
 
     @property
     def bairro(self):
-        return self._bairro
+        return self.__bairro
 
     @bairro.setter
     def bairro(self, bairro):
-        self._bairro = bairro
+        self.__bairro = bairro
 
     @property
     def rua(self):
-        return self._rua
+        return self.__rua
 
     @rua.setter
     def rua(self, rua):
-        self._rua = rua
+        self.__rua = rua
 
     @property
     def numero(self):
-        return self._numero
+        return self.__numero
 
     @numero.setter
     def numero(self, numero):
-        self._numero = numero
+        self.__numero = numero
 
     def __str__(self):
-        return f"CEP: {self._cep},\
-                 Estado: {self._estado},\
-                 Cidade: {self._cidade},\
-                 Bairro: {self._bairro},\
-                 Rua: {self._rua},\
-                 Número: {self._numero}"
+        return f"CEP: {self.__cep},\
+                 Estado: {self.__estado},\
+                 Cidade: {self.__cidade},\
+                 Bairro: {self.__bairro},\
+                 Rua: {self.__rua},\
+                 Número: {self.__numero}"
 
     def __eq__(self, other):
         if isinstance(other, Endereco):
