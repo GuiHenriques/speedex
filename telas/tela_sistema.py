@@ -20,11 +20,10 @@ class TelaSistema(TelaAbstrata):
     def tela_principal(self):
         layout = self.layout_button(
             [
+                "Entregas",
+                "Clientes",
                 "Tipos de Entrega",
                 "Tipos de Caixa",
-                "Clientes",
-                "Encomendas",
-                "Entregas",
                 "Relatórios",
             ]
         )

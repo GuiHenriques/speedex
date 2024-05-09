@@ -1,11 +1,11 @@
-from telas.tela_encomenda import TelaEncomenda
+from telas.tela_entrega import TelaEncomenda
 from utils.valildadores import campo_vazio_validador, campo_numerico_validador
 from entidades.repositorios.encomenda_repositorio import EncomendaRepositorio
 
 # from entidades.repositorios.cliente_repositorio import ClienteRepositorio
 
 
-class ControladorEncomenda:
+class ControladorEntrega:
     def __init__(self, controlador_sistema):
         self.__tela = TelaEncomenda() if not controlador_sistema.development_mode else None
         self.__repositorio = EncomendaRepositorio(controlador_sistema)
@@ -15,7 +15,7 @@ class ControladorEncomenda:
     def tela(self):
         return self.__tela
 
-    def abre_tela_encomenda(self):
+    def abre_tela(self):
         while True:
             evento, valores_encomenda = self.__tela.tela_encomenda()
 

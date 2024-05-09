@@ -1,7 +1,7 @@
 from telas.tela_sistema import TelaSistema
 from controladores.controlador_funcionario import ControladorFuncionario
 from controladores.controlador_tipo_de_entrega import ControladorTipoDeEntrega
-from controladores.controlador_encomenda import ControladorEncomenda
+from controladores.controlador_entrega import ControladorEntrega
 from controladores.controlador_cliente import ControladorCliente
 
 import os, sys
@@ -17,7 +17,7 @@ class ControladorSistema:
         self.__development_mode = not self.modo_producao()
         self.__controlador_funcionario = ControladorFuncionario(self)
         self.__controlador_tipo_de_entrega = ControladorTipoDeEntrega(self)
-        self.__controlador_encomenda = ControladorEncomenda(self)
+        self.__controlador_encomenda = ControladorEntrega(self)
         self.__controlador_cliente = ControladorCliente(self)
 
     @property
@@ -59,8 +59,8 @@ class ControladorSistema:
     def menu_tipo_de_entrega(self):
         return self.__controlador_tipo_de_entrega.abre_tela()
     
-    def menu_encomenda(self):
-        return self.__controlador_encomenda.abre_tela_encomenda()
+    def menu_entrega(self):
+        return self.__controlador_encomenda.abre_tela()
     
     def menu_cliente(self):
         return self.__controlador_cliente.abre_tela()
@@ -80,7 +80,7 @@ class ControladorSistema:
 
     def abre_tela(self):
         lista_opcoes = {
-            1: self.menu_encomenda,
+            1: self.menu_entrega,
             2: self.menu_cliente,
             3: self.menu_tipo_de_entrega,
             0: self.encerra_sistema,
