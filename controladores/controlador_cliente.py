@@ -61,13 +61,27 @@ class ControladorCliente:
             self.mensagem("CPF já cadastrado!")
             return False
 
-        cliente_cadastrado, msg_error = self.__repositorio.registrar_cliente(cliente)
-        if cliente_cadastrado:
+        cliente_foi_cadastrado, msg_error = self.__repositorio.registrar_cliente(cliente)
+        if cliente_foi_cadastrado:
             self.mensagem("Cliente cadastrado!")
             return cliente
         else:
             self.mensagem(f"Não foi possível cadastrar o cliente!\n{msg_error}")
             return False
+        
+    def excluir_cliente(self, cpf: str):
+        if not cpf_validador(cpf):
+            self.mensagem("CPF inválido!")
+            return False
+
+        cliente = self.__repositorio.pega_cliente(cpf)
+        cliente_foi_excluido, msg_error = self.__repositorio.excluir_cliente(cliente)
+        if cliente_foi_excluido:
+            return cliente
+        else:
+            self.mensagem(f"Não foi possível excluir o cliente!\n{msg_error}")
+            return False
+
 
     def __verificar_se_cpf_existe(self, cpf: str):
         if self.__repositorio.pega_cliente(cpf) == None:

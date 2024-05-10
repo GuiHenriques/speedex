@@ -3,7 +3,7 @@ from telas.telaAbstrata import TelaAbstrata
 import PySimpleGUI as sg
 
 # constantes
-SIZE_TEXT = (5, 1)
+SIZE_TEXT = (10, 1)
 SIZE_INPUT_TEXT = (30, 1)
 
 class TelaCliente(TelaAbstrata):
