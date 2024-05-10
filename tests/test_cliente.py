@@ -68,4 +68,5 @@ class TestCliente:
 
     def test_falhar_em_exclusao_de_cliente_inexistente(self):
         cpf_valido = "482.061.170-40"
-        # DO: Implementar a verificação de cliente inexistente.
+        cliente_excluido = self.controlador_sistema.controlador_cliente.excluir_cliente(cpf_valido)
+        assert not cliente_excluido
