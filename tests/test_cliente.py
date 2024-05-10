@@ -8,7 +8,7 @@ import pytest
 class TestCliente:
     controlador_sistema = cs
     nome_valido = "Michael Jackson"
-    endereco_valido = Endereco("26321510", "Rio de Janeiro", "Queimados", "Parque Ipanema", "Rua Santo Elias", "24A")
+    endereco_valido = Endereco("26321-510", "Rio de Janeiro", "Queimados", "Parque Ipanema", "Rua Santo Elias", "24A")
 
     @pytest.fixture(scope="class", autouse=True)
     def limpar_banco(self):
@@ -51,7 +51,10 @@ class TestCliente:
             cpf_valido, self.nome_valido
         )
         cliente_excluido = self.controlador_sistema.controlador_cliente.excluir_cliente(cpf_valido)
-        assert cliente_excluido == cliente_cadastrado
+        if isinstance(cliente_excluido, Remetente):
+            assert cliente_excluido == cliente_cadastrado
+        else:
+            assert False
 
     def test_sucesso_em_exclusao_de_destinatario(self):
         cpf_valido = "658.512.530-45"
@@ -59,7 +62,10 @@ class TestCliente:
             cpf_valido, self.nome_valido, self.endereco_valido
         )
         cliente_excluido = self.controlador_sistema.controlador_cliente.excluir_cliente(cpf_valido)
-        assert cliente_excluido == cliente_cadastrado
+        if isinstance(cliente_excluido, Destinatario):
+            assert cliente_excluido == cliente_cadastrado
+        else:
+            assert False
 
     def test_falhar_em_exclusao_de_cpf_invalido(self):
         cpf_invalido = "123.456.789-10"

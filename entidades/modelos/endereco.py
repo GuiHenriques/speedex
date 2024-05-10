@@ -1,6 +1,9 @@
+from utils.formatadores import cep_formatador
+
+
 class Endereco:
     def __init__(self, cep: str, estado: str, cidade: str, bairro: str, rua: str, numero: str):
-        self.__cep = cep
+        self.__cep = cep_formatador(cep)
         self.__estado = estado
         self.__cidade = cidade
         self.__bairro = bairro

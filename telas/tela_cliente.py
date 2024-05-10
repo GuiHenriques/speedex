@@ -13,6 +13,7 @@ class TelaCliente(TelaAbstrata):
     def abre_tela(self):
         self.tela_principal()
         evento, valores = self.abrir_janela()
+        self.fechar_janela()
 
         if evento is None:
             return 0
@@ -24,13 +25,12 @@ class TelaCliente(TelaAbstrata):
             [sg.Text("Cadastrar cliente", font=("Arial", 24), justification="center")],
             [sg.Text("Nome:", size=SIZE_TEXT), sg.InputText("", key="nome", size=SIZE_INPUT_TEXT)],
             [sg.Text("CPF:", size=SIZE_TEXT), sg.InputText("", key="cpf", size=SIZE_INPUT_TEXT)],
-            [sg.Text("Endereço:", size=SIZE_TEXT), sg.InputText("", key="endereco", size=SIZE_INPUT_TEXT)],
-            [sg.Text("CEP", size=SIZE_TEXT), sg.InputText("", key="cep", size=SIZE_INPUT_TEXT)],
+            [sg.Text("CEP", size=SIZE_TEXT), sg.InputText("Opcional", key="cep", size=SIZE_INPUT_TEXT)],
+            [sg.Text("Estado", size=SIZE_TEXT), sg.InputText("", key="estado", size=SIZE_INPUT_TEXT)],
+            [sg.Text("Cidade", size=SIZE_TEXT), sg.InputText("", key="cidade", size=SIZE_INPUT_TEXT)],
+            [sg.Text("Bairro", size=SIZE_TEXT), sg.InputText("", key="bairro", size=SIZE_INPUT_TEXT)],
             [sg.Text("Rua", size=SIZE_TEXT), sg.InputText("", key="rua", size=SIZE_INPUT_TEXT)],
             [sg.Text("Número", size=SIZE_TEXT), sg.InputText("", key="numero", size=SIZE_INPUT_TEXT)],
-            [sg.Text("Bairro", size=SIZE_TEXT), sg.InputText("", key="bairro", size=SIZE_INPUT_TEXT)],
-            [sg.Text("Cidade", size=SIZE_TEXT), sg.InputText("", key="cidade", size=SIZE_INPUT_TEXT)],
-            [sg.Text("Estado", size=SIZE_TEXT), sg.InputText("", key="Estado", size=SIZE_INPUT_TEXT)],
             [sg.Button("Cadastrar", size=(8, 1))]
         ]
 
