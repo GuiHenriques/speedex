@@ -1,14 +1,14 @@
-from telas.tela_entrega import TelaEncomenda
+from telas.tela_entrega import TelaEntrega
 from utils.valildadores import campo_vazio_validador, campo_numerico_validador
-from entidades.repositorios.encomenda_repositorio import EncomendaRepositorio
+from entidades.repositorios.entrega_repositorio import EntregaRepositorio
 
 # from entidades.repositorios.cliente_repositorio import ClienteRepositorio
 
 
 class ControladorEntrega:
     def __init__(self, controlador_sistema):
-        self.__tela = TelaEncomenda() if not controlador_sistema.development_mode else None
-        self.__repositorio = EncomendaRepositorio(controlador_sistema)
+        self.__tela = TelaEntrega() if not controlador_sistema.development_mode else None
+        self.__repositorio = EntregaRepositorio(controlador_sistema)
         # self.__repositorio_cliente = ClienteRepositorio(controlador_sistema)
 
     @property
@@ -20,14 +20,14 @@ class ControladorEntrega:
             evento, valores_encomenda = self.__tela.tela_encomenda()
 
             if evento == None or evento == "voltar":
-                return False
-
+                return
             if not self.__verificar_campos_validos_encomenda(valores_encomenda):
                 continue
             
+            
             # se usuario tem caixa
             if valores_encomenda["caixa_sim"]:
-                valores_caixa = self.tela_encomenda.tela_possui_caixa()
+                valores_caixa = self.tela.tela_possui_caixa()
                 # valores_caixa = {"altura": "10", "largura": "10", "comprimento": "10"}
                 if valores_caixa == None:
                     return False
@@ -37,24 +37,47 @@ class ControladorEntrega:
                     continue
 
             else:
-                valores_caixa = self.tela_encomenda.tela_nao_possui_caixa()
+                
+                valores_caixa = self.tela.tela_nao_possui_caixa()
                 # pegar dimensões da caixa selecionada
                 
                 if valores_caixa == None:
                     return False
+                
+            print(valores_caixa)
 
-            # registrar encomenda
             valores = {**valores_encomenda, **valores_caixa}
-            print(valores)
-            self.processar_encomenda(valores)
+            # print(valores)
+
+            
+            # registrar encomenda
+            # self.registrar_encomenda(valores["conteudo"], valores["peso"], valores_caixa)
+
+            self.processar_entrega(valores)
             break
+    
+    def processar_entrega(self, valores):
+        # destino
+
+        # distancia
+
+        # valor total
+
+        # registrar encomenda
+        self.registrar_encomenda(valores)
+
+        # registrar entrega
+
+        # tela entrega cadastrada
+        self.tela.tela_cadastrada()
 
     def registrar_encomenda(self, valores):
+        print("Valores Encomenda", valores)
 
         # registrar encomenda no banco de dados
         # self.__repositorio.registrar_encomenda()
 
-        self.__tela.tela_cadastrada()
+        # self.__tela.tela_cadastrada()
 
     def __verificar_campos_validos_encomenda(self, valores_encomenda):
 

@@ -22,7 +22,6 @@ def email_validador(email: str) -> bool:
     pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
     return re.match(pattern, email) is not None
 
-
 def campo_vazio_validador(valores: dict) -> bool:
     return any(
         not value.strip() if isinstance(value, str) else value is None

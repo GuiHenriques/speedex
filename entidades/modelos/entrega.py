@@ -1,8 +1,8 @@
-from remetente import Remetente
-from destinatario import Destinatario
-from encomenda import Encomenda
-from tipo_de_entrega import TipoDeEntrega
-from funcionario import Funcionario
+from .remetente import Remetente
+from .destinatario import Destinatario
+from .encomenda import Encomenda
+from .tipo_de_entrega import tipoDeEntrega
+from .funcionario import Funcionario
 
 
 class Entrega:
@@ -11,7 +11,7 @@ class Entrega:
         remetente: Remetente,
         destinatario: Destinatario,
         encomenda: Encomenda,
-        tipo_de_entrega: TipoDeEntrega,
+        tipo_de_entrega: tipoDeEntrega,
         funcionario: Funcionario,
         distancia: float,
     ):

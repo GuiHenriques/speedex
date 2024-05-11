@@ -15,3 +15,14 @@ class EntregaRepositorio:
             return False, "Erro interno no banco de dados."
         
         return True, ""
+    
+    def pegar_tipos_de_caixa(self):
+        tipos_de_caixa = []
+        try:
+            self.__cursor.execute("SELECT * FROM tipos_de_caixa")
+            tipos_de_caixa = self.__cursor.fetchall()
+        except Exception as e:
+            self.__tela.mensagem("Erro ao buscar tipos de caixa.")
+
+        return tipos_de_caixa
+    

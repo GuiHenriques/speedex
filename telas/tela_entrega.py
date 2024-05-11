@@ -2,7 +2,7 @@ import PySimpleGUI as sg
 from telas.telaAbstrata import TelaAbstrata
 
 
-class TelaEncomenda(TelaAbstrata):
+class TelaEntrega(TelaAbstrata):
     def __init__(self):
         super().__init__()
 
@@ -10,12 +10,32 @@ class TelaEncomenda(TelaAbstrata):
         layout = [
             [sg.Text("Encomenda", font=("Arial", 24), justification="center")],
             [
+                sg.Text("CPF do Remetente:", size=(15, 1)),
+                sg.InputText("", key="cpf_remetente", size=(30, 1)),
+            ],
+            [
+                sg.Text("CPF do Destinatário:", size=(15, 1)),
+                sg.InputText("", key="cpf_destinatario", size=(30, 1)),
+            ],
+            [
                 sg.Text("Conteúdo:", size=(15, 1)),
-                sg.InputText("", key="descricao", size=(30, 1)),
+                sg.InputText("", key="conteudo", size=(30, 1)),
             ],
             [
                 sg.Text("Peso (kg):", size=(15, 1)),
                 sg.InputText("", key="peso", size=(30, 1)),
+            ],
+            [
+                sg.Text(
+                    "Opção de entrega:",
+                    size=(15, 1),
+                    justification="center",
+                ),
+                sg.Combo(
+                    ["Expressa", "Normal", "Econômica"],
+                    key="opcao_entrega",
+                    size=(28, 1),
+                ),
             ],
             [
                 sg.Text("Possui caixa?", size=(15, 1)),
@@ -40,7 +60,9 @@ class TelaEncomenda(TelaAbstrata):
         self.fechar_janela()
 
         # {
-        #     "descricao": "Bola",
+        #     "cpf_remetente": "123.456.789-00",
+        #     "cpf_destinatario": "987.654.321-00",
+        #     "conteudo": "Bola",
         #     "peso": "10",
         #     "caixa_sim": True,
         #     "caixa_nao": False,
@@ -107,10 +129,11 @@ class TelaEncomenda(TelaAbstrata):
         self.janela = sg.Window("Caixa", layout, element_justification="c")
 
         evento, valores = self.abrir_janela()
+        print(valores)
         self.fechar_janela()
 
         if evento == "Proximo":
-            # pegar dimensões da caixa selecionada e retornar 
+            # pegar dimensões da caixa selecionada e retornar
             # valores = {"altura": "10", "largura": "10", "comprimento": "10"}
             return valores
 
