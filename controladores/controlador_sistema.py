@@ -1,6 +1,7 @@
 from telas.tela_sistema import TelaSistema
 from controladores.controlador_funcionario import ControladorFuncionario
 from controladores.controlador_tipo_de_entrega import ControladorTipoDeEntrega
+from controladores.controlador_tipo_de_caixa import ControladorTipoDeCaixa
 from controladores.controlador_entrega import ControladorEntrega
 from controladores.controlador_cliente import ControladorCliente
 
@@ -17,6 +18,7 @@ class ControladorSistema:
         self.__development_mode = not self.modo_producao()
         self.__controlador_funcionario = ControladorFuncionario(self)
         self.__controlador_tipo_de_entrega = ControladorTipoDeEntrega(self)
+        self.__controlador_tipo_de_caixa = ControladorTipoDeCaixa(self)
         self.__controlador_encomenda = ControladorEntrega(self)
         self.__controlador_cliente = ControladorCliente(self)
 
@@ -35,6 +37,10 @@ class ControladorSistema:
     @property
     def controlador_tipo_de_entrega(self):
         return self.__controlador_tipo_de_entrega
+    
+    @property
+    def controlador_tipo_de_caixa(self):
+        return self.__controlador_tipo_de_caixa
     
     @property
     def controlador_encomenda(self):
@@ -58,6 +64,9 @@ class ControladorSistema:
 
     def menu_tipo_de_entrega(self):
         return self.__controlador_tipo_de_entrega.abre_tela()
+    
+    def menu_tipo_de_caixa(self):
+        return self.__controlador_tipo_de_caixa.abre_tela()
     
     def menu_entrega(self):
         return self.__controlador_encomenda.abre_tela()
@@ -83,14 +92,10 @@ class ControladorSistema:
             1: self.menu_entrega,
             2: self.menu_cliente,
             3: self.menu_tipo_de_entrega,
+            4: self.menu_tipo_de_caixa,
+            #5: self.menu_relatorio,
             0: self.encerra_sistema,
         }
-        # Tipos de Entrega 1
-        # Tipos de Caixa 2
-        # Clientes 3
-        # Encomendas 4 
-        # Entregas 5
-        # Relatórios 6 
 
         while True:
             opcao = self.__tela.abre_tela()
