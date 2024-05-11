@@ -93,14 +93,9 @@ class ControladorSistema:
             2: self.menu_cliente,
             3: self.menu_tipo_de_entrega,
             4: self.menu_tipo_de_caixa,
+            #5: self.menu_relatorio,
             0: self.encerra_sistema,
         }
-        # Tipos de Entrega 1
-        # Tipos de Caixa 2
-        # Clientes 3
-        # Encomendas 4 
-        # Entregas 5
-        # Relatórios 6 
 
         while True:
             opcao = self.__tela.abre_tela()
