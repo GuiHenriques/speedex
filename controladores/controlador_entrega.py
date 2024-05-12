@@ -22,7 +22,7 @@ class ControladorEntrega:
             if evento == None or evento == "voltar":
                 return False
 
-            if not self.__verificar_campos_validos_encomenda(valores_encomenda):
+            if not self.__campos_sao_validos_encomenda(valores_encomenda):
                 continue
             
             # se usuario tem caixa
@@ -33,7 +33,7 @@ class ControladorEntrega:
                     return False
 
                 # validação dos campos
-                if not self.__verificar_campos_validos_caixa(valores_caixa):
+                if not self.__campos_sao_validos_caixa(valores_caixa):
                     continue
 
             else:
@@ -56,7 +56,7 @@ class ControladorEntrega:
 
         self.__tela.tela_cadastrada()
 
-    def __verificar_campos_validos_encomenda(self, valores_encomenda):
+    def __campos_sao_validos_encomenda(self, valores_encomenda):
 
         # verificar se todos os campos foram preenchidos
         if campo_vazio_validador(valores_encomenda):
@@ -91,7 +91,7 @@ class ControladorEntrega:
         # ta puro
         return True
 
-    def __verificar_campos_validos_caixa(self, valores_caixa):
+    def __campos_sao_validos_caixa(self, valores_caixa):
         
         # verificar se todos os campos foram preenchidos
         if campo_vazio_validador(valores_caixa):

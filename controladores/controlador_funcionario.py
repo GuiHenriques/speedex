@@ -71,7 +71,7 @@ class ControladorFuncionario:
         # Criando funcionario com cpf e emails validos.
         novo_funcionario = Funcionario(cpf, nome, email, senha)
 
-        if self.__verificar_se_cpf_existe(novo_funcionario.cpf):
+        if self.__cpf_existe(novo_funcionario.cpf):
             self.__mensagem("CPF já cadastrado.")
             return False
 
@@ -87,7 +87,7 @@ class ControladorFuncionario:
             self.__mensagem(f"Não foi possível cadastrar o funcionário:\n{msg_error}")
             return False
 
-    def __verificar_se_cpf_existe(self, cpf: str):
+    def __cpf_existe(self, cpf: str):
         if self.__repositorio.pegar_funcionario(cpf) == None:
             return False
         else:
