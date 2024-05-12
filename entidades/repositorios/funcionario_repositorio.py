@@ -25,6 +25,7 @@ class FuncionarioRepositorio:
             dados_funcionario = self.__cursor.fetchone()
         except Exception as e:
             print(e)
+            return None
         
         if dados_funcionario != None:
             funcionario = Funcionario(*dados_funcionario)
