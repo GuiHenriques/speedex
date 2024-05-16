@@ -1,5 +1,5 @@
 from telas.tela_entrega import TelaEncomenda
-from utils.valildadores import campo_vazio_validador, campo_numerico_validador
+from utils.valildadores import algum_campo_e_vazio, campo_numerico_validador
 from entidades.repositorios.encomenda_repositorio import EncomendaRepositorio
 
 # from entidades.repositorios.cliente_repositorio import ClienteRepositorio
@@ -59,7 +59,7 @@ class ControladorEntrega:
     def __campos_sao_validos_encomenda(self, valores_encomenda):
 
         # verificar se todos os campos foram preenchidos
-        if campo_vazio_validador(valores_encomenda):
+        if algum_campo_e_vazio(valores_encomenda):
             self.__mensagem("Por favor, preencha todos os campos.")
             return False
 
@@ -94,7 +94,7 @@ class ControladorEntrega:
     def __campos_sao_validos_caixa(self, valores_caixa):
         
         # verificar se todos os campos foram preenchidos
-        if campo_vazio_validador(valores_caixa):
+        if algum_campo_e_vazio(valores_caixa):
             self.__mensagem("Por favor, preencha todos os campos.")
             return False
 

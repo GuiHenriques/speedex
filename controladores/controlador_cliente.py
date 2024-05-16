@@ -16,7 +16,7 @@ class ControladorCliente:
     def abre_tela(self):
         lista_opcoes = {
             1: self.menu_cadastro_de_cliente,
-            2: "self.menu_alterar_cliente",
+            2: self.menu_alterar_cliente,
             3: self.menu_excluir_cliente,
             0: "Retornar para o menu principal",
         }
@@ -31,7 +31,7 @@ class ControladorCliente:
 
     def menu_cadastro_de_cliente(self):
         while True:
-            evento, valores = self.__tela.pega_dados_de_cadastro()
+            evento, valores = self.__tela.pega_dados_de_cliente()
             
             if evento == None:
                 return
@@ -70,7 +70,7 @@ class ControladorCliente:
 
         cliente_foi_cadastrado, msg_error = self.__repositorio.registrar_cliente(cliente)
         if cliente_foi_cadastrado:
-            self.__mensagem("Cliente cadastrado!")
+            self.__mensagem("Cliente cadastrado com sucesso!")
             return cliente
         else:
             self.__mensagem(f"Não foi possível cadastrar o cliente!\n{msg_error}")
@@ -108,6 +108,64 @@ class ControladorCliente:
             self.__mensagem(f"Não foi possível excluir o cliente!\n{msg_error}")
             return False
 
+    def menu_alterar_cliente(self):
+        while True:
+            evento, valores = self.__tela.pega_cpf_cliente()
+
+            if evento == None:
+                return
+            
+            if evento == "Confirmar" and valores == None:
+                continue
+
+            cpf = valores["cpf"]
+
+            if not self.__cpf_existe(cpf):
+                self.__mensagem("CPF não cadastrado!")
+                continue
+
+            cliente = self.__repositorio.pega_cliente(cpf)
+            
+            while True:
+                evento, valores = self.__tela.pega_dados_de_cliente(
+                    cliente.nome, cliente.endereco.cep, cliente.endereco.estado,
+                    cliente.endereco.cidade, cliente.endereco.bairro, cliente.endereco.rua, cliente.endereco.numero
+                )
+
+                if evento == None:
+                    break
+                
+                if evento == "Cadastrar" and valores == None:
+                    continue
+
+                break
+
+            if valores == None:
+                continue
+
+            nome = valores["nome"]
+            endereco = Endereco(
+                valores["cep"],
+                valores["estado"],
+                valores["cidade"],
+                valores["bairro"],
+                valores["rua"],
+                valores["numero"],
+            )
+
+            if self.alterar_cliente(cpf, nome, endereco):
+                return
+
+    def alterar_cliente(self, cpf: str, nome: str, endereco: Endereco = None):
+        if endereco is None:
+            cliente = Remetente(cpf, nome)
+        else:
+            cliente = Destinatario(cpf, nome, endereco)
+
+        self.__repositorio.atualizar_dados_de_cliente(cliente)
+        self.__mensagem("Cliente atualizado com sucesso!")
+        return cliente
+        
 
     def __cpf_existe(self, cpf: str):
         if self.__repositorio.pega_cliente(cpf) == None:

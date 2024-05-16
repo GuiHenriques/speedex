@@ -38,6 +38,28 @@ class ClienteRepositorio:
         
         return True, ""
     
+    def atualizar_dados_de_cliente(self, cliente: Remetente | Destinatario):
+        if isinstance(cliente, Remetente):
+            try:
+                self.__cursor.execute(f"UPDATE clientes SET nome='{cliente.nome}\
+                                      WHERE cpf='{cliente.cpf}';'")
+            except Exception as e:
+                print(e)
+                return False, "Erro interno no banco de dados."
+        else:
+            try:
+                self.__cursor.execute(f"UPDATE clientes SET nome='{cliente.nome}', cep='{cliente.endereco.cep}',\
+                                      estado='{cliente.endereco.estado}', cidade='{cliente.endereco.cidade}',\
+                                      bairro='{cliente.endereco.bairro}', rua='{cliente.endereco.rua}',\
+                                      numero='{cliente.endereco.numero}'\
+                                      WHERE cpf='{cliente.cpf}';")
+            except Exception as e:
+                print(e)
+                return False, "Erro interno no banco de dados."
+            
+        return True, ""
+        
+    
     def pega_cliente(self, cpf: str):
         cpf = cpf_formatador(cpf)
         dados_cliente: tuple = None
