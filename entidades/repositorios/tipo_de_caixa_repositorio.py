@@ -8,8 +8,8 @@ class tipoDeCaixaRepositorio:
 
     def registrar_tipo_de_caixa(self, tipodecaixa: TipoDeCaixa):
         try:
-            self.__cursor.execute(f"INSERT INTO tipos_de_caixa(id, nome, taxa, dimensoes) \
-                                VALUES ('{tipodecaixa.id}', '{tipodecaixa.nome}', '{tipodecaixa.taxa}', '{tipodecaixa.dimensoes}');")
+            self.__cursor.execute(f"INSERT INTO tipo_de_caixa(id, nome, taxa, altura, largura, comprimento) \
+                                VALUES ('{tipodecaixa.id}', '{tipodecaixa.nome}', '{tipodecaixa.taxa}', '{tipodecaixa.dimensoes.altura}', '{tipodecaixa.dimensoes.largura}','{tipodecaixa.dimensoes.comprimento}');")
         except Exception as e:
             print(e)
             return False, "Erro interno no banco de dados."
@@ -19,7 +19,7 @@ class tipoDeCaixaRepositorio:
     def pegar_tipo_de_caixa_por_id(self, id):
         dados_tipo_de_caixa: tuple = None
         try:
-            self.__cursor.execute(f"SELECT * FROM tipos_de_caixa\
+            self.__cursor.execute(f"SELECT * FROM tipo_de_caixa\
                                   WHERE id='{id}'")
             dados_tipo_de_caixa = self.__cursor.fetchone()
         except Exception as e:

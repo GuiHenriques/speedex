@@ -1,9 +1,41 @@
 from entidades.modelos.caixa import Caixa
 
 class TipoDeCaixa:
-    def __init__(self, nome: str, taxa: float, dimensoes: str):
-        self.__id = None
-        self.__nome = nome
-        self.__taxa = taxa
-        self.__dimensoes = dimensoes
+    def __init__(self, id, nome: str, taxa: float, dimensoes: Caixa):
+        self._id = id
+        self._nome = nome
+        self._taxa = taxa
+        self._dimensoes = dimensoes
         # super().__init__(dimensoes)
+
+    @property
+    def id(self):
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        self._id = id
+
+    @property
+    def nome(self):
+        return self._nome
+
+    @nome.setter
+    def nome(self, nome):
+        self._nome = nome
+
+    @property
+    def taxa(self):
+        return self._taxa
+
+    @taxa.setter
+    def taxa(self, taxa):
+        self._taxa = taxa
+
+    @property
+    def dimensoes(self):
+        return self._dimensoes
+
+    @dimensoes.setter
+    def dimensoes(self, dimensoes):
+        self._dimensoes = dimensoes
