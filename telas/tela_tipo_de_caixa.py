@@ -54,7 +54,9 @@ class TelaTiposDeCaixa(TelaAbstrata):
         layout = [
             [sg.Text("Nome: "), sg.InputText("", key="nome")],
             [sg.Text("Taxa: "), sg.InputText("", key="taxa")],
-            [sg.Text("Dimensões: "), sg.InputText("", key="dimensoes")],
+            [sg.Text("Altura em metros: "), sg.InputText("", key="altura")],
+            [sg.Text("Largura em metros: "), sg.InputText("", key="largura")],
+            [sg.Text("Comprimento em metros: "), sg.InputText("", key="comprimento")],
             [sg.Push(), sg.Button("Cadastrar"), sg.Cancel("Cancelar")]
         ]
 
@@ -79,7 +81,24 @@ class TelaTiposDeCaixa(TelaAbstrata):
             self.fechar_janela()
             entrada_invalida = True
             return
+        
+        if not is_float(valores["altura"]) or not is_float(valores["largura"]) or not is_float(valores["comprimento"]):
+            sg.popup("Altura, largura e comprimento devem ser números válidos!")
+            self.fechar_janela()
+            entrada_invalida = True
+            return
 
+        if float(valores["altura"]) > 1 or float(valores["largura"]) > 1 or float(valores["comprimento"]) > 1:
+            sg.popup("Altura, largura e comprimento não podem ser maiores que 1m individualmente!")
+            self.fechar_janela()
+            entrada_invalida = True
+            return
+
+        if (float(valores["altura"]) + float(valores["largura"])  + float(valores["comprimento"])) > 2:
+            sg.popup("A soma de altura, largura e comprimento não pode exceder 2m!")
+            self.fechar_janela()
+            entrada_invalida = True
+            return
 
         self.fechar_janela()
         if entrada_invalida:
@@ -88,7 +107,10 @@ class TelaTiposDeCaixa(TelaAbstrata):
             return {
                 "nome": valores["nome"],
                 "taxa": float(valores["taxa"]),
-                "dimensoes": valores["dimensoes"],
+                "altura": float(valores["altura"]),
+                "largura": float(valores["largura"]),
+                "comprimento": float(valores["comprimento"]),
+
             }
         
     def seleciona_codigo_tipo_de_caixa(self):
@@ -120,7 +142,7 @@ class TelaTiposDeCaixa(TelaAbstrata):
             string_resultados = "Nenhum tipo de caixa cadastrado!"
         else:
             for row in resultados:
-                string_resultados += f"Código:{row[0]} \nNome: {row[1]} \nTaxa: {row[2]} \nDimensões: {row[3]}\n \n"
+                string_resultados += f"Código:{row[0]} \nNome: {row[1]} \nTaxa: {row[2]} \nAltura: {row[4]}m \nLargura: {row[3]}m\nComprimento: {row[5]}m\n\n"
 
         width_size = 50
         height_size = 20
