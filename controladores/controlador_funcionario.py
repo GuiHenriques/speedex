@@ -4,7 +4,7 @@ from entidades.repositorios.funcionario_repositorio import FuncionarioRepositori
 from utils.valildadores import cpf_validador
 from utils.formatadores import cpf_formatador
 from utils.valildadores import email_validador
-from utils.valildadores import campo_vazio_validador
+from utils.valildadores import algum_campo_e_vazio
 
 import hashlib
 
@@ -40,7 +40,7 @@ class ControladorFuncionario:
             if valores == None or evento == "login":
                 return False
 
-            if campo_vazio_validador(valores):
+            if algum_campo_e_vazio(valores):
                 self.__tela.mensagem("Por favor, preencha todos os campos.")
                 continue
 

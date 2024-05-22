@@ -23,7 +23,7 @@ def email_validador(email: str) -> bool:
     return re.match(pattern, email) is not None
 
 
-def campo_vazio_validador(valores: dict) -> bool:
+def algum_campo_e_vazio(valores: dict) -> bool:
     return any(
         not value.strip() if isinstance(value, str) else value is None
         for value in valores.values()
