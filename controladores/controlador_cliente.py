@@ -129,6 +129,10 @@ class ControladorCliente:
 
             cpf = valores["cpf"]
 
+            if not cpf_validador(cpf):
+                self.__mensagem("CPF inválido!")
+                continue
+
             if not self.__cpf_existe(cpf):
                 self.__mensagem("CPF não cadastrado!")
                 continue

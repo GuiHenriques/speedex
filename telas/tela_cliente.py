@@ -39,6 +39,7 @@ class TelaCliente(TelaAbstrata):
             [sg.Text("Bairro:", size=SIZE_TEXT), sg.InputText(bairro, key="bairro", size=SIZE_INPUT_TEXT)],
             [sg.Text("Rua:", size=SIZE_TEXT), sg.InputText(rua, key="rua", size=SIZE_INPUT_TEXT)],
             [sg.Text("Número:", size=SIZE_TEXT), sg.InputText(numero, key="numero", size=SIZE_INPUT_TEXT)],
+            [sg.Text("* - Campos obrigatórios"), sg.Push()],
             [sg.Button("Confirmar", size=BUTTON_SIZE)]
         ]
 
@@ -58,7 +59,7 @@ class TelaCliente(TelaAbstrata):
     
     def pega_cpf_cliente(self):
         layout = [
-            [sg.Text("Digite o CPF:", size=SIZE_TEXT), sg.InputText("", key="cpf", size=SIZE_INPUT_TEXT)],
+            [sg.Text("CPF:", size=SIZE_TEXT), sg.InputText("", key="cpf", size=SIZE_INPUT_TEXT)],
             [sg.Button("Confirmar", size=BUTTON_SIZE)]
         ]
 
