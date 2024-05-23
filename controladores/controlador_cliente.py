@@ -174,7 +174,10 @@ class ControladorCliente:
         
     def listar_clientes(self):
         clientes = self.__repositorio.pega_todos_os_clientes()
-        self.__tela.mostra_cliente(clientes)
+        if clientes:
+            self.__tela.mostra_cliente(clientes)
+        else:
+            self.__mensagem("Nenhum cliente cadastrado!")
 
     def __cpf_existe(self, cpf: str):
         if self.__repositorio.pega_cliente(cpf) == None:
