@@ -28,8 +28,9 @@ class TelaCliente(TelaAbstrata):
         
         layout = [
             [sg.Text("Cadastrar cliente" if nome == "" else "Atualizar cliente", font=("Arial", 24), justification="center")],
-            [sg.Text("CPF:", size=SIZE_TEXT), sg.InputText("", key="cpf", size=SIZE_INPUT_TEXT)] if nome == "" else [],
-            [sg.Text("Nome:", size=SIZE_TEXT), sg.InputText(nome, key="nome", size=SIZE_INPUT_TEXT)],
+            [sg.Text("")],
+            [sg.Text("CPF*:", size=SIZE_TEXT), sg.InputText("", key="cpf", size=SIZE_INPUT_TEXT)] if nome == "" else [],
+            [sg.Text("Nome*:", size=SIZE_TEXT), sg.InputText(nome, key="nome", size=SIZE_INPUT_TEXT)],
             [sg.Text("")],
             [sg.Text("Endereço"), sg.Push()],
             [sg.Text("CEP:", size=SIZE_TEXT), sg.InputText(cep, key="cep", size=SIZE_INPUT_TEXT)],
@@ -38,16 +39,16 @@ class TelaCliente(TelaAbstrata):
             [sg.Text("Bairro:", size=SIZE_TEXT), sg.InputText(bairro, key="bairro", size=SIZE_INPUT_TEXT)],
             [sg.Text("Rua:", size=SIZE_TEXT), sg.InputText(rua, key="rua", size=SIZE_INPUT_TEXT)],
             [sg.Text("Número:", size=SIZE_TEXT), sg.InputText(numero, key="numero", size=SIZE_INPUT_TEXT)],
-            [sg.Button("Cadastrar:", size=BUTTON_SIZE)]
+            [sg.Button("Confirmar", size=BUTTON_SIZE)]
         ]
 
-        self.janela = sg.Window("Cadastro", layout, element_justification="c")
+        self.janela = sg.Window("Cadastro de cliente" if nome == "" else "Atualização cliente", layout, element_justification="c")
 
         evento, valores = self.abrir_janela()
         self.fechar_janela()
 
 
-        if evento == "Cadastrar":
+        if evento == "Confirmar":
             if not self.__campos_sao_validos(valores):
                 return evento, None
     
@@ -99,11 +100,11 @@ class TelaCliente(TelaAbstrata):
     def __campos_sao_validos(self, valores):
         if "cpf" in valores:
             if valores["cpf"] == "":
-                self.mensagem("CPF pode ser vazio!")
+                self.mensagem("Campos obrigatórios não preenchidos!")
                 return False
         
         if valores["nome"] == "":
-            self.mensagem("Nome não pode ser vazio!")
+            self.mensagem("Campos obrigatórios não preenchidos!")
             return False
 
         if valores["cep"] == "":
@@ -112,7 +113,7 @@ class TelaCliente(TelaAbstrata):
                 return False
         else:
             if valores["estado"] == "" or valores["cidade"] == "" or valores["bairro"] == "" or valores["rua"] == "" or valores["numero"] == "":
-                self.mensagem("Digite também os outros campos de endereço!")
+                self.mensagem("Você deve digitar também os outros campos de endereço!")
                 return False
 
         return True

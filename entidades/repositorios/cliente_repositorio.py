@@ -38,11 +38,12 @@ class ClienteRepositorio:
         
         return True, ""
     
-    def atualizar_dados_de_cliente(self, cliente: Remetente | Destinatario):
+    def atualizar_dados_de_cliente(self, cliente: Remetente | Destinatario) -> tuple[bool, str]:
         if isinstance(cliente, Remetente):
             try:
-                self.__cursor.execute(f"UPDATE clientes SET nome='{cliente.nome}\
-                                      WHERE cpf='{cliente.cpf}';'")
+                self.__cursor.execute(f"UPDATE clientes SET nome='{cliente.nome}', cep='',\
+                                      estado='', cidade='', bairro='', rua='', numero=''\
+                                      WHERE cpf='{cliente.cpf}';")
             except Exception as e:
                 print(e)
                 return False, "Erro interno no banco de dados."

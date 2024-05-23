@@ -6,6 +6,9 @@ from entidades.modelos.endereco import Endereco
 
 from utils.valildadores import cpf_validador
 
+import urllib.request
+import json
+
 
 class ControladorCliente:
     def __init__(self, controlador_sistema):
@@ -37,7 +40,7 @@ class ControladorCliente:
             if evento == None:
                 return
 
-            if evento == "Cadastrar" and valores == None:
+            if evento == "Confirmar" and valores == None:
                 continue
 
             cpf = valores["cpf"]
@@ -68,13 +71,18 @@ class ControladorCliente:
         if self.__cpf_existe(cliente.cpf):
             self.__mensagem("CPF já cadastrado!")
             return False
+        
+        if isinstance(cliente, Destinatario):
+            if not self.__cep_existe(cliente.endereco.cep):
+                self.__mensagem("CEP Inválido!")
+                return False
 
         cliente_foi_cadastrado, msg_error = self.__repositorio.registrar_cliente(cliente)
         if cliente_foi_cadastrado:
             self.__mensagem("Cliente cadastrado com sucesso!")
             return cliente
         else:
-            self.__mensagem(f"Não foi possível cadastrar o cliente!\n{msg_error}")
+            self.__mensagem(f"Não foi possível cadastrar o cliente.\n{msg_error}")
             return False
         
     def menu_excluir_cliente(self):
@@ -106,7 +114,7 @@ class ControladorCliente:
             self.__mensagem(f"Cliente {cliente.cpf}, {cliente.nome} excluído!")
             return cliente
         else:
-            self.__mensagem(f"Não foi possível excluir o cliente!\n{msg_error}")
+            self.__mensagem(f"Não foi possível excluir o cliente.\n{msg_error}")
             return False
 
     def menu_alterar_cliente(self):
@@ -141,7 +149,7 @@ class ControladorCliente:
                 if evento == None:
                     break
                 
-                if evento == "Cadastrar" and valores == None:
+                if evento == "Confirmar" and valores == None:
                     continue
 
                 break
@@ -150,14 +158,18 @@ class ControladorCliente:
                 continue
 
             nome = valores["nome"]
-            endereco = Endereco(
-                valores["cep"],
-                valores["estado"],
-                valores["cidade"],
-                valores["bairro"],
-                valores["rua"],
-                valores["numero"],
-            )
+
+            if valores["cep"] != "" or valores["estado"] != "":
+                endereco = Endereco(
+                    valores["cep"],
+                    valores["estado"],
+                    valores["cidade"],
+                    valores["bairro"],
+                    valores["rua"],
+                    valores["numero"],
+                )
+            else:
+                endereco = None
 
             if self.alterar_cliente(cpf, nome, endereco):
                 return
@@ -168,9 +180,18 @@ class ControladorCliente:
         else:
             cliente = Destinatario(cpf, nome, endereco)
 
-        self.__repositorio.atualizar_dados_de_cliente(cliente)
-        self.__mensagem("Cliente atualizado com sucesso!")
-        return cliente
+        if isinstance(cliente, Destinatario):
+            if not self.__cep_existe(cliente.endereco.cep):
+                self.__mensagem("CEP Inválido!")
+                return False
+
+        cliente_foi_atualizado, msg_error = self.__repositorio.atualizar_dados_de_cliente(cliente)
+        if cliente_foi_atualizado:
+            self.__mensagem("Cliente atualizado com sucesso!")
+            return cliente
+        else:
+            self.__mensagem(f"Não foi possível atualizar os dados do cliente.\n{msg_error}")
+            return False
         
     def listar_clientes(self):
         clientes = self.__repositorio.pega_todos_os_clientes()
@@ -184,6 +205,17 @@ class ControladorCliente:
             return False
         else:
             return True
+        
+    def __cep_existe(self, cep: str):
+        url = f'https://viacep.com.br/ws/{cep}/json'
+        headers = { 'User-Agent': 'Autociencia/1.0' }
+        req = urllib.request.Request(url=url, headers=headers, method='GET')
+        client = urllib.request.urlopen(req)
+        content = client.read().decode('utf-8')
+        address = json.loads(content)
+        client.close()
+
+        return "cep" in address
 
     def __mensagem(self, msg):
         try:
