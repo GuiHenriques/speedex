@@ -6,6 +6,9 @@ from entidades.modelos.endereco import Endereco
 
 from utils.valildadores import cpf_validador
 
+import urllib.request
+import json
+
 
 class ControladorCliente:
     def __init__(self, controlador_sistema):
@@ -18,6 +21,7 @@ class ControladorCliente:
             1: self.menu_cadastro_de_cliente,
             2: self.menu_alterar_cliente,
             3: self.menu_excluir_cliente,
+            4: self.listar_clientes,
             0: "Retornar para o menu principal",
         }
 
@@ -36,19 +40,23 @@ class ControladorCliente:
             if evento == None:
                 return
 
-            if evento == "Cadastrar" and valores == None:
+            if evento == "Confirmar" and valores == None:
                 continue
 
             cpf = valores["cpf"]
             nome = valores["nome"]
-            endereco = Endereco(
-                valores["cep"],
-                valores["estado"],
-                valores["cidade"],
-                valores["bairro"],
-                valores["rua"],
-                valores["numero"],
-            )
+            
+            if valores["cep"] != "" or valores["estado"] != "":
+                endereco = Endereco(
+                    valores["cep"],
+                    valores["estado"],
+                    valores["cidade"],
+                    valores["bairro"],
+                    valores["rua"],
+                    valores["numero"],
+                )
+            else:
+                endereco = None
 
             if self.cadastrar_cliente(cpf, nome, endereco):
                 return
@@ -67,13 +75,18 @@ class ControladorCliente:
         if self.__cpf_existe(cliente.cpf):
             self.__mensagem("CPF já cadastrado!")
             return False
+        
+        if isinstance(cliente, Destinatario):
+            if not self.__cep_existe(cliente.endereco.cep):
+                self.__mensagem("CEP Inválido!")
+                return False
 
         cliente_foi_cadastrado, msg_error = self.__repositorio.registrar_cliente(cliente)
         if cliente_foi_cadastrado:
             self.__mensagem("Cliente cadastrado com sucesso!")
             return cliente
         else:
-            self.__mensagem(f"Não foi possível cadastrar o cliente!\n{msg_error}")
+            self.__mensagem(f"Não foi possível cadastrar o cliente.\n{msg_error}")
             return False
         
     def menu_excluir_cliente(self):
@@ -105,7 +118,7 @@ class ControladorCliente:
             self.__mensagem(f"Cliente {cliente.cpf}, {cliente.nome} excluído!")
             return cliente
         else:
-            self.__mensagem(f"Não foi possível excluir o cliente!\n{msg_error}")
+            self.__mensagem(f"Não foi possível excluir o cliente.\n{msg_error}")
             return False
 
     def menu_alterar_cliente(self):
@@ -120,6 +133,10 @@ class ControladorCliente:
 
             cpf = valores["cpf"]
 
+            if not cpf_validador(cpf):
+                self.__mensagem("CPF inválido!")
+                continue
+
             if not self.__cpf_existe(cpf):
                 self.__mensagem("CPF não cadastrado!")
                 continue
@@ -127,15 +144,20 @@ class ControladorCliente:
             cliente = self.__repositorio.pega_cliente(cpf)
             
             while True:
-                evento, valores = self.__tela.pega_dados_de_cliente(
-                    cliente.nome, cliente.endereco.cep, cliente.endereco.estado,
-                    cliente.endereco.cidade, cliente.endereco.bairro, cliente.endereco.rua, cliente.endereco.numero
-                )
+                if isinstance(cliente, Destinatario):
+                    evento, valores = self.__tela.pega_dados_de_cliente(
+                        cliente.nome, cliente.endereco.cep, cliente.endereco.estado,
+                        cliente.endereco.cidade, cliente.endereco.bairro, cliente.endereco.rua, cliente.endereco.numero
+                    )
+                else:
+                    evento, valores = self.__tela.pega_dados_de_cliente(
+                        cliente.nome
+                    )
 
                 if evento == None:
                     break
                 
-                if evento == "Cadastrar" and valores == None:
+                if evento == "Confirmar" and valores == None:
                     continue
 
                 break
@@ -144,14 +166,18 @@ class ControladorCliente:
                 continue
 
             nome = valores["nome"]
-            endereco = Endereco(
-                valores["cep"],
-                valores["estado"],
-                valores["cidade"],
-                valores["bairro"],
-                valores["rua"],
-                valores["numero"],
-            )
+
+            if valores["cep"] != "" or valores["estado"] != "":
+                endereco = Endereco(
+                    valores["cep"],
+                    valores["estado"],
+                    valores["cidade"],
+                    valores["bairro"],
+                    valores["rua"],
+                    valores["numero"],
+                )
+            else:
+                endereco = None
 
             if self.alterar_cliente(cpf, nome, endereco):
                 return
@@ -162,16 +188,42 @@ class ControladorCliente:
         else:
             cliente = Destinatario(cpf, nome, endereco)
 
-        self.__repositorio.atualizar_dados_de_cliente(cliente)
-        self.__mensagem("Cliente atualizado com sucesso!")
-        return cliente
+        if isinstance(cliente, Destinatario):
+            if not self.__cep_existe(cliente.endereco.cep):
+                self.__mensagem("CEP Inválido!")
+                return False
+
+        cliente_foi_atualizado, msg_error = self.__repositorio.atualizar_dados_de_cliente(cliente)
+        if cliente_foi_atualizado:
+            self.__mensagem("Cliente atualizado com sucesso!")
+            return cliente
+        else:
+            self.__mensagem(f"Não foi possível atualizar os dados do cliente.\n{msg_error}")
+            return False
         
+    def listar_clientes(self):
+        clientes = self.__repositorio.pega_todos_os_clientes()
+        if clientes:
+            self.__tela.mostra_cliente(clientes)
+        else:
+            self.__mensagem("Nenhum cliente cadastrado!")
 
     def __cpf_existe(self, cpf: str):
         if self.__repositorio.pega_cliente(cpf) == None:
             return False
         else:
             return True
+        
+    def __cep_existe(self, cep: str):
+        url = f'https://viacep.com.br/ws/{cep}/json'
+        headers = { 'User-Agent': 'Autociencia/1.0' }
+        req = urllib.request.Request(url=url, headers=headers, method='GET')
+        client = urllib.request.urlopen(req)
+        content = client.read().decode('utf-8')
+        address = json.loads(content)
+        client.close()
+
+        return "cep" in address
 
     def __mensagem(self, msg):
         try:

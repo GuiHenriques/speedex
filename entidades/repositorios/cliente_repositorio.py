@@ -38,11 +38,12 @@ class ClienteRepositorio:
         
         return True, ""
     
-    def atualizar_dados_de_cliente(self, cliente: Remetente | Destinatario):
+    def atualizar_dados_de_cliente(self, cliente: Remetente | Destinatario) -> tuple[bool, str]:
         if isinstance(cliente, Remetente):
             try:
-                self.__cursor.execute(f"UPDATE clientes SET nome='{cliente.nome}\
-                                      WHERE cpf='{cliente.cpf}';'")
+                self.__cursor.execute(f"UPDATE clientes SET nome='{cliente.nome}', cep='',\
+                                      estado='', cidade='', bairro='', rua='', numero=''\
+                                      WHERE cpf='{cliente.cpf}';")
             except Exception as e:
                 print(e)
                 return False, "Erro interno no banco de dados."
@@ -60,6 +61,20 @@ class ClienteRepositorio:
         return True, ""
         
     
+    def pega_todos_os_clientes(self):
+        try:
+            self.__cursor.execute(f"SELECT * FROM clientes;")
+            rows = self.__cursor.fetchall()
+        except Exception as e:
+            print(e)
+            return None
+
+        if rows is None:
+            return None
+
+        clientes = [[field if field is not None else '' for field in row] for row in rows]        
+        return clientes
+
     def pega_cliente(self, cpf: str):
         cpf = cpf_formatador(cpf)
         dados_cliente: tuple = None
