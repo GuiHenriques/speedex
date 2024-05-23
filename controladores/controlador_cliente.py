@@ -45,14 +45,18 @@ class ControladorCliente:
 
             cpf = valores["cpf"]
             nome = valores["nome"]
-            endereco = Endereco(
-                valores["cep"],
-                valores["estado"],
-                valores["cidade"],
-                valores["bairro"],
-                valores["rua"],
-                valores["numero"],
-            )
+            
+            if valores["cep"] != "" or valores["estado"] != "":
+                endereco = Endereco(
+                    valores["cep"],
+                    valores["estado"],
+                    valores["cidade"],
+                    valores["bairro"],
+                    valores["rua"],
+                    valores["numero"],
+                )
+            else:
+                endereco = None
 
             if self.cadastrar_cliente(cpf, nome, endereco):
                 return
