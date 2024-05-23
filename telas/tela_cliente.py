@@ -6,6 +6,7 @@ import PySimpleGUI as sg
 # constantes
 SIZE_TEXT = (10, 1)
 SIZE_INPUT_TEXT = (30, 1)
+BUTTON_SIZE = (8, 1)
 
 class TelaCliente(TelaAbstrata):
     def __init__(self):
@@ -35,7 +36,7 @@ class TelaCliente(TelaAbstrata):
             [sg.Text("Bairro", size=SIZE_TEXT), sg.InputText(bairro, key="bairro", size=SIZE_INPUT_TEXT)],
             [sg.Text("Rua", size=SIZE_TEXT), sg.InputText(rua, key="rua", size=SIZE_INPUT_TEXT)],
             [sg.Text("Número", size=SIZE_TEXT), sg.InputText(numero, key="numero", size=SIZE_INPUT_TEXT)],
-            [sg.Button("Cadastrar", size=(8, 1))]
+            [sg.Button("Cadastrar", size=BUTTON_SIZE)]
         ]
 
         self.janela = sg.Window("Cadastro", layout, element_justification="c")
@@ -55,7 +56,7 @@ class TelaCliente(TelaAbstrata):
     def pega_cpf_cliente(self):
         layout = [
             [sg.Text("Digite o CPF:", size=SIZE_TEXT), sg.InputText("", key="cpf", size=SIZE_INPUT_TEXT)],
-            [sg.Button("Confirmar", size=(8, 1))]
+            [sg.Button("Confirmar", size=BUTTON_SIZE)]
         ]
 
         self.janela = sg.Window("Buscar CPF", layout, element_justification="c")
@@ -70,6 +71,17 @@ class TelaCliente(TelaAbstrata):
             return evento, valores
         
         return evento, None
+
+    def mostra_cliente(self, dados_cliente):
+        header = ("CPF", "Nome", "CEP", "Estado", "Cidade", "Bairro", "Rua", "Número")
+        layout = [
+            [sg.Table(dados_cliente, header)],
+            [sg.Button("Ok", size=BUTTON_SIZE)]
+        ]
+
+        self.janela = sg.Window("Lista de clientes", layout, element_justification="c")
+        self.abrir_janela()
+        self.fechar_janela()
 
     def tela_principal(self):
         layout = self.layout_button([

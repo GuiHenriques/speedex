@@ -60,6 +60,20 @@ class ClienteRepositorio:
         return True, ""
         
     
+    def pega_todos_os_clientes(self):
+        try:
+            self.__cursor.execute(f"SELECT * FROM clientes;")
+            rows = self.__cursor.fetchall()
+        except Exception as e:
+            print(e)
+            return None
+
+        if rows is None:
+            return None
+
+        clientes = [[field if field is not None else '' for field in row] for row in rows]        
+        return clientes
+
     def pega_cliente(self, cpf: str):
         cpf = cpf_formatador(cpf)
         dados_cliente: tuple = None

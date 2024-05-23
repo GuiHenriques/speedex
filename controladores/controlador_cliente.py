@@ -18,6 +18,7 @@ class ControladorCliente:
             1: self.menu_cadastro_de_cliente,
             2: self.menu_alterar_cliente,
             3: self.menu_excluir_cliente,
+            4: self.listar_clientes,
             0: "Retornar para o menu principal",
         }
 
@@ -127,10 +128,15 @@ class ControladorCliente:
             cliente = self.__repositorio.pega_cliente(cpf)
             
             while True:
-                evento, valores = self.__tela.pega_dados_de_cliente(
-                    cliente.nome, cliente.endereco.cep, cliente.endereco.estado,
-                    cliente.endereco.cidade, cliente.endereco.bairro, cliente.endereco.rua, cliente.endereco.numero
-                )
+                if isinstance(cliente, Destinatario):
+                    evento, valores = self.__tela.pega_dados_de_cliente(
+                        cliente.nome, cliente.endereco.cep, cliente.endereco.estado,
+                        cliente.endereco.cidade, cliente.endereco.bairro, cliente.endereco.rua, cliente.endereco.numero
+                    )
+                else:
+                    evento, valores = self.__tela.pega_dados_de_cliente(
+                        cliente.nome
+                    )
 
                 if evento == None:
                     break
@@ -166,6 +172,9 @@ class ControladorCliente:
         self.__mensagem("Cliente atualizado com sucesso!")
         return cliente
         
+    def listar_clientes(self):
+        clientes = self.__repositorio.pega_todos_os_clientes()
+        self.__tela.mostra_cliente(clientes)
 
     def __cpf_existe(self, cpf: str):
         if self.__repositorio.pega_cliente(cpf) == None:
