@@ -54,9 +54,13 @@ class TelaTiposDeCaixa(TelaAbstrata):
         layout = [
             [sg.Text("Nome: "), sg.InputText("", key="nome")],
             [sg.Text("Taxa: "), sg.InputText("", key="taxa")],
+<<<<<<< HEAD
             [sg.Text("Altura em metros: "), sg.InputText("", key="altura")],
             [sg.Text("Largura em metros: "), sg.InputText("", key="largura")],
             [sg.Text("Comprimento em metros: "), sg.InputText("", key="comprimento")],
+=======
+            [sg.Text("Dimensões: "), sg.InputText("", key="dimensoes")],
+>>>>>>> 59ddabe3ca3a8fa7195d831ea3eaabed8bf07cbb
             [sg.Push(), sg.Button("Cadastrar"), sg.Cancel("Cancelar")]
         ]
 
@@ -81,6 +85,7 @@ class TelaTiposDeCaixa(TelaAbstrata):
             self.fechar_janela()
             entrada_invalida = True
             return
+<<<<<<< HEAD
         
         if not is_float(valores["altura"]) or not is_float(valores["largura"]) or not is_float(valores["comprimento"]):
             sg.popup("Altura, largura e comprimento devem ser números válidos!")
@@ -99,6 +104,9 @@ class TelaTiposDeCaixa(TelaAbstrata):
             self.fechar_janela()
             entrada_invalida = True
             return
+=======
+
+>>>>>>> 59ddabe3ca3a8fa7195d831ea3eaabed8bf07cbb
 
         self.fechar_janela()
         if entrada_invalida:
@@ -107,10 +115,14 @@ class TelaTiposDeCaixa(TelaAbstrata):
             return {
                 "nome": valores["nome"],
                 "taxa": float(valores["taxa"]),
+<<<<<<< HEAD
                 "altura": float(valores["altura"]),
                 "largura": float(valores["largura"]),
                 "comprimento": float(valores["comprimento"]),
 
+=======
+                "dimensoes": valores["dimensoes"],
+>>>>>>> 59ddabe3ca3a8fa7195d831ea3eaabed8bf07cbb
             }
         
     def seleciona_codigo_tipo_de_caixa(self):
@@ -142,7 +154,11 @@ class TelaTiposDeCaixa(TelaAbstrata):
             string_resultados = "Nenhum tipo de caixa cadastrado!"
         else:
             for row in resultados:
+<<<<<<< HEAD
                 string_resultados += f"Código:{row[0]} \nNome: {row[1]} \nTaxa: {row[2]} \nAltura: {row[4]}m \nLargura: {row[3]}m\nComprimento: {row[5]}m\n\n"
+=======
+                string_resultados += f"Código:{row[0]} \nNome: {row[1]} \nTaxa: {row[2]} \nDimensões: {row[3]}\n \n"
+>>>>>>> 59ddabe3ca3a8fa7195d831ea3eaabed8bf07cbb
 
         width_size = 50
         height_size = 20

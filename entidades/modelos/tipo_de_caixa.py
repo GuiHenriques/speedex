@@ -5,4 +5,4 @@ class TipoDeCaixa:
         self.__id = None
         self.__nome = nome
         self.__taxa = taxa
-        # super().__init__(dimensoes)
+        self.__dimensoes = dimensoes

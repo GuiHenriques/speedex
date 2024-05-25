@@ -1,7 +1,10 @@
 from entidades.modelos.remetente import Remetente
 from entidades.modelos.destinatario import Destinatario
+<<<<<<< HEAD
 from entidades.modelos.endereco import Endereco
 from utils.formatadores import cpf_formatador
+=======
+>>>>>>> 59ddabe3ca3a8fa7195d831ea3eaabed8bf07cbb
 
 from psycopg2 import extensions
 
@@ -27,6 +30,7 @@ class ClienteRepositorio:
                 print(e)
                 return False, "Erro interno no banco de dados."
 
+<<<<<<< HEAD
         return True, ""
     
     def excluir_cliente(self, cliente: Remetente | Destinatario) -> bool:
@@ -56,3 +60,6 @@ class ClienteRepositorio:
             else:
                 endereco = Endereco(*dados_cliente[2:])
                 return Destinatario(cpf, nome, endereco)
+=======
+        return True, ""
+>>>>>>> 59ddabe3ca3a8fa7195d831ea3eaabed8bf07cbb

@@ -1,8 +1,9 @@
-from abc import ABC, abstractmethod
+from abc import ABC
+from utils.formatadores import cpf_formatador
 
 class Pessoa(ABC):
     def __init__(self, cpf, nome):
-        self.__cpf = cpf
+        self.__cpf = cpf_formatador(cpf)
         self.__nome = nome
     
     @property

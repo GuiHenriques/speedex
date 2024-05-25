@@ -1,6 +1,9 @@
 from telas.tela_tipo_de_caixa import TelaTiposDeCaixa
 from entidades.modelos.tipo_de_caixa import TipoDeCaixa
+<<<<<<< HEAD
 from entidades.modelos.caixa import Caixa
+=======
+>>>>>>> 59ddabe3ca3a8fa7195d831ea3eaabed8bf07cbb
 from entidades.repositorios.tipo_de_caixa_repositorio import tipoDeCaixaRepositorio
 
 
@@ -38,7 +41,11 @@ class ControladorTipoDeCaixa:
             pass
 
     def pegar_tipo_de_caixa_por_id(self, id):
+<<<<<<< HEAD
         self.__cursor.execute("SELECT * FROM tipo_de_caixa WHERE id = %s", (id,))
+=======
+        self.__cursor.execute("SELECT * FROM tipos_de_caixa WHERE id = %s", (id,))
+>>>>>>> 59ddabe3ca3a8fa7195d831ea3eaabed8bf07cbb
         tipo_de_caixa = self.__cursor.fetchone()
         if tipo_de_caixa:
             return tipo_de_caixa
@@ -52,13 +59,22 @@ class ControladorTipoDeCaixa:
             return
         
 
+<<<<<<< HEAD
         consulta_max_id = "SELECT MAX(id) FROM tipo_de_caixa"
+=======
+        consulta_max_id = "SELECT MAX(id) FROM tipos_de_caixa"
+>>>>>>> 59ddabe3ca3a8fa7195d831ea3eaabed8bf07cbb
         self.__cursor.execute(consulta_max_id)
         max_id = self.__cursor.fetchone()[0]
         novo_id = max_id + 1 if max_id is not None else 1
 
+<<<<<<< HEAD
         nova_caixa = Caixa(dados_tipo_de_caixa["altura"], dados_tipo_de_caixa["largura"], dados_tipo_de_caixa["comprimento"])
         novo_tipo_de_caixa = TipoDeCaixa(novo_id, dados_tipo_de_caixa["nome"], dados_tipo_de_caixa["taxa"], nova_caixa)
+=======
+        
+        novo_tipo_de_caixa = TipoDeCaixa(novo_id, dados_tipo_de_caixa["nome"], dados_tipo_de_caixa["taxa"], dados_tipo_de_caixa["dimensoes"])
+>>>>>>> 59ddabe3ca3a8fa7195d831ea3eaabed8bf07cbb
 
         cadastrado, msg_error = self.__repositorio.registrar_tipo_de_caixa(novo_tipo_de_caixa)
         if cadastrado:
@@ -77,8 +93,13 @@ class ControladorTipoDeCaixa:
             if dados_tipo_de_caixa == None:
                 return False
             
+<<<<<<< HEAD
             self.__cursor.execute("UPDATE tipo_de_caixa SET nome = %s, taxa = %s, altura = %s, largura = %s, comprimento = %s WHERE id = %s",
                                   (dados_tipo_de_caixa["nome"], dados_tipo_de_caixa["taxa"],dados_tipo_de_caixa["largura"],dados_tipo_de_caixa["altura"],dados_tipo_de_caixa["comprimento"], codigo_selecionado))
+=======
+            self.__cursor.execute("UPDATE tipos_de_caixa SET nome = %s, taxa = %s, descricao = %s WHERE id = %s",
+                                  (dados_tipo_de_caixa["nome"], dados_tipo_de_caixa["taxa"], dados_tipo_de_caixa["dimensoes"], codigo_selecionado))
+>>>>>>> 59ddabe3ca3a8fa7195d831ea3eaabed8bf07cbb
             self.__controlador_sistema.database.commit()
 
             self.__mensagem("Tipo de caixa alterado com sucesso!")
@@ -88,12 +109,20 @@ class ControladorTipoDeCaixa:
         codigo_selecionado = self.__tela.seleciona_codigo_tipo_de_caixa()
         tipo_de_caixa = self.pegar_tipo_de_caixa_por_id(codigo_selecionado)
         if tipo_de_caixa is not None:
+<<<<<<< HEAD
             self.__cursor.execute("DELETE FROM tipo_de_caixa WHERE id = %s", (codigo_selecionado,))
+=======
+            self.__cursor.execute("DELETE FROM tipos_de_caixa WHERE id = %s", (codigo_selecionado,))
+>>>>>>> 59ddabe3ca3a8fa7195d831ea3eaabed8bf07cbb
             self.__controlador_sistema.database.commit()
             self.__mensagem("Tipo de caixa excluído com sucesso!")
 
     def listar_tipo_de_caixa(self):
+<<<<<<< HEAD
         self.__cursor.execute("SELECT * FROM tipo_de_caixa")
+=======
+        self.__cursor.execute("SELECT * FROM tipos_de_caixa")
+>>>>>>> 59ddabe3ca3a8fa7195d831ea3eaabed8bf07cbb
         resultados = self.__cursor.fetchall()
         
         self.__tela.mostra_tipo_de_caixa(resultados)
