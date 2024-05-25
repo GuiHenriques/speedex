@@ -15,7 +15,7 @@ class ControladorCliente:
         self.__tela = TelaCliente() if not controlador_sistema.development_mode else None
         self.__controlador_sistema = controlador_sistema
         self.__repositorio = ClienteRepositorio(controlador_sistema)
-
+    
     def abre_tela(self):
         lista_opcoes = {
             1: self.menu_cadastro_de_cliente,
@@ -72,7 +72,7 @@ class ControladorCliente:
         else:
             cliente = Destinatario(cpf, nome, endereco)
         
-        if self.__cpf_existe(cliente.cpf):
+        if self.cpf_existe(cliente.cpf):
             self.__mensagem("CPF já cadastrado!")
             return False
         
@@ -108,7 +108,7 @@ class ControladorCliente:
             self.__mensagem("CPF inválido!")
             return False
 
-        if not self.__cpf_existe(cpf):
+        if not self.cpf_existe(cpf):
             self.__mensagem("CPF não cadastrado!")
             return False
 
@@ -137,7 +137,7 @@ class ControladorCliente:
                 self.__mensagem("CPF inválido!")
                 continue
 
-            if not self.__cpf_existe(cpf):
+            if not self.cpf_existe(cpf):
                 self.__mensagem("CPF não cadastrado!")
                 continue
 
@@ -208,7 +208,7 @@ class ControladorCliente:
         else:
             self.__mensagem("Nenhum cliente cadastrado!")
 
-    def __cpf_existe(self, cpf: str):
+    def cpf_existe(self, cpf: str):
         if self.__repositorio.pega_cliente(cpf) == None:
             return False
         else:
