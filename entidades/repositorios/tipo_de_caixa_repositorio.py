@@ -8,8 +8,8 @@ class tipoDeCaixaRepositorio:
 
     def registrar_tipo_de_caixa(self, tipodecaixa: TipoDeCaixa):
         try:
-            self.__cursor.execute(f"INSERT INTO tipo_de_caixa(id, nome, taxa, altura, largura, comprimento) \
-                                VALUES ('{tipodecaixa.id}', '{tipodecaixa.nome}', '{tipodecaixa.taxa}', '{tipodecaixa.dimensoes.altura}', '{tipodecaixa.dimensoes.largura}','{tipodecaixa.dimensoes.comprimento}');")
+            self.__cursor.execute(f"INSERT INTO tipo_de_caixa( nome, taxa, altura, largura, comprimento) \
+                                VALUES ( '{tipodecaixa.nome}', '{tipodecaixa.taxa}', '{tipodecaixa.dimensoes.altura}', '{tipodecaixa.dimensoes.largura}','{tipodecaixa.dimensoes.comprimento}');")
         except Exception as e:
             print(e)
             return False, "Erro interno no banco de dados."

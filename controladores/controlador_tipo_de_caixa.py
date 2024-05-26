@@ -52,13 +52,13 @@ class ControladorTipoDeCaixa:
             return
         
 
-        consulta_max_id = "SELECT MAX(id) FROM tipo_de_caixa"
-        self.__cursor.execute(consulta_max_id)
-        max_id = self.__cursor.fetchone()[0]
-        novo_id = max_id + 1 if max_id is not None else 1
+        # consulta_max_id = "SELECT MAX(id) FROM tipo_de_caixa"
+        # self.__cursor.execute(consulta_max_id)
+        # max_id = self.__cursor.fetchone()[0]
+        # novo_id = max_id + 1 if max_id is not None else 1
 
         nova_caixa = Caixa(dados_tipo_de_caixa["altura"], dados_tipo_de_caixa["largura"], dados_tipo_de_caixa["comprimento"])
-        novo_tipo_de_caixa = TipoDeCaixa(novo_id, dados_tipo_de_caixa["nome"], dados_tipo_de_caixa["taxa"], nova_caixa)
+        novo_tipo_de_caixa = TipoDeCaixa( dados_tipo_de_caixa["nome"], dados_tipo_de_caixa["taxa"], nova_caixa)
 
         cadastrado, msg_error = self.__repositorio.registrar_tipo_de_caixa(novo_tipo_de_caixa)
         if cadastrado:
