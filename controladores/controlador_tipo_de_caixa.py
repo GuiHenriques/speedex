@@ -68,7 +68,6 @@ class ControladorTipoDeCaixa:
             self.__mensagem(f"Não foi possível cadastrar o tipo de caixa:\n{msg_error}")
             return False
 
-
     def alterar_tipo_de_caixa(self):
         codigo_selecionado = self.__tela.seleciona_codigo_tipo_de_caixa()
         tipo_de_caixa = self.pegar_tipo_de_caixa_por_id(codigo_selecionado)
@@ -97,3 +96,14 @@ class ControladorTipoDeCaixa:
         resultados = self.__cursor.fetchall()
         
         self.__tela.mostra_tipo_de_caixa(resultados)
+
+    def gerar_tipo_de_caixa_cliente(self, dados_caixa):
+        caixa = Caixa(dados_caixa["altura"], dados_caixa["largura"], dados_caixa["comprimento"])
+        tipo_de_caixa = TipoDeCaixa(None, "caixa propria", 0, caixa) # tirar id=None
+
+        return tipo_de_caixa
+    
+    def tipos_de_caixa(self):
+        tipos_de_caixa = self.__repositorio.pegar_tipos_de_caixa()
+        
+        return tipos_de_caixa

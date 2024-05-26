@@ -28,3 +28,13 @@ class tipoDeCaixaRepositorio:
         if dados_tipo_de_caixa != None:
             tipodecaixa = TipoDeCaixa(*dados_tipo_de_caixa)
             return tipodecaixa
+    
+    def pegar_tipos_de_caixa(self):
+        try:
+            self.__cursor.execute(f"SELECT * FROM tipo_de_caixa")
+            tipos_de_caixa = self.__cursor.fetchall()
+        except Exception as e:
+            print(e)
+            return None
+        
+        return tipos_de_caixa

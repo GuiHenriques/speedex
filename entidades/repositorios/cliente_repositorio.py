@@ -38,6 +38,34 @@ class ClienteRepositorio:
         
         return True, ""
     
+    def pega_cliente(self, cpf: str):
+        cpf = cpf_formatador(cpf)
+        dados_cliente: tuple = None
+        try:
+            self.__cursor.execute(f"SELECT * FROM clientes WHERE cpf='{cpf}';")
+            dados_cliente = self.__cursor.fetchone()
+        except Exception as e:
+            print(e)
+            return None
+        
+        if dados_cliente != None:
+            cpf = dados_cliente[0]
+            nome = dados_cliente[1]
+            if None in dados_cliente:
+                return Remetente(cpf, nome)
+            else:
+                endereco = Endereco(*dados_cliente[2:])
+                return Destinatario(cpf, nome, endereco)
+        
+    def excluir_cliente(self, cliente: Remetente | Destinatario) -> bool:
+        try:
+            self.__cursor.execute(f"DELETE FROM clientes WHERE cpf='{cliente.cpf}';")
+        except Exception as e:
+            print(e)
+            return False, "Erro interno no banco de dados."
+        
+        return True, ""
+    
     def atualizar_dados_de_cliente(self, cliente: Remetente | Destinatario) -> tuple[bool, str]:
         if isinstance(cliente, Remetente):
             try:
