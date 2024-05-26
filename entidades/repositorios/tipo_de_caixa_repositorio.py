@@ -60,6 +60,7 @@ class tipoDeCaixaRepositorio:
 
 
 
+
         # dados_tipo_de_caixa: tuple = None
         # try:
         #     self.__cursor.execute(f"SELECT * FROM tipo_de_caixa\
@@ -71,3 +72,4 @@ class tipoDeCaixaRepositorio:
         # if dados_tipo_de_caixa != None:
         #     tipodecaixa = TipoDeCaixa(*dados_tipo_de_caixa)
         #     return tipodecaixa
+

@@ -1,12 +1,18 @@
 import PySimpleGUI as sg
 from telas.telaAbstrata import TelaAbstrata
 
+from utils.valildadores import (
+    algum_campo_e_vazio,
+    campo_numerico_validador,
+    cpf_validador,
+)
 
-class TelaEncomenda(TelaAbstrata):
+
+class TelaEntrega(TelaAbstrata):
     def __init__(self):
         super().__init__()
 
-    def tela_encomenda(self):
+    def tela_encomenda(self, tipos_de_entrega: list):
         layout = [
             [sg.Text("Encomenda", font=("Arial", 24), justification="center")],
             [
@@ -31,16 +37,10 @@ class TelaEncomenda(TelaAbstrata):
                     size=(15, 1),
                     justification="center",
                 ),
-                sg.Combo(
-                    ["Expressa", "Normal", "Econômica"],
-                    key="opcao_entrega",
-                    size=(28, 1),
-                ),
+                sg.Combo(tipos_de_entrega, key="opcao_entrega", size=(28, 1)),
             ],
             [
-                sg.Text("Possui caixa?", size=(15, 1)),
-                sg.Radio("Sim", "caixa", key="caixa_sim", default=True),
-                sg.Radio("Não", "caixa", key="caixa_nao"),
+                sg.Checkbox("Encomenda possui caixa?", key="possui_caixa"),
             ],
             [sg.Button("Proximo", size=(8, 1))],
             [
@@ -50,7 +50,7 @@ class TelaEncomenda(TelaAbstrata):
                     font=("Arial", 10, "underline"),
                     enable_events=True,
                     key="voltar",
-                )
+                ),
             ],
         ]
 
@@ -60,15 +60,21 @@ class TelaEncomenda(TelaAbstrata):
         self.fechar_janela()
 
         # {
-        #     "cpf_remetente": "15645692845",
-        #     "cpf_destinatario": "54766065808",
-        #     "descricao": "Bola",
+        #     "cpf_remetente": "123.456.789-00",
+        #     "cpf_destinatario": "987.654.321-00",
+        #     "conteudo": "Bola",
         #     "peso": "10",
         #     "opcao_entrega": "Expressa",
-        #     "caixa_sim": True,
-        #     "caixa_nao": False,
+        #     "possui_caixa": True,
         # }
-        return evento, valores
+
+        if evento == "Proximo":
+            if self.__campos_sao_validos_encomenda(valores):
+                return evento, valores
+
+            return evento, None
+
+        return evento, None
 
     def tela_possui_caixa(self):
         layout = [
@@ -93,13 +99,18 @@ class TelaEncomenda(TelaAbstrata):
 
         evento, valores = self.abrir_janela()
         self.fechar_janela()
-
+        # valores = {"altura": "10", "largura": "10", "comprimento": "10"}
         if evento == "Proximo":
-            return valores
+            if self.__campos_sao_validos_possui_caixa(valores):
+                return valores
+            
+            self.mensagem("As dimensões da caixa devem ser números inteiros positivos.")
 
         return None
 
-    def tela_nao_possui_caixa(self):
+    def tela_nao_possui_caixa(self, tipos_de_caixa: list):
+        radio_layout = []
+
         layout = [
             [sg.Text("Caixa", font=("Arial", 24), justification="center")],
             [
@@ -109,38 +120,38 @@ class TelaEncomenda(TelaAbstrata):
                     justification="center",
                 )
             ],
-            # loop para cada caixa
-            [
-                sg.Radio("Pequena", "tamanho_caixa", key="pequena", size=(8, 1)),
-                sg.Text(f"{10}x{10}x{10} - R$ {10}"),
-            ],
-            [
-                sg.Radio(
-                    "Média", "tamanho_caixa", key="media", size=(8, 1), default=True
-                ),
-                sg.Text(f"{20}x{20}x{20} - R$ {20}"),
-            ],
-            [
-                sg.Radio("Grande", "tamanho_caixa", key="grande", size=(8, 1)),
-                sg.Text(f"{30}x{30}x{30} - R$ {30}"),
-            ],
-            [sg.Button("Proximo", size=(8, 1))],
         ]
+        # loop para cada caixa
+        # [
+        #     sg.Radio("Pequena", "tamanho_caixa", key="pequena", size=(8, 1)),
+        #     sg.Text(f"{10}x{10}x{10} - R$ {10}"),
+        # ],
+
+        for caixa in tipos_de_caixa:
+            layout.append(
+                [
+                    sg.Radio(caixa[1], "tamanho_caixa", key=caixa[0], size=(8, 1)),
+                    sg.Text(f"{caixa[3]} x {caixa[4]} x {caixa[5]}"),
+                    sg.Text(f"R$ {caixa[2]}"),
+                ]
+            )
+
+        layout.append([sg.Button("Proximo", size=(8, 1))])
 
         self.janela = sg.Window("Caixa", layout, element_justification="c")
 
         evento, valores = self.abrir_janela()
+        print(valores)
         self.fechar_janela()
 
         if evento == "Proximo":
-            # pegar dimensões da caixa selecionada e retornar nesse formato
+            # pegar dimensões da caixa selecionada e retornar
             # valores = {"altura": "10", "largura": "10", "comprimento": "10"}
             return valores
 
         return None
 
-    # defina um bom nome para a tela de encomenda cadastrada com sucesso
-    def tela_cadastrada(self):
+    def tela_entrega_cadastrada(self):
         layout = [
             [
                 sg.Text(
@@ -161,3 +172,45 @@ class TelaEncomenda(TelaAbstrata):
         self.fechar_janela()
 
         return None
+
+    def __campos_sao_validos_encomenda(self, valores):
+
+        # verificar se todos os campos foram preenchidos
+        if algum_campo_e_vazio(valores):
+            self.mensagem("Por favor, preencha todos os campos.")
+            return False
+
+        # verificar se o cpf do remetente e do destinatario existem no banco de dados
+        if not cpf_validador(valores["cpf_remetente"]):
+            self.mensagem("CPF do remetente inválido.")
+            return False
+
+        if not cpf_validador(valores["cpf_destinatario"]):
+            self.mensagem("CPF do destinatário inválido.")
+            return False
+
+        # verificar se o cpf do remetente e do destinatario são iguais
+        if valores["cpf_remetente"] == valores["cpf_destinatario"]:
+            self.mensagem("CPF do remetente e do destinatário são iguais.")
+            return False
+
+        # verificar se o peso é um número
+        if not valores["peso"].isnumeric():
+            self.mensagem("O peso deve ser um número inteiro positivo.")
+            return False
+
+        return True
+
+    def __campos_sao_validos_possui_caixa(self, valores_caixa):
+
+        # verificar se todos os campos foram preenchidos
+        if algum_campo_e_vazio(valores_caixa):
+            self.mensagem("Por favor, preencha todos os campos.")
+            return False
+
+        # verificar se a altura, largura e comprimento são números
+        if not campo_numerico_validador(valores_caixa):
+            self.mensagem("As dimensões da caixa devem ser números inteiros positivos.")
+            return False
+
+        return True

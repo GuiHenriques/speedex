@@ -39,3 +39,6 @@ class TipoDeCaixa:
     @dimensoes.setter
     def dimensoes(self, dimensoes):
         self._dimensoes = dimensoes
+
+    def __str__(self):
+        return f"Nome: {self._nome} | Taxa: {self._taxa} | Dimensões: {self._dimensoes}"

@@ -13,7 +13,6 @@ class ControladorTipoDeEntrega:
         self.__cursor: extensions.cursor = controlador_sistema.database.cursor()
         self.__repositorio = tipoDeEntregaRepositorio(controlador_sistema)
 
-
     def abre_tela(self):
         lista_opcoes = {
             1: self.incluir_tipo_de_entrega,
@@ -44,19 +43,17 @@ class ControladorTipoDeEntrega:
         else:
             self.__mensagem("Tipo de entrega não encontrado para o ID fornecido.")
             return None
-    
+
     def incluir_tipo_de_entrega(self):
         dados_tipo_de_entrega = self.__tela.pega_dados_tipo_de_entrega()
         if dados_tipo_de_entrega == None:
             return
-        
 
         consulta_max_id = "SELECT MAX(id) FROM tipos_de_entrega"
         self.__cursor.execute(consulta_max_id)
         max_id = self.__cursor.fetchone()[0]
         novo_id = max_id + 1 if max_id is not None else 1
 
-        
         novo_tipo_de_entrega = tipoDeEntrega(novo_id, dados_tipo_de_entrega["nome"], dados_tipo_de_entrega["taxa"], dados_tipo_de_entrega["descricao"])
 
         cadastrado, msg_error = self.__repositorio.registrar_tipo_de_entrega(novo_tipo_de_entrega)
@@ -67,7 +64,6 @@ class ControladorTipoDeEntrega:
             self.__mensagem(f"Não foi possível cadastrar o tipo de entrega:\n{msg_error}")
             return False
 
-
     def alterar_tipo_de_entrega(self):
         codigo_selecionado = self.__tela.seleciona_codigo_tipo_de_entrega()
         tipo_de_entrega = self.pegar_tipo_de_entrega_por_id(codigo_selecionado)
@@ -75,7 +71,7 @@ class ControladorTipoDeEntrega:
             dados_tipo_de_entrega = self.__tela.pega_dados_tipo_de_entrega()
             if dados_tipo_de_entrega == None:
                 return False
-            
+
             self.__cursor.execute("UPDATE tipos_de_entrega SET nome = %s, taxa = %s, descricao = %s WHERE id = %s",
                                   (dados_tipo_de_entrega["nome"], dados_tipo_de_entrega["taxa"], dados_tipo_de_entrega["descricao"], codigo_selecionado))
             self.__controlador_sistema.database.commit()
@@ -94,5 +90,10 @@ class ControladorTipoDeEntrega:
     def listar_tipo_de_entrega(self):
         self.__cursor.execute("SELECT * FROM tipos_de_entrega")
         resultados = self.__cursor.fetchall()
-        
+
         self.__tela.mostra_tipo_de_entrega(resultados)
+
+    def nome_tipos_de_entrega(self):
+        tipos_de_entrega = self.__repositorio.listar_nome_tipos_de_entrega()
+
+        return tipos_de_entrega
