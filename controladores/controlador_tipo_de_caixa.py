@@ -70,7 +70,7 @@ class ControladorTipoDeCaixa:
 
     def alterar_tipo_de_caixa(self):
         codigo_selecionado = self.__tela.seleciona_codigo_tipo_de_caixa()
-        tipo_de_caixa = self.pegar_tipo_de_caixa_por_id(codigo_selecionado)
+        tipo_de_caixa = self.__repositorio.pegar_tipo_de_caixa_por_id(codigo_selecionado)
         if tipo_de_caixa is not None:
             dados_tipo_de_caixa = self.__tela.pega_dados_tipo_de_caixa()
             if dados_tipo_de_caixa == None:
@@ -85,7 +85,7 @@ class ControladorTipoDeCaixa:
 
     def excluir_tipo_de_caixa(self):
         codigo_selecionado = self.__tela.seleciona_codigo_tipo_de_caixa()
-        tipo_de_caixa = self.pegar_tipo_de_caixa_por_id(codigo_selecionado)
+        tipo_de_caixa = self.__repositorio.pegar_tipo_de_caixa_por_id(codigo_selecionado)
         if tipo_de_caixa is not None:
             self.__cursor.execute("DELETE FROM tipo_de_caixa WHERE id = %s", (codigo_selecionado,))
             self.__controlador_sistema.database.commit()
