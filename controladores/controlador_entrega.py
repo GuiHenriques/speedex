@@ -19,6 +19,7 @@ class ControladorEntrega:
 
     def cadastrar_entrega(self):
         dados = self.dados_entrega()
+        if not dados: return
         # {
         #     "cpf_remetente": "15645692845",
         #     "cpf_destinatario": "54766065808",

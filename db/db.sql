@@ -9,7 +9,8 @@ CREATE TABLE tipos_de_entrega(
   id SERIAL PRIMARY KEY,
   nome VARCHAR(255) NOT NULL,
   taxa FLOAT NOT NULL,
-  descricao TEXT
+  descricao TEXT,
+  velocidade INT NOT NULL
 );
 
 CREATE TABLE clientes(

@@ -1,4 +1,5 @@
 from telas.telaAbstrata import TelaAbstrata
+from utils.valildadores import algum_campo_e_vazio
 
 import PySimpleGUI as sg
 
@@ -41,9 +42,8 @@ class TelaTiposDeEntrega(TelaAbstrata):
         ]
         self.janela = sg.Window("Menu de tipos de entrega", layout, finalize=True)
 
-    
     def pega_dados_tipo_de_entrega(self):
-        
+
         def is_float(value):
             try:
                 float(value)
@@ -55,6 +55,11 @@ class TelaTiposDeEntrega(TelaAbstrata):
             [sg.Text("Nome: "), sg.InputText("", key="nome")],
             [sg.Text("Taxa: "), sg.InputText("", key="taxa")],
             [sg.Text("Descrição: "), sg.InputText("", key="descricao")],
+            [sg.Text("Selecione uma velocidade de entrega: ")],
+            [sg.Radio("Entrega econômica", "Radio1", key="1", default=True)],
+            [sg.Radio("Entrega normal", "Radio1", key="2")],
+            [sg.Radio("Entrega rápida", "Radio1", key="3")],
+            [sg.Radio("Entrega expressa", "Radio1", key="4")],
             [sg.Push(), sg.Button("Cadastrar"), sg.Cancel("Cancelar")]
         ]
 
@@ -65,32 +70,37 @@ class TelaTiposDeEntrega(TelaAbstrata):
         if evento in (None, "Cancelar"):
             self.fechar_janela()
             return
-        
 
-
-        if not all(valores.values()):
+        if algum_campo_e_vazio(valores):
             sg.popup("Você deve preencher todos os campos!")
             self.fechar_janela()
             entrada_invalida = True
             return
-        
+
         if not is_float(valores["taxa"]):
             sg.popup("A taxa deve ser um número válido!")
             self.fechar_janela()
             entrada_invalida = True
             return
 
-
         self.fechar_janela()
         if entrada_invalida:
             return
         else:
+            # Encontrando a chave cujo valor é True
+            velocidades = ['1', '2', '3', '4']
+            for velocidade in velocidades:
+                if valores.get(velocidade) is True:
+                    indice = velocidade
+                    break
+            
             return {
                 "nome": valores["nome"],
                 "taxa": float(valores["taxa"]),
                 "descricao": valores["descricao"],
+                "velocidade": int(indice)
             }
-        
+
     def seleciona_codigo_tipo_de_entrega(self):
         layout = [
             [sg.Text("Código: "), sg.InputText("", key="codigo")],
@@ -112,7 +122,6 @@ class TelaTiposDeEntrega(TelaAbstrata):
 
         self.fechar_janela()
         return valores["codigo"]
-    
 
     def mostra_tipo_de_entrega(self, resultados):
         string_resultados=""

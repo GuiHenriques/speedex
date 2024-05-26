@@ -8,8 +8,8 @@ class tipoDeEntregaRepositorio:
 
     def registrar_tipo_de_entrega(self, tipodeentrega: tipoDeEntrega):
         try:
-            self.__cursor.execute(f"INSERT INTO tipos_de_entrega(id, nome, taxa, descricao) \
-                                VALUES ('{tipodeentrega.id}', '{tipodeentrega.nome}', '{tipodeentrega.taxa}', '{tipodeentrega.descricao}');")
+            self.__cursor.execute(f"INSERT INTO tipos_de_entrega(id, nome, taxa, descricao, velocidade) \
+                                VALUES ({tipodeentrega.id}, '{tipodeentrega.nome}', '{tipodeentrega.taxa}', '{tipodeentrega.descricao}', '{tipodeentrega.velocidade}');")
         except Exception as e:
             print(e)
             return False, "Erro interno no banco de dados."

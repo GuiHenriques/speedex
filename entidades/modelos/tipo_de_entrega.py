@@ -1,11 +1,12 @@
 
 
 class tipoDeEntrega:
-    def __init__(self, id, nome, taxa, descricao):
+    def __init__(self, id, nome, taxa, descricao, velocidade: int):
         self._id = id
         self._nome = nome
         self._taxa = taxa
         self._descricao = descricao
+        self._velocidade = velocidade
  
 
     @property
@@ -40,5 +41,13 @@ class tipoDeEntrega:
     def descricao(self, descricao):
         self._descricao = descricao
 
+    @property
+    def velocidade(self):
+        return self._velocidade
+    
+    @velocidade.setter
+    def velocidade(self, velocidade):
+        self._velocidade = velocidade
+
     def __str__(self):
-        return f"Tipo de entrega: {self._nome} - Taxa: {self._taxa} - Descrição: {self._descricao}"
+        return f"ID: {self.id} - Tipo de entrega: {self._nome} - Taxa: {self._taxa} - Descrição: {self._descricao} - Velocidade: {self._velocidade}"
