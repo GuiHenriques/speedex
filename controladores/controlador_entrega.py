@@ -48,13 +48,13 @@ class ControladorEntrega:
                 continue
 
             # cpf do remetente e destinatário existem
-            # if not self.__controlador_sistema.controlador_cliente.cpf_existe(valores["cpf_remetente"]):
-            #     self.tela.mensagem("CPF do remetente não encontrado")
-            #     continue
+            if not self.__controlador_sistema.controlador_cliente.cpf_existe(valores["cpf_remetente"]):
+                self.tela.mensagem("CPF do remetente não encontrado")
+                continue
 
-            # if not self.__controlador_sistema.controlador_cliente.cpf_existe(valores["cpf_destinatario"]):
-            #     self.tela.mensagem("CPF do destinatário não encontrado")
-            #     continue
+            if not self.__controlador_sistema.controlador_cliente.cpf_existe(valores["cpf_destinatario"]):
+                self.tela.mensagem("CPF do destinatário não encontrado")
+                continue
 
             # validação tipo de entrega
             if valores["opcao_entrega"] not in tipos_de_entrega:

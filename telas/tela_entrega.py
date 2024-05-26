@@ -183,13 +183,11 @@ class TelaEntrega(TelaAbstrata):
         # verificar se o cpf do remetente e do destinatario existem no banco de dados
         if not cpf_validador(valores["cpf_remetente"]):
             self.mensagem("CPF do remetente inválido.")
-            return True
-            # return False
+            return False
 
         if not cpf_validador(valores["cpf_destinatario"]):
             self.mensagem("CPF do destinatário inválido.")
-            return True
-            # return False
+            return False
 
         # verificar se o cpf do remetente e do destinatario são iguais
         if valores["cpf_remetente"] == valores["cpf_destinatario"]:
