@@ -27,7 +27,6 @@ class ClienteRepositorio:
                 print(e)
                 return False, "Erro interno no banco de dados."
 
-<<<<<<< HEAD
         return True, ""
     
     def excluir_cliente(self, cliente: Remetente | Destinatario) -> bool:
@@ -57,8 +56,6 @@ class ClienteRepositorio:
             else:
                 endereco = Endereco(*dados_cliente[2:])
                 return Destinatario(cpf, nome, endereco)
-=======
-        return True, ""
     
     def excluir_cliente(self, cliente: Remetente | Destinatario) -> bool:
         try:

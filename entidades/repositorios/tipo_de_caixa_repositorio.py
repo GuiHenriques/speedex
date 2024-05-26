@@ -7,7 +7,6 @@ class tipoDeCaixaRepositorio:
         self.__cursor: extensions.cursor = controlador_sistema.database.cursor()
         self.__tela = TelaTiposDeCaixa(self)
 
-
     def registrar_tipo_de_caixa(self, tipodecaixa: TipoDeCaixa):
         try:
             self.__cursor.execute(f"INSERT INTO tipo_de_caixa( nome, taxa, altura, largura, comprimento) \
@@ -15,51 +14,34 @@ class tipoDeCaixaRepositorio:
         except Exception as e:
             print(e)
             return False, "Erro interno no banco de dados."
-        
+
         return True, ""
-    
+
     def pegar_tipo_de_caixa_por_id(self, id):
-        self.__cursor.execute("SELECT * FROM tipo_de_caixa WHERE id = %s", (id,))
-        tipo_de_caixa = self.__cursor.fetchone()
-        if tipo_de_caixa:
+        try:
+            self.__cursor.execute("SELECT * FROM tipo_de_caixa WHERE id = %s", (id,))
+            dados_tipo_de_caixa = self.__cursor.fetchone()
+        except Exception as e:
+            print(e)
+            return None
+
+        if dados_tipo_de_caixa != None:
+            print("Dados tipo de caixa", dados_tipo_de_caixa)
+            tipo_de_caixa = TipoDeCaixa(*dados_tipo_de_caixa)
             return tipo_de_caixa
         else:
             self.__tela.mensagem("Tipo de caixa não encontrado para o ID fornecido.")
             return None
-        
 
+    def pegar_tipos_de_caixa(self):
+        try:
+            self.__cursor.execute(f"SELECT * FROM tipo_de_caixa")
+            tipos_de_caixa = self.__cursor.fetchall()
+        except Exception as e:
+            print(e)
+            return None
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        return tipos_de_caixa
 
         # dados_tipo_de_caixa: tuple = None
         # try:
@@ -72,4 +54,3 @@ class tipoDeCaixaRepositorio:
         # if dados_tipo_de_caixa != None:
         #     tipodecaixa = TipoDeCaixa(*dados_tipo_de_caixa)
         #     return tipodecaixa
-

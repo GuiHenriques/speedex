@@ -80,7 +80,7 @@ class ControladorEntrega:
 
             tipo_de_caixa = self.__controlador_sistema.controlador_tipo_de_caixa.gerar_tipo_de_caixa_cliente(valores_caixa)
 
-        else:
+        else: # Caixa SPEEDEX
             tipos_de_caixa = self.__controlador_sistema.controlador_tipo_de_caixa.tipos_de_caixa()
             valores_caixa = self.tela.tela_nao_possui_caixa(tipos_de_caixa)
             

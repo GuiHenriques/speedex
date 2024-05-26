@@ -109,8 +109,6 @@ class TelaEntrega(TelaAbstrata):
         return None
 
     def tela_nao_possui_caixa(self, tipos_de_caixa: list):
-        radio_layout = []
-
         layout = [
             [sg.Text("Caixa", font=("Arial", 24), justification="center")],
             [
