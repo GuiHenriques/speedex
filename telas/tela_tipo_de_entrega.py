@@ -56,10 +56,10 @@ class TelaTiposDeEntrega(TelaAbstrata):
             [sg.Text("Taxa: "), sg.InputText("", key="taxa")],
             [sg.Text("Descrição: "), sg.InputText("", key="descricao")],
             [sg.Text("Selecione uma velocidade de entrega: ")],
-            [sg.Radio("Entrega econômica", "Radio1", key="1", default=True)],
-            [sg.Radio("Entrega normal", "Radio1", key="2")],
-            [sg.Radio("Entrega rápida", "Radio1", key="3")],
-            [sg.Radio("Entrega expressa", "Radio1", key="4")],
+            [sg.Radio("Entrega econômica", "Radio1", key="0", default=True)],
+            [sg.Radio("Entrega normal", "Radio1", key="1")],
+            [sg.Radio("Entrega rápida", "Radio1", key="2")],
+            [sg.Radio("Entrega expressa", "Radio1", key="3")],
             [sg.Push(), sg.Button("Cadastrar"), sg.Cancel("Cancelar")]
         ]
 
@@ -88,7 +88,7 @@ class TelaTiposDeEntrega(TelaAbstrata):
             return
         else:
             # Encontrando a chave cujo valor é True
-            velocidades = ['1', '2', '3', '4']
+            velocidades = ['0', '1', '2', '3']
             for velocidade in velocidades:
                 if valores.get(velocidade) is True:
                     indice = velocidade

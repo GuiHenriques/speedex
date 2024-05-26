@@ -1,5 +1,6 @@
 from telas.tela_entrega import TelaEntrega
-from utils.valildadores import algum_campo_e_vazio, campo_numerico_validador
+from utils.apis import get_distancia
+from utils.frete import calcula_valor_total
 from entidades.repositorios.entrega_repositorio import EntregaRepositorio
 from entidades.modelos.destinatario import Destinatario
 from entidades.modelos.encomenda import Encomenda
@@ -19,7 +20,8 @@ class ControladorEntrega:
 
     def cadastrar_entrega(self):
         dados = self.dados_entrega()
-        if not dados: return
+        if not dados:
+            return
         # {
         #     "cpf_remetente": "15645692845",
         #     "cpf_destinatario": "54766065808",
@@ -46,21 +48,34 @@ class ControladorEntrega:
         print("Encomenda", encomenda)
         # self.cadastrar_encomenda(encomenda)
 
+        tipo_de_caixa = dados["tipo_de_caixa"]
+
         tipo_de_entrega = self.__controlador_sistema.controlador_tipo_de_entrega.pegar_tipo_de_entrega_por_nome(
             dados["opcao_entrega"][0]
         )
         print("Tipo de entrega", tipo_de_entrega)
 
-        # funcionario = self.dados_funcionario_entrega()
-
-        # destino
-        cep_destino = destinatario.cep
+        # get funcionario logado
 
         # distancia
-        # api google maps
+        dados_distancia = get_distancia(
+            destinatario.endereco.cep, tipo_de_entrega.velocidade
+        )
+        print("Distancia", dados_distancia)
+        # {
+        #     "distance": {"text": "706 km", "value": 705998},
+        #     "duration": {"text": "9 hours 13 mins", "value": 33157},
+        #     "status": "OK",
+        # }
 
-        # valor total
-        # formula
+        # formula valor total
+        valor_total = calcula_valor_total(
+            dados_distancia["distance"]["value"],
+            encomenda.peso,
+            tipo_de_caixa.dimensoes,
+            tipo_de_caixa.taxa,
+            tipo_de_entrega.taxa,
+        )
 
         # registrar encomenda
         # self.registrar_encomenda(dados)
@@ -85,8 +100,13 @@ class ControladorEntrega:
                 continue
 
             # validação de cpfs e tipo de entrega
-            # if not self.__cpfs_e_tipo_de_entrega_valido(valores["cpf_remetente"],valores["cpf_destinatario"],valores["opcao_entrega"],tipos_de_entrega,):
-            #     continue
+            if not self.__cpfs_e_tipo_de_entrega_valido(
+                valores["cpf_remetente"],
+                valores["cpf_destinatario"],
+                valores["opcao_entrega"],
+                tipos_de_entrega,
+            ):
+                continue
 
             # dados da caixa
             tipo_de_caixa = self.dados_tipo_caixa(valores["possui_caixa"])
