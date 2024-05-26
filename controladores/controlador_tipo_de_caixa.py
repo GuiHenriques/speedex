@@ -99,7 +99,7 @@ class ControladorTipoDeCaixa:
 
     def gerar_tipo_de_caixa_cliente(self, dados_caixa):
         caixa = Caixa(dados_caixa["altura"], dados_caixa["largura"], dados_caixa["comprimento"])
-        tipo_de_caixa = TipoDeCaixa(None, "caixa propria", 0, caixa) # tirar id=None
+        tipo_de_caixa = TipoDeCaixa("caixa propria", 0, caixa)
 
         return tipo_de_caixa
     
