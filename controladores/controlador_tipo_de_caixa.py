@@ -52,13 +52,13 @@ class ControladorTipoDeCaixa:
             return
         
 
-        consulta_max_id = "SELECT MAX(id) FROM tipo_de_caixa"
-        self.__cursor.execute(consulta_max_id)
-        max_id = self.__cursor.fetchone()[0]
-        novo_id = max_id + 1 if max_id is not None else 1
+        # consulta_max_id = "SELECT MAX(id) FROM tipo_de_caixa"
+        # self.__cursor.execute(consulta_max_id)
+        # max_id = self.__cursor.fetchone()[0]
+        # novo_id = max_id + 1 if max_id is not None else 1
 
         nova_caixa = Caixa(dados_tipo_de_caixa["altura"], dados_tipo_de_caixa["largura"], dados_tipo_de_caixa["comprimento"])
-        novo_tipo_de_caixa = TipoDeCaixa(novo_id, dados_tipo_de_caixa["nome"], dados_tipo_de_caixa["taxa"], nova_caixa)
+        novo_tipo_de_caixa = TipoDeCaixa( dados_tipo_de_caixa["nome"], dados_tipo_de_caixa["taxa"], nova_caixa)
 
         cadastrado, msg_error = self.__repositorio.registrar_tipo_de_caixa(novo_tipo_de_caixa)
         if cadastrado:
@@ -67,7 +67,6 @@ class ControladorTipoDeCaixa:
         else:
             self.__mensagem(f"Não foi possível cadastrar o tipo de caixa:\n{msg_error}")
             return False
-
 
     def alterar_tipo_de_caixa(self):
         codigo_selecionado = self.__tela.seleciona_codigo_tipo_de_caixa()
@@ -97,3 +96,14 @@ class ControladorTipoDeCaixa:
         resultados = self.__cursor.fetchall()
         
         self.__tela.mostra_tipo_de_caixa(resultados)
+
+    def gerar_tipo_de_caixa_cliente(self, dados_caixa):
+        caixa = Caixa(dados_caixa["altura"], dados_caixa["largura"], dados_caixa["comprimento"])
+        tipo_de_caixa = TipoDeCaixa(None, "caixa propria", 0, caixa) # tirar id=None
+
+        return tipo_de_caixa
+    
+    def tipos_de_caixa(self):
+        tipos_de_caixa = self.__repositorio.pegar_tipos_de_caixa()
+        
+        return tipos_de_caixa

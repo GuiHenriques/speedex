@@ -19,7 +19,7 @@ class ControladorSistema:
         self.__controlador_funcionario = ControladorFuncionario(self)
         self.__controlador_tipo_de_entrega = ControladorTipoDeEntrega(self)
         self.__controlador_tipo_de_caixa = ControladorTipoDeCaixa(self)
-        self.__controlador_encomenda = ControladorEntrega(self)
+        self.__controlador_entrega = ControladorEntrega(self)
         self.__controlador_cliente = ControladorCliente(self)
 
     @property
@@ -43,8 +43,8 @@ class ControladorSistema:
         return self.__controlador_tipo_de_caixa
     
     @property
-    def controlador_encomenda(self):
-        return self.__controlador_encomenda
+    def controlador_entrega(self):
+        return self.__controlador_entrega
     
     @property
     def controlador_cliente(self):
@@ -52,7 +52,7 @@ class ControladorSistema:
 
     def inicializa_sistema(self):
         # if not self.login():
-        #     return
+           # return
 
         self.abre_tela()
 
@@ -69,7 +69,7 @@ class ControladorSistema:
         return self.__controlador_tipo_de_caixa.abre_tela()
     
     def menu_entrega(self):
-        return self.__controlador_encomenda.abre_tela()
+        return self.__controlador_entrega.cadastrar_entrega()
     
     def menu_cliente(self):
         return self.__controlador_cliente.abre_tela()

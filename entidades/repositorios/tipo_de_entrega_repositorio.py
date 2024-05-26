@@ -28,3 +28,13 @@ class tipoDeEntregaRepositorio:
         if dados_tipo_de_entrega != None:
             tipodeentrega = tipoDeEntrega(*dados_tipo_de_entrega)
             return tipodeentrega
+        
+    def listar_nome_tipos_de_entrega(self):
+        try:
+            self.__cursor.execute("SELECT nome FROM tipos_de_entrega")
+            tipos_de_entrega = self.__cursor.fetchall()
+        except Exception as e:
+            print(e)
+            return None
+        
+        return tipos_de_entrega
