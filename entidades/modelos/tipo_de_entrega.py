@@ -40,4 +40,5 @@ class tipoDeEntrega:
     def descricao(self, descricao):
         self._descricao = descricao
 
-
+    def __str__(self):
+        return f"Tipo de entrega: {self._nome} - Taxa: {self._taxa} - Descrição: {self._descricao}"

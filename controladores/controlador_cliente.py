@@ -208,6 +208,10 @@ class ControladorCliente:
         else:
             self.__mensagem("Nenhum cliente cadastrado!")
 
+    def pega_cliente_por_cpf(self, cpf: str):
+        cliente = self.__repositorio.pega_cliente(cpf)
+        return cliente
+
     def cpf_existe(self, cpf: str):
         if self.__repositorio.pega_cliente(cpf) == None:
             return False

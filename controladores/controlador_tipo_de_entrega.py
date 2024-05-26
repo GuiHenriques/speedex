@@ -44,6 +44,14 @@ class ControladorTipoDeEntrega:
             self.__mensagem("Tipo de entrega não encontrado para o ID fornecido.")
             return None
 
+    def pegar_tipo_de_entrega_por_nome(self, nome):
+        nome = self.__repositorio.pegar_tipo_de_entrega_por_nome(nome)
+        if nome:
+            return nome
+        else:
+            self.__mensagem("Tipo de entrega não encontrado para o nome fornecido.")
+            return None
+
     def incluir_tipo_de_entrega(self):
         dados_tipo_de_entrega = self.__tela.pega_dados_tipo_de_entrega()
         if dados_tipo_de_entrega == None:

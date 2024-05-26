@@ -28,7 +28,19 @@ class tipoDeEntregaRepositorio:
         if dados_tipo_de_entrega != None:
             tipodeentrega = tipoDeEntrega(*dados_tipo_de_entrega)
             return tipodeentrega
+    
+    def pegar_tipo_de_entrega_por_nome(self, nome):
+        try:
+            self.__cursor.execute(f"SELECT * FROM tipos_de_entrega WHERE nome='{nome}'")
+            dados_tipo_de_entrega = self.__cursor.fetchone()
         
+        except Exception as e:
+            self.__tela.mensagem("Erro", "Tipo de entrega não encontrado para o nome fornecido.")
+        
+        if dados_tipo_de_entrega != None:
+            tipodeentrega = tipoDeEntrega(*dados_tipo_de_entrega)
+            return tipodeentrega
+
     def listar_nome_tipos_de_entrega(self):
         try:
             self.__cursor.execute("SELECT nome FROM tipos_de_entrega")

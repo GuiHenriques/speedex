@@ -1,3 +1,4 @@
+from typing import Any
 from entidades.modelos.pessoa import Pessoa
 
 
@@ -10,3 +11,6 @@ class Remetente(Pessoa):
             return self.cpf == other.cpf and self.nome == other.nome
         else:
             return False
+        
+    def __str__(self):
+        return f"Remetente: {self.nome} | CPF: {self.cpf}"

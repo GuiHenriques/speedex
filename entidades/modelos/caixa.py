@@ -31,4 +31,5 @@ class Caixa:
     def comprimento(self, comprimento):
         self._comprimento = comprimento
 
-
+    def __str__(self):
+        return f"Largura: {self._largura} | Altura: {self._altura} | Comprimento: {self._comprimento}"

@@ -37,12 +37,11 @@ class ControladorTipoDeCaixa:
             pass
 
     def pegar_tipo_de_caixa_por_id(self, id):
-        self.__cursor.execute("SELECT * FROM tipo_de_caixa WHERE id = %s", (id,))
-        tipo_de_caixa = self.__cursor.fetchone()
+        tipo_de_caixa = self.__repositorio.pegar_tipo_de_caixa_por_id(id)
         if tipo_de_caixa:
             return tipo_de_caixa
         else:
-            self.__mensagem("Tipo de caixa não encontrado para o ID fornecido.")
+            self.__tela.mensagem("Tipo de caixa não encontrado para o ID fornecido.")
             return None
 
     def incluir_tipo_de_caixa(self):

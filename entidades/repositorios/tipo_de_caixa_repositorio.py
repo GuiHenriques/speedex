@@ -1,4 +1,5 @@
 from entidades.modelos.tipo_de_caixa import TipoDeCaixa
+from entidades.modelos.caixa import Caixa
 from telas.tela_tipo_de_caixa import TelaTiposDeCaixa
 from psycopg2 import extensions
 
@@ -27,10 +28,10 @@ class tipoDeCaixaRepositorio:
 
         if dados_tipo_de_caixa != None:
             print("Dados tipo de caixa", dados_tipo_de_caixa)
-            tipo_de_caixa = TipoDeCaixa(*dados_tipo_de_caixa)
+            caixa = Caixa(dados_tipo_de_caixa[3], dados_tipo_de_caixa[4], dados_tipo_de_caixa[5])
+            tipo_de_caixa = TipoDeCaixa(*dados_tipo_de_caixa[1:3], caixa, dados_tipo_de_caixa[0])
             return tipo_de_caixa
         else:
-            self.__tela.mensagem("Tipo de caixa não encontrado para o ID fornecido.")
             return None
 
     def pegar_tipos_de_caixa(self):

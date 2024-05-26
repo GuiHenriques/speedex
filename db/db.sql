@@ -35,5 +35,6 @@ CREATE TABLE tipo_de_caixa(
 CREATE TABLE encomenda (
     id SERIAL PRIMARY KEY,
     conteudo TEXT NOT NULL,
-    tipo_de_caixa_id INTEGER NOT NULL REFERENCES tipo_de_caixa(id)
+    peso INT NOT NULL,
+    tipo_de_caixa_id INTEGER REFERENCES tipo_de_caixa(id)
 );

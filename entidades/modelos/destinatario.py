@@ -20,3 +20,6 @@ class Destinatario(Pessoa):
             return self.cpf == other.cpf and self.nome == other.nome and self.endereco == other.endereco
         else:
             return False
+
+    def __str__(self):
+        return f"Destinatario: {self.nome} | CPF: {self.cpf} | Endereço: {self.endereco.cidade}"

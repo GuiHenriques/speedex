@@ -128,7 +128,7 @@ class TelaEntrega(TelaAbstrata):
         for caixa in tipos_de_caixa:
             layout.append(
                 [
-                    sg.Radio(caixa[1], "tamanho_caixa", key=caixa[0], size=(8, 1)),
+                    sg.Radio(caixa[1], "tamanho_caixa", key=caixa[0], size=(8, 1), default=True),
                     sg.Text(f"{caixa[3]} x {caixa[4]} x {caixa[5]}"),
                     sg.Text(f"R$ {caixa[2]}"),
                 ]
@@ -139,7 +139,6 @@ class TelaEntrega(TelaAbstrata):
         self.janela = sg.Window("Caixa", layout, element_justification="c")
 
         evento, valores = self.abrir_janela()
-        print(valores)
         self.fechar_janela()
 
         if evento == "Proximo":
@@ -179,13 +178,13 @@ class TelaEntrega(TelaAbstrata):
             return False
 
         # verificar se o cpf do remetente e do destinatario existem no banco de dados
-        if not cpf_validador(valores["cpf_remetente"]):
-            self.mensagem("CPF do remetente inválido.")
-            return False
+        # if not cpf_validador(valores["cpf_remetente"]):
+        #     self.mensagem("CPF do remetente inválido.")
+        #     return False
 
-        if not cpf_validador(valores["cpf_destinatario"]):
-            self.mensagem("CPF do destinatário inválido.")
-            return False
+        # if not cpf_validador(valores["cpf_destinatario"]):
+        #     self.mensagem("CPF do destinatário inválido.")
+        #     return False
 
         # verificar se o cpf do remetente e do destinatario são iguais
         if valores["cpf_remetente"] == valores["cpf_destinatario"]:
