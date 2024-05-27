@@ -79,3 +79,5 @@ class Entrega:
     def distancia(self, distancia):
         self.__distancia = distancia
 
+    def __str__(self):
+        return f"ENTREGA = Remetente: {self.remetente.nome} - Destinatário: {self.destinatario.nome} - Encomenda: {self.encomenda} - Tipo de entrega: {self.tipo_de_entrega} - Funcionário: {self.funcionario} - Distância: {self.distancia}"

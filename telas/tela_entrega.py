@@ -70,6 +70,7 @@ class TelaEntrega(TelaAbstrata):
 
         if evento == "Proximo":
             if self.__campos_sao_validos_encomenda(valores):
+                valores["peso"] = int(valores["peso"])
                 return evento, valores
 
             return evento, None
@@ -102,8 +103,9 @@ class TelaEntrega(TelaAbstrata):
         # valores = {"altura": "10", "largura": "10", "comprimento": "10"}
         if evento == "Proximo":
             if self.__campos_sao_validos_possui_caixa(valores):
-                return valores
-            
+                valores_int = { chave: int(valor) for chave, valor in valores.items() }
+                return valores_int
+
             self.mensagem("As dimensões da caixa devem ser números inteiros positivos.")
 
         return None
@@ -128,7 +130,13 @@ class TelaEntrega(TelaAbstrata):
         for caixa in tipos_de_caixa:
             layout.append(
                 [
-                    sg.Radio(caixa[1], "tamanho_caixa", key=caixa[0], size=(8, 1), default=True),
+                    sg.Radio(
+                        caixa[1],
+                        "tamanho_caixa",
+                        key=caixa[0],
+                        size=(8, 1),
+                        default=True,
+                    ),
                     sg.Text(f"{caixa[3]} x {caixa[4]} x {caixa[5]}"),
                     sg.Text(f"R$ {caixa[2]}"),
                 ]
@@ -142,8 +150,6 @@ class TelaEntrega(TelaAbstrata):
         self.fechar_janela()
 
         if evento == "Proximo":
-            # pegar dimensões da caixa selecionada e retornar
-            # valores = {"altura": "10", "largura": "10", "comprimento": "10"}
             return valores
 
         return None
@@ -186,10 +192,10 @@ class TelaEntrega(TelaAbstrata):
         #     self.mensagem("CPF do destinatário inválido.")
         #     return False
 
-        # verificar se o cpf do remetente e do destinatario são iguais
-        if valores["cpf_remetente"] == valores["cpf_destinatario"]:
-            self.mensagem("CPF do remetente e do destinatário são iguais.")
-            return False
+        # # verificar se o cpf do remetente e do destinatario são iguais
+        # if valores["cpf_remetente"] == valores["cpf_destinatario"]:
+        #     self.mensagem("CPF do remetente e do destinatário são iguais.")
+        #     return False
 
         # verificar se o peso é um número
         if not valores["peso"].isnumeric():

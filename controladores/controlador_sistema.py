@@ -69,7 +69,7 @@ class ControladorSistema:
         return self.__controlador_tipo_de_caixa.abre_tela()
     
     def menu_entrega(self):
-        return self.__controlador_entrega.cadastrar_entrega()
+        return self.__controlador_entrega.dados_entrega()
     
     def menu_cliente(self):
         return self.__controlador_cliente.abre_tela()

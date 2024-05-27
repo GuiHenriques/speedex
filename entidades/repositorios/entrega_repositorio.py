@@ -8,8 +8,15 @@ class EntregaRepositorio:
         self.__cursor: extensions.cursor = controlador_sistema.database.cursor()
 
     def registrar_entrega(self, entrega: Entrega):
+
+        # mudar "NULL" entrega.funcionario.cpf
         try:
-            ...
+            self.__cursor.execute(
+                f"INSERT INTO entregas(remetente_cpf, destinatario_cpf, encomenda_id, tipo_de_entrega_id, funcionario_cpf, distancia) \
+                    VALUES ({entrega.remetente.cpf}, {entrega.destinatario.cpf}, {entrega.encomenda.id}, {entrega.tipo_de_entrega.id},\
+                            NULL, {entrega.distancia});"
+            )
+
         except Exception as e:
             print(e)
             return False, "Erro interno no banco de dados."
@@ -31,3 +38,11 @@ class EntregaRepositorio:
             return False, "Erro interno no banco de dados."
 
         return True, ""
+
+    def pegar_id_ultima_encomenda(self):
+        try:
+            self.__cursor.execute("SELECT MAX(id) FROM encomendas;")
+            return self.__cursor.fetchone()[0]
+        except Exception as e:
+            print(e)
+            return False, "Erro interno no banco de dados."

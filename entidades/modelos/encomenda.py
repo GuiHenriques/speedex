@@ -1,6 +1,7 @@
 from entidades.modelos.tipo_de_caixa import TipoDeCaixa
 
 class Encomenda:
+
     def __init__(self, conteudo: str, peso: int, tipo_de_caixa: TipoDeCaixa):
         self.__id = None
         self.__conteudo = conteudo

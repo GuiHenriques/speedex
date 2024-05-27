@@ -1,4 +1,5 @@
 def calcula_valor_total(distancia, peso, dimensoes, taxa_caixa, taxa_entrega):
+
     taxa_distancia = 0.05
     taxa_peso = 2
     taxa_volume = 5

@@ -1,3 +1,4 @@
+from entidades.modelos.entrega import Entrega
 from telas.tela_entrega import TelaEntrega
 from utils.apis import get_distancia
 from utils.frete import calcula_valor_total
@@ -18,35 +19,29 @@ class ControladorEntrega:
     def tela(self):
         return self.__tela
 
-    def cadastrar_entrega(self):
-        dados = self.dados_entrega()
+    def dados_entrega(self):
+        dados = self.dados_encomenda()
         if not dados:
             return
-        # {
-        #     "cpf_remetente": "15645692845",
-        #     "cpf_destinatario": "54766065808",
-        #     "descricao": "bola",
-        #     "peso": "12",
-        #     "opcao_entrega": ("aaa",),
-        #     "possui_caixa": False,
-        #     "tipo_de_caixa": "<entidades.modelos.tipo_de_caixa.TipoDeCaixa object at 0x000002D56F2A5610>",
-        # }
 
         remetente = self.__controlador_sistema.controlador_cliente.pega_cliente_por_cpf(
             dados["cpf_remetente"]
         )
-        print("Remetente", remetente)
+        # print("Remetente", remetente)
 
         destinatario = (
             self.__controlador_sistema.controlador_cliente.pega_cliente_por_cpf(
                 dados["cpf_destinatario"]
             )
         )
-        print("Destinatario", destinatario)
+        # print("Destinatario", destinatario)
 
         encomenda = Encomenda(dados["descricao"], dados["peso"], dados["tipo_de_caixa"])
         print("Encomenda", encomenda)
         # self.cadastrar_encomenda(encomenda)
+        
+        id = self.__repositorio.pegar_id_ultima_encomenda()
+        encomenda.id = id
 
         tipo_de_caixa = dados["tipo_de_caixa"]
 
@@ -58,34 +53,42 @@ class ControladorEntrega:
         # get funcionario logado
 
         # distancia
-        dados_distancia = get_distancia(
-            destinatario.endereco.cep, tipo_de_entrega.velocidade
-        )
-        print("Distancia", dados_distancia)
-        # {
-        #     "distance": {"text": "706 km", "value": 705998},
+        # dados_distancia = get_distancia(
+        #     destinatario.endereco.cep, tipo_de_entrega.velocidade
+        # )
+        # distancia = dados_distancia["distance"]["value"]
+        distancia = 500_000
+        # print("Distancia", dados_distancia)
+        #     {"distance": {"text": "706 km", "value": 705998},
         #     "duration": {"text": "9 hours 13 mins", "value": 33157},
-        #     "status": "OK",
-        # }
+        #     "status": "OK",}
 
         # formula valor total
         valor_total = calcula_valor_total(
-            dados_distancia["distance"]["value"],
+            distancia,
             encomenda.peso,
             tipo_de_caixa.dimensoes,
             tipo_de_caixa.taxa,
             tipo_de_entrega.taxa,
         )
+        print("Valor total", valor_total)
 
-        # registrar encomenda
-        # self.registrar_encomenda(dados)
-
-        # registrar entrega
+        # entrega
+        entrega = Entrega(
+            remetente,
+            destinatario,
+            encomenda,
+            tipo_de_entrega,
+            None,  # funcionario
+            distancia,
+        )
+        print("Entrega", entrega)
+        self.cadastrar_entrega(entrega)
 
         # tela entrega cadastrada
         # self.tela.tela_cadastrada()
 
-    def dados_entrega(self):
+    def dados_encomenda(self):
         while True:
             # Encomenda
             tipos_de_entrega = (
@@ -100,13 +103,13 @@ class ControladorEntrega:
                 continue
 
             # validação de cpfs e tipo de entrega
-            if not self.__cpfs_e_tipo_de_entrega_valido(
-                valores["cpf_remetente"],
-                valores["cpf_destinatario"],
-                valores["opcao_entrega"],
-                tipos_de_entrega,
-            ):
-                continue
+            # if not self.__cpfs_e_tipo_de_entrega_valido(
+            #     valores["cpf_remetente"],
+            #     valores["cpf_destinatario"],
+            #     valores["opcao_entrega"],
+            #     tipos_de_entrega,
+            # ):
+            #     continue
 
             # dados da caixa
             tipo_de_caixa = self.dados_tipo_caixa(valores["possui_caixa"])
@@ -147,7 +150,6 @@ class ControladorEntrega:
                 id_caixa_escolhida
             )
 
-        print("Tipo de Caixa", tipo_de_caixa)
         return tipo_de_caixa
 
     def cadastrar_encomenda(self, encomenda):
@@ -157,6 +159,15 @@ class ControladorEntrega:
             return True
         else:
             self.tela.mensagem(f"Não foi possível cadastrar a encomenda:\n{msg_error}")
+            return False
+
+    def cadastrar_entrega(self, entrega):
+        cadastrado, msg_error = self.__repositorio.registrar_entrega(entrega)
+        if cadastrado:
+            self.tela.mensagem("Entrega cadastrada com sucesso")
+            return True
+        else:
+            self.tela.mensagem(f"Não foi possível cadastrar a entrega:\n{msg_error}")
             return False
 
     def __cpfs_e_tipo_de_entrega_valido(

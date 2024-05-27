@@ -33,9 +33,20 @@ CREATE TABLE tipo_de_caixa(
   comprimento FLOAT NOT NULL
 );
 
-CREATE TABLE encomenda (
-    id SERIAL PRIMARY KEY,
-    conteudo TEXT NOT NULL,
-    peso INT NOT NULL,
-    tipo_de_caixa_id INTEGER REFERENCES tipo_de_caixa(id)
+CREATE TABLE encomendas (
+  id SERIAL PRIMARY KEY,
+  conteudo TEXT NOT NULL,
+  peso INT NOT NULL,
+  tipo_de_caixa_id INTEGER REFERENCES tipo_de_caixa(id)
+);
+
+CREATE TABLE entregas (
+  id SERIAL PRIMARY KEY,
+  remetente_cpf VARCHAR(11) REFERENCES clientes(cpf),
+  destinatario_cpf VARCHAR(11) REFERENCES clientes(cpf),
+  encomenda_id INTEGER REFERENCES encomendas(id),
+  tipo_de_entrega_id INTEGER REFERENCES tipos_de_entrega(id),
+  funcionario_cpf VARCHAR(11) REFERENCES funcionarios(cpf),
+  distancia FLOAT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );

@@ -12,6 +12,7 @@ def get_distancia(cep_destino, mode_idx):
     cep_ufsc = "88040-370"
 
     modes = ["walking", "bicycling", "transit", "driving"]
+    print(mode_idx)
     mode = modes[mode_idx]
 
     params = {
