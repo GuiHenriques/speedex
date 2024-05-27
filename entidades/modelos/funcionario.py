@@ -5,7 +5,7 @@ class Funcionario(Pessoa):
     def __init__(self, cpf, nome, email, senha):
         super().__init__(cpf, nome)
         self.__email = email
-        self.__senha_hash = hashlib.sha256(senha.encode('utf-8')).hexdigest()
+        self.__senha_hash = senha
 
     @property
     def email(self):
@@ -20,7 +20,7 @@ class Funcionario(Pessoa):
         return self.__senha_hash
     
     @senha_hash.setter
-    def senha(self, senha):
+    def senha_hash(self, senha):
         self.__senha_hash = senha
 
     def __eq__(self, other):

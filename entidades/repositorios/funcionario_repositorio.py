@@ -9,7 +9,7 @@ class FuncionarioRepositorio:
     def registrar_funcionario(self, funcionario: Funcionario):
         try:
             self.__cursor.execute(f"INSERT INTO funcionarios(cpf, nome, email, senha) \
-                                VALUES ('{funcionario.cpf}', '{funcionario.nome}', '{funcionario.email}', '{funcionario.senha}');")
+                                VALUES ('{funcionario.cpf}', '{funcionario.nome}', '{funcionario.email}', '{funcionario.senha_hash}');")
         except Exception as e:
             print(e)
             return False, "Erro interno no banco de dados."
