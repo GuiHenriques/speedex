@@ -50,3 +50,13 @@ class tipoDeEntregaRepositorio:
             return None
         
         return tipos_de_entrega
+    
+    def listar_tipos_de_entrega(self):
+        try:
+            self.__cursor.execute("SELECT * FROM tipos_de_entrega")
+            tipos_de_entrega = self.__cursor.fetchall()
+        except Exception as e:
+            print(e)
+            return None
+        
+        return tipos_de_entrega

@@ -42,15 +42,3 @@ class tipoDeCaixaRepositorio:
             return None
 
         return tipos_de_caixa
-
-        # dados_tipo_de_caixa: tuple = None
-        # try:
-        #     self.__cursor.execute(f"SELECT * FROM tipo_de_caixa\
-        #                           WHERE id='{id}'")
-        #     dados_tipo_de_caixa = self.__cursor.fetchone()
-        # except Exception as e:
-        #     # self.__tela.mensagem("Tipo de caixa não encontrado para o ID fornecido.")
-        #     print(e)
-        # if dados_tipo_de_caixa != None:
-        #     tipodecaixa = TipoDeCaixa(*dados_tipo_de_caixa)
-        #     return tipodecaixa

@@ -106,6 +106,10 @@ class ControladorTipoDeCaixa:
         )
         if tipo_de_caixa is not None:
             self.__cursor.execute(
+                "UPDATE encomendas SET tipo_de_caixa_id = NULL WHERE tipo_de_caixa_id = %s",
+                (codigo_selecionado,),
+            )
+            self.__cursor.execute(
                 "DELETE FROM tipo_de_caixa WHERE id = %s", (codigo_selecionado,)
             )
             self.__controlador_sistema.database.commit()

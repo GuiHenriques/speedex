@@ -123,6 +123,11 @@ class ControladorTipoDeEntrega:
         self.__tela.mostra_tipo_de_entrega(resultados)
 
     def nome_tipos_de_entrega(self):
-        tipos_de_entrega = self.__repositorio.listar_nome_tipos_de_entrega()
+        nome_dos_tipos_de_entrega = self.__repositorio.listar_nome_tipos_de_entrega()
 
+        return nome_dos_tipos_de_entrega
+    
+    def tipos_de_entrega(self):
+        tipos_de_entrega = self.__repositorio.listar_tipos_de_entrega()
+        
         return tipos_de_entrega
