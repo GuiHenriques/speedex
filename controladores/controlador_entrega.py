@@ -9,9 +9,7 @@ from entidades.modelos.encomenda import Encomenda
 
 class ControladorEntrega:
     def __init__(self, controlador_sistema):
-        self.__tela = (
-            TelaEntrega() if not controlador_sistema.development_mode else None
-        )
+        self.__tela = (TelaEntrega() if not controlador_sistema.development_mode else None)
         self.__repositorio = EntregaRepositorio(controlador_sistema)
         self.__controlador_sistema = controlador_sistema
 
@@ -20,50 +18,47 @@ class ControladorEntrega:
         return self.__tela
 
     def dados_entrega(self):
+        # Obtém os dados da encomenda
         dados = self.dados_encomenda()
         if not dados:
             return
 
+        # Recupera o remetente pelo CPF
         remetente = self.__controlador_sistema.controlador_cliente.pega_cliente_por_cpf(
             dados["cpf_remetente"]
         )
-        # print("Remetente", remetente)
 
+        # Recupera o destinatário pelo CPF
         destinatario = (
             self.__controlador_sistema.controlador_cliente.pega_cliente_por_cpf(
                 dados["cpf_destinatario"]
             )
         )
-        # print("Destinatario", destinatario)
 
+        # Obtém o funcionário logado
+
+        # Cria uma nova encomenda
         encomenda = Encomenda(dados["descricao"], dados["peso"], dados["tipo_de_caixa"])
-        print("Encomenda", encomenda)
-        # self.cadastrar_encomenda(encomenda)
-        
+        self.cadastrar_encomenda(encomenda)
+
+        # Define o ID da encomenda
         id = self.__repositorio.pegar_id_ultima_encomenda()
         encomenda.id = id
 
         tipo_de_caixa = dados["tipo_de_caixa"]
 
+        # Recupera o tipo de entrega
         tipo_de_entrega = self.__controlador_sistema.controlador_tipo_de_entrega.pegar_tipo_de_entrega_por_nome(
             dados["opcao_entrega"][0]
         )
-        print("Tipo de entrega", tipo_de_entrega)
 
-        # get funcionario logado
+        # Calcula a distância usando uma API
+        dados_distancia = get_distancia(
+            destinatario.endereco.cep, tipo_de_entrega.velocidade
+        )
+        distancia = dados_distancia["distance"]["value"]
 
-        # distancia
-        # dados_distancia = get_distancia(
-        #     destinatario.endereco.cep, tipo_de_entrega.velocidade
-        # )
-        # distancia = dados_distancia["distance"]["value"]
-        distancia = 500_000
-        # print("Distancia", dados_distancia)
-        #     {"distance": {"text": "706 km", "value": 705998},
-        #     "duration": {"text": "9 hours 13 mins", "value": 33157},
-        #     "status": "OK",}
-
-        # formula valor total
+        # Calcula o valor total do frete
         valor_total = calcula_valor_total(
             distancia,
             encomenda.peso,
@@ -71,47 +66,47 @@ class ControladorEntrega:
             tipo_de_caixa.taxa,
             tipo_de_entrega.taxa,
         )
-        print("Valor total", valor_total)
 
-        # entrega
+        # Cria uma nova entrega
         entrega = Entrega(
             remetente,
             destinatario,
             encomenda,
             tipo_de_entrega,
-            None,  # funcionario
+            "NULL",  # Funcionario logado
             distancia,
         )
         print("Entrega", entrega)
         self.cadastrar_entrega(entrega)
 
-        # tela entrega cadastrada
+        # tela de entrega cadastrada 
         # self.tela.tela_cadastrada()
 
     def dados_encomenda(self):
         while True:
-            # Encomenda
+            # Obtém os nomes dos tipos de entrega
             tipos_de_entrega = (
                 self.__controlador_sistema.controlador_tipo_de_entrega.nome_tipos_de_entrega()
             )
+            # Exibe a tela para obter os dados da encomenda
             evento, valores = self.tela.tela_encomenda(tipos_de_entrega)
 
-            if evento == None or evento == "voltar":
+            if evento is None or evento == "voltar":
                 return
 
-            if valores == None:
+            if valores is None:
                 continue
 
-            # validação de cpfs e tipo de entrega
-            # if not self.__cpfs_e_tipo_de_entrega_valido(
-            #     valores["cpf_remetente"],
-            #     valores["cpf_destinatario"],
-            #     valores["opcao_entrega"],
-            #     tipos_de_entrega,
-            # ):
-            #     continue
+            # Valida os CPFs e o tipo de entrega
+            if not self.__cpfs_e_tipo_de_entrega_valido(
+                valores["cpf_remetente"],
+                valores["cpf_destinatario"],
+                valores["opcao_entrega"],
+                tipos_de_entrega,
+            ):
+                continue
 
-            # dados da caixa
+            # Obtém os dados do tipo de caixa
             tipo_de_caixa = self.dados_tipo_caixa(valores["possui_caixa"])
             if not tipo_de_caixa:
                 continue
@@ -121,31 +116,32 @@ class ControladorEntrega:
             return valores
 
     def dados_tipo_caixa(self, possui_caixa):
-
-        if possui_caixa:
+        if possui_caixa: # caixa do cliente
             valores_caixa = self.tela.tela_possui_caixa()
-            # valores_caixa = {"altura": "10", "largura": "10", "comprimento": "10"}
 
-            if valores_caixa == None:
+            if valores_caixa is None:
                 return False
 
+            # Gera o tipo de caixa do cliente
             tipo_de_caixa = self.__controlador_sistema.controlador_tipo_de_caixa.gerar_tipo_de_caixa_cliente(
                 valores_caixa
             )
 
-        else:  # Caixa SPEEDEX
+        else: # caixa da SPEEDEX
             tipos_de_caixa = (
                 self.__controlador_sistema.controlador_tipo_de_caixa.tipos_de_caixa()
             )
             valores_caixa = self.tela.tela_nao_possui_caixa(tipos_de_caixa)
 
-            if valores_caixa == None:
+            if valores_caixa is None:
                 return False
 
+            # Identifica a caixa escolhida pelo cliente
             id_caixa_escolhida = next(
                 key for key, value in valores_caixa.items() if value
             )
 
+            # Recupera o tipo de caixa pelo ID
             tipo_de_caixa = self.__controlador_sistema.controlador_tipo_de_caixa.pegar_tipo_de_caixa_por_id(
                 id_caixa_escolhida
             )
@@ -153,7 +149,9 @@ class ControladorEntrega:
         return tipo_de_caixa
 
     def cadastrar_encomenda(self, encomenda):
+        # Registra a encomenda no repositório
         cadastrado, msg_error = self.__repositorio.registrar_encomenda(encomenda)
+
         if cadastrado:
             self.tela.mensagem("Encomenda cadastrada com sucesso")
             return True
@@ -162,7 +160,9 @@ class ControladorEntrega:
             return False
 
     def cadastrar_entrega(self, entrega):
+        # Registra a entrega no repositório
         cadastrado, msg_error = self.__repositorio.registrar_entrega(entrega)
+
         if cadastrado:
             self.tela.mensagem("Entrega cadastrada com sucesso")
             return True
@@ -173,18 +173,19 @@ class ControladorEntrega:
     def __cpfs_e_tipo_de_entrega_valido(
         self, cpf_remetente, cpf_destinatario, tipo_de_entrega, tipos_de_entrega
     ):
-        # cpf do remetente existe
+        # Verifica se o CPF do remetente existe
         if not self.__controlador_sistema.controlador_cliente.cpf_existe(cpf_remetente):
             self.tela.mensagem("CPF do remetente não encontrado")
             return False
 
+        # Verifica se o CPF do destinatário existe
         if not self.__controlador_sistema.controlador_cliente.cpf_existe(
             cpf_destinatario
         ):
             self.tela.mensagem("CPF do destinatário não encontrado")
             return False
 
-        # destinatario é instância de destinatario
+        # Verifica se o destinatário tem um endereço cadastrado
         if not isinstance(
             self.__controlador_sistema.controlador_cliente.pega_cliente_por_cpf(
                 cpf_destinatario
@@ -194,7 +195,7 @@ class ControladorEntrega:
             self.tela.mensagem("Destinatário não tem endereço cadastrado")
             return False
 
-        # validação tipo de entrega
+        # Verifica se o tipo de entrega é válido
         if tipo_de_entrega not in tipos_de_entrega:
             self.tela.mensagem("Tipo de entrega inválido")
             return False
