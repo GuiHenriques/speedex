@@ -28,8 +28,9 @@ class ControladorFuncionario:
                 self.abre_tela_cadastro()
                 continue
 
-            if self.verificar_login(valores["email"], valores["senha"]):
-                return True
+            funcionario_logado = self.verificar_login(valores["email"], valores["senha"])
+            if funcionario_logado:
+                return funcionario_logado
             else:
                 self.__tela.mensagem("Login ou senha incorreto.")
 
@@ -47,7 +48,7 @@ class ControladorFuncionario:
             if self.cadastrar_funcionario(valores["cpf"], valores["nome"], valores["email"], valores["senha"]):
                 break
 
-    def verificar_login(self, email, senha):
+    def verificar_login(self, email: str, senha: str) -> Funcionario | bool:
         funcionario = self.__repositorio.pegar_funcionario(email)
 
         if funcionario == None: # email não encontrado
@@ -56,7 +57,10 @@ class ControladorFuncionario:
         # hash da senha para comparar com o hash armazenado
         senha_hash_fornecida = hashlib.sha256(senha.encode('utf-8')).hexdigest()
 
-        return senha_hash_fornecida == funcionario.senha
+        if senha_hash_fornecida == funcionario.senha_hash:
+            return funcionario
+        else:
+            return False
 
     def cadastrar_funcionario(self, cpf: str, nome: str, email: str, senha: str) -> bool:
         
@@ -69,7 +73,8 @@ class ControladorFuncionario:
             return False
 
         # Criando funcionario com cpf e emails validos.
-        novo_funcionario = Funcionario(cpf, nome, email, senha)
+        senha_hash = hashlib.sha256(senha.encode('utf-8')).hexdigest()
+        novo_funcionario = Funcionario(cpf, nome, email, senha_hash)
 
         if self.__cpf_existe(novo_funcionario.cpf):
             self.__mensagem("CPF já cadastrado.")

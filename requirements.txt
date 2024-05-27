@@ -1,4 +1,6 @@
 pysimplegui
-psycopg2
+psycopg2; platform_system == "Windows"
+psycopg2-binary; platform_system == "Linux"
 python-dotenv
 pytest
+requests
