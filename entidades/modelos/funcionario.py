@@ -29,3 +29,6 @@ class Funcionario(Pessoa):
                 and self.email == other.email and self.senha_hash == other.senha_hash
         else:
             return False
+        
+    def __str__(self):
+        return f"Funcionário: {self.nome} - CPF: {self.cpf} - Email: {self.email}"

@@ -12,7 +12,7 @@ class TelaEntrega(TelaAbstrata):
     def __init__(self):
         super().__init__()
 
-    def tela_encomenda(self, tipos_de_entrega: list):
+    def tela_encomenda(self, nomes_dos_tipos_de_entrega: list):
         layout = [
             [sg.Text("Encomenda", font=("Arial", 24), justification="center")],
             [
@@ -37,7 +37,7 @@ class TelaEntrega(TelaAbstrata):
                     size=(15, 1),
                     justification="center",
                 ),
-                sg.Combo(tipos_de_entrega, key="opcao_entrega", size=(28, 1)),
+                sg.Combo(nomes_dos_tipos_de_entrega, key="opcao_entrega", size=(28, 1)),
             ],
             [
                 sg.Checkbox("Encomenda possui caixa?", key="possui_caixa"),

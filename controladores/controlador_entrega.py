@@ -18,6 +18,11 @@ class ControladorEntrega:
         return self.__tela
 
     def dados_entrega(self):
+        # Verifica se há tipos de entrega cadastrados
+        if not self.__controlador_sistema.controlador_tipo_de_entrega.tipos_de_entrega():
+            self.tela.mensagem("Não há tipos de entrega cadastrados")
+            return
+        
         # Obtém os dados da encomenda
         dados = self.dados_encomenda()
         if not dados:
@@ -35,7 +40,8 @@ class ControladorEntrega:
             )
         )
 
-        # Obtém o funcionário logado
+        # Recupera o funcionário logado
+        funcionario = self.__controlador_sistema.session
 
         # Cria uma nova encomenda
         encomenda = Encomenda(dados["descricao"], dados["peso"], dados["tipo_de_caixa"])
@@ -73,7 +79,7 @@ class ControladorEntrega:
             destinatario,
             encomenda,
             tipo_de_entrega,
-            "NULL",  # Funcionario logado
+            funcionario,
             distancia,
         )
         self.cadastrar_entrega(entrega)
@@ -84,11 +90,11 @@ class ControladorEntrega:
     def dados_encomenda(self):
         while True:
             # Obtém os nomes dos tipos de entrega
-            tipos_de_entrega = (
+            nome_dos_tipos_de_entrega = (
                 self.__controlador_sistema.controlador_tipo_de_entrega.nome_tipos_de_entrega()
             )
             # Exibe a tela para obter os dados da encomenda
-            evento, valores = self.tela.tela_encomenda(tipos_de_entrega)
+            evento, valores = self.tela.tela_encomenda(nome_dos_tipos_de_entrega)
 
             if evento is None or evento == "voltar":
                 return
@@ -101,7 +107,7 @@ class ControladorEntrega:
                 valores["cpf_remetente"],
                 valores["cpf_destinatario"],
                 valores["opcao_entrega"],
-                tipos_de_entrega,
+                nome_dos_tipos_de_entrega,
             ):
                 continue
 
@@ -127,6 +133,11 @@ class ControladorEntrega:
             )
 
         else: # caixa da SPEEDEX
+            # Verifica se há tipos de caixa
+            if not self.__controlador_sistema.controlador_tipo_de_caixa.tipos_de_caixa():
+                self.tela.mensagem("Não há tipos de caixa cadastrados")
+                return False
+            
             tipos_de_caixa = (
                 self.__controlador_sistema.controlador_tipo_de_caixa.tipos_de_caixa()
             )
@@ -152,7 +163,6 @@ class ControladorEntrega:
         cadastrado, msg_error = self.__repositorio.registrar_encomenda(encomenda)
 
         if cadastrado:
-            self.tela.mensagem("Encomenda cadastrada com sucesso")
             return True
         else:
             self.tela.mensagem(f"Não foi possível cadastrar a encomenda:\n{msg_error}")
