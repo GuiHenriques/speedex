@@ -3,12 +3,14 @@ from entidades.modelos.funcionario import Funcionario
 from tests.conftest import controlador_sistema as cs
 
 import pytest
+import hashlib
 
 
 class TestFuncionario:
     controlador_sistema = cs
     nome_valido = "Taylor Swift"
     senha_valida = "123"
+    senha_hash = hashlib.sha256(senha_valida.encode('utf-8')).hexdigest()
 
     # Sempre antes de realizar a bateria de testes de funcionário, ele limpa a tabela de funcionários
     @pytest.fixture(scope="class", autouse=True)
@@ -18,7 +20,7 @@ class TestFuncionario:
     def test_passar_em_cadastro_correto(self):
         cpf_valido = "909.580.950-19"
         email_valido = "emailvalido1@gmail.com"
-        funcionario_esperado = Funcionario(cpf_valido, self.nome_valido, email_valido, self.senha_valida)
+        funcionario_esperado = Funcionario(cpf_valido, self.nome_valido, email_valido, self.senha_hash)
         funcionario_cadastrado = self.controlador_sistema.controlador_funcionario.cadastrar_funcionario(
             cpf_valido, self.nome_valido, email_valido, self.senha_valida
         )
@@ -29,7 +31,7 @@ class TestFuncionario:
         email_valido = "emailvalido3@gmail.com"
 
         funcionario_cadastrado = self.controlador_sistema.controlador_funcionario.cadastrar_funcionario(
-            cpf_invalido, self.nome_valido, email_valido, self.senha_valida
+            cpf_invalido, self.nome_valido, email_valido, self.senha_hash
         )
         assert not funcionario_cadastrado
 
@@ -39,11 +41,11 @@ class TestFuncionario:
         email_valido2 = "segundoemailvalido3@gmail.com"
 
         self.controlador_sistema.controlador_funcionario.cadastrar_funcionario(
-            cpf_repetido, self.nome_valido, email_valido, self.senha_valida
+            cpf_repetido, self.nome_valido, email_valido, self.senha_hash
         )
 
         funcionario_repetido_cadastrado = self.controlador_sistema.controlador_funcionario.cadastrar_funcionario(
-            cpf_repetido, self.nome_valido, email_valido2, self.senha_valida
+            cpf_repetido, self.nome_valido, email_valido2, self.senha_hash
         )
         assert not funcionario_repetido_cadastrado
 
@@ -53,11 +55,11 @@ class TestFuncionario:
         email_repetido = "emailrepetido@email.com"
 
         self.controlador_sistema.controlador_funcionario.cadastrar_funcionario(
-            cpf_valido, self.nome_valido, email_repetido, self.senha_valida
+            cpf_valido, self.nome_valido, email_repetido, self.senha_hash
         )
 
         funcionario_repetido_cadastrado = self.controlador_sistema.controlador_funcionario.cadastrar_funcionario(
-            cpf_valido2, self.nome_valido, email_repetido, self.senha_valida
+            cpf_valido2, self.nome_valido, email_repetido, self.senha_hash
         )
 
         assert not funcionario_repetido_cadastrado
