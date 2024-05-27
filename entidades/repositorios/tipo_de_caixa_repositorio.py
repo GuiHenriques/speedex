@@ -10,7 +10,7 @@ class tipoDeCaixaRepositorio:
 
     def registrar_tipo_de_caixa(self, tipodecaixa: TipoDeCaixa):
         try:
-            self.__cursor.execute(f"INSERT INTO tipos_de_caixa( nome, taxa, altura, largura, comprimento) \
+            self.__cursor.execute(f"INSERT INTO tipo_de_caixa( nome, taxa, altura, largura, comprimento) \
                                 VALUES ( '{tipodecaixa.nome}', '{tipodecaixa.taxa}', '{tipodecaixa.dimensoes.altura}', '{tipodecaixa.dimensoes.largura}','{tipodecaixa.dimensoes.comprimento}');")
         except Exception as e:
             print(e)
@@ -20,7 +20,7 @@ class tipoDeCaixaRepositorio:
 
     def pegar_tipo_de_caixa_por_id(self, id):
         try:
-            self.__cursor.execute("SELECT * FROM tipos_de_caixa WHERE id = %s", (id,))
+            self.__cursor.execute("SELECT * FROM tipo_de_caixa WHERE id = %s", (id,))
             dados_tipo_de_caixa = self.__cursor.fetchone()
         except Exception as e:
             print(e)
@@ -35,7 +35,7 @@ class tipoDeCaixaRepositorio:
 
     def pegar_tipos_de_caixa(self):
         try:
-            self.__cursor.execute(f"SELECT * FROM tipos_de_caixa")
+            self.__cursor.execute(f"SELECT * FROM tipo_de_caixa")
             tipos_de_caixa = self.__cursor.fetchall()
         except Exception as e:
             print(e)

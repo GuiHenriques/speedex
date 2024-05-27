@@ -100,13 +100,11 @@ class TelaEntrega(TelaAbstrata):
 
         evento, valores = self.abrir_janela()
         self.fechar_janela()
-        # valores = {"altura": "10", "largura": "10", "comprimento": "10"}
+        
         if evento == "Proximo":
             if self.__campos_sao_validos_possui_caixa(valores):
                 valores_int = { chave: int(valor) for chave, valor in valores.items() }
                 return valores_int
-
-            self.mensagem("As dimensões da caixa devem ser números inteiros positivos.")
 
         return None
 
@@ -188,18 +186,18 @@ class TelaEntrega(TelaAbstrata):
             return False
 
         # verificar se o cpf do remetente e do destinatario existem no banco de dados
-        # if not cpf_validador(valores["cpf_remetente"]):
-        #     self.mensagem("CPF do remetente inválido.")
-        #     return False
+        if not cpf_validador(valores["cpf_remetente"]):
+            self.mensagem("CPF do remetente inválido.")
+            return False
 
-        # if not cpf_validador(valores["cpf_destinatario"]):
-        #     self.mensagem("CPF do destinatário inválido.")
-        #     return False
+        if not cpf_validador(valores["cpf_destinatario"]):
+            self.mensagem("CPF do destinatário inválido.")
+            return False
 
         # # verificar se o cpf do remetente e do destinatario são iguais
-        # if valores["cpf_remetente"] == valores["cpf_destinatario"]:
-        #     self.mensagem("CPF do remetente e do destinatário são iguais.")
-        #     return False
+        if valores["cpf_remetente"] == valores["cpf_destinatario"]:
+            self.mensagem("CPF do remetente e do destinatário são iguais.")
+            return False
 
         # verificar se o peso é um número
         if not valores["peso"].isnumeric():
