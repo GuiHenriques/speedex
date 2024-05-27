@@ -27,7 +27,6 @@ class tipoDeCaixaRepositorio:
             return None
 
         if dados_tipo_de_caixa != None:
-            print("Dados tipo de caixa", dados_tipo_de_caixa)
             caixa = Caixa(dados_tipo_de_caixa[3], dados_tipo_de_caixa[4], dados_tipo_de_caixa[5])
             tipo_de_caixa = TipoDeCaixa(*dados_tipo_de_caixa[1:3], caixa, dados_tipo_de_caixa[0])
             return tipo_de_caixa

@@ -76,11 +76,10 @@ class ControladorEntrega:
             "NULL",  # Funcionario logado
             distancia,
         )
-        print("Entrega", entrega)
         self.cadastrar_entrega(entrega)
 
         # tela de entrega cadastrada 
-        # self.tela.tela_cadastrada()
+        self.tela.entrega_cadastrada(entrega, valor_total)
 
     def dados_encomenda(self):
         while True:

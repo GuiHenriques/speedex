@@ -154,22 +154,26 @@ class TelaEntrega(TelaAbstrata):
 
         return None
 
-    def tela_entrega_cadastrada(self):
+    def entrega_cadastrada(self, entrega, total):
         layout = [
             [
                 sg.Text(
-                    "Encomenda cadastrada com sucesso!",
-                    font=("Arial", 18),
+                    "Detalhes da Entrega",
+                    font=("Helvetica", 16),
                     justification="center",
                 )
             ],
-            [sg.Text("Valor total: R$ 30,00")],
-            [sg.Text("Origem: São Paulo")],
-            [sg.Text("Destino: Rio de Janeiro")],
-            [sg.Button("OK", size=(8, 1), button_color=("white", "green"))],
+            [sg.Text(f"Remetente: {entrega.remetente.nome}")],
+            [sg.Text(f"Destinatário: {entrega.destinatario.nome}")],
+            [sg.Text(f"Origem: Agência SPEEDEX - Trindade")],
+            [sg.Text(f"Destino: {entrega.destinatario.endereco}")],
+            [sg.Text(f"Distância: {entrega.distancia} m")],
+            [sg.Text(f"Tipo de Entrega: {entrega.tipo_de_entrega.nome}")],
+            [sg.Text(f"Valor Total: R$ {total}")],
+            [sg.Button("Fechar", size=(10, 1))],
         ]
 
-        self.janela = sg.Window("Encomenda", layout, element_justification="c")
+        self.janela = sg.Window("Detalhes da Entrega", layout)
 
         self.abrir_janela()
         self.fechar_janela()

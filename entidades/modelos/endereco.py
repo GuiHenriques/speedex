@@ -59,12 +59,7 @@ class Endereco:
         self.__numero = numero
 
     def __str__(self):
-        return f"CEP: {self.__cep},\
-                 Estado: {self.__estado},\
-                 Cidade: {self.__cidade},\
-                 Bairro: {self.__bairro},\
-                 Rua: {self.__rua},\
-                 Número: {self.__numero}"
+        return f"{self.__rua}, {self.__bairro}, {self.__cidade} - {self.__estado}"
 
     def __eq__(self, other):
         if isinstance(other, Endereco):
