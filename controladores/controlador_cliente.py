@@ -36,7 +36,7 @@ class ControladorCliente:
     def menu_cadastro_de_cliente(self):
         while True:
             evento, valores = self.__tela.pega_dados_de_cliente()
-            
+
             if evento == None:
                 return
 
@@ -45,7 +45,7 @@ class ControladorCliente:
 
             cpf = valores["cpf"]
             nome = valores["nome"]
-            
+
             if valores["cep"] != "" or valores["estado"] != "":
                 endereco = Endereco(
                     valores["cep"],

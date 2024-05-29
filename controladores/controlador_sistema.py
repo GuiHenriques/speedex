@@ -82,6 +82,9 @@ class ControladorSistema:
     def menu_cliente(self):
         return self.__controlador_cliente.abre_tela()
     
+    def menu_relatorio(self):
+        return
+    
     def encerra_sistema(self):
         self.__database.close()
         exit()
@@ -101,7 +104,7 @@ class ControladorSistema:
             2: self.menu_cliente,
             3: self.menu_tipo_de_entrega,
             4: self.menu_tipo_de_caixa,
-            #5: self.menu_relatorio,
+            5: self.menu_relatorio,
             0: self.encerra_sistema,
         }
 
