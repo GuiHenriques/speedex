@@ -15,7 +15,7 @@ CREATE TABLE tipos_de_entrega(
 
 CREATE TABLE clientes(
   cpf VARCHAR(11) PRIMARY KEY,
-  nome VARCHAR(100),
+  nome VARCHAR(100) NOT NULL,
   cep VARCHAR(8),
   estado VARCHAR(100),
   cidade VARCHAR(100),
