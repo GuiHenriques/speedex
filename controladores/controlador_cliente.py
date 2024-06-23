@@ -1,3 +1,4 @@
+from warnings import catch_warnings
 from telas.tela_cliente import TelaCliente
 from entidades.repositorios.cliente_repositorio import ClienteRepositorio
 from entidades.modelos.remetente import Remetente
@@ -12,10 +13,12 @@ import json
 
 class ControladorCliente:
     def __init__(self, controlador_sistema):
-        self.__tela = TelaCliente() if not controlador_sistema.development_mode else None
+        self.__tela: TelaCliente | None = (
+            TelaCliente() if not controlador_sistema.development_mode else None
+        )
         self.__controlador_sistema = controlador_sistema
         self.__repositorio = ClienteRepositorio(controlador_sistema)
-    
+
     def abre_tela(self):
         lista_opcoes = {
             1: self.menu_cadastro_de_cliente,
@@ -43,6 +46,9 @@ class ControladorCliente:
             if evento == "Confirmar" and valores == None:
                 continue
 
+            if valores == None:
+                continue
+
             cpf = valores["cpf"]
             nome = valores["nome"]
 
@@ -61,7 +67,9 @@ class ControladorCliente:
             if self.cadastrar_cliente(cpf, nome, endereco):
                 return
 
-    def cadastrar_cliente(self, cpf: str, nome: str, endereco: Endereco = None) -> bool:
+    def cadastrar_cliente(
+        self, cpf: str, nome: str, endereco: Endereco | None = None
+    ) -> bool:
         if not cpf_validador(cpf):
             self.__mensagem("CPF inválido!")
             return False
@@ -71,38 +79,40 @@ class ControladorCliente:
             cliente = Remetente(cpf, nome)
         else:
             cliente = Destinatario(cpf, nome, endereco)
-        
+
         if self.cpf_existe(cliente.cpf):
             self.__mensagem("CPF já cadastrado!")
             return False
-        
+
         if isinstance(cliente, Destinatario):
             if not self.__cep_existe(cliente.endereco.cep):
                 self.__mensagem("CEP Inválido!")
                 return False
 
-        cliente_foi_cadastrado, msg_error = self.__repositorio.registrar_cliente(cliente)
+        cliente_foi_cadastrado, msg_error = self.__repositorio.registrar_cliente(
+            cliente
+        )
         if cliente_foi_cadastrado:
             self.__mensagem("Cliente cadastrado com sucesso!")
             return cliente
         else:
             self.__mensagem(f"Não foi possível cadastrar o cliente.\n{msg_error}")
             return False
-        
+
     def menu_excluir_cliente(self):
         while True:
             evento, valores = self.__tela.pega_cpf_cliente()
 
             if evento == None:
                 return
-            
+
             if evento == "Confirmar" and valores == None:
                 continue
-            
+
             cpf = valores["cpf"]
             if self.excluir_cliente(cpf):
                 return
-        
+
     def excluir_cliente(self, cpf: str):
         if not cpf_validador(cpf):
             self.__mensagem("CPF inválido!")
@@ -127,7 +137,7 @@ class ControladorCliente:
 
             if evento == None:
                 return
-            
+
             if evento == "Confirmar" and valores == None:
                 continue
 
@@ -142,21 +152,24 @@ class ControladorCliente:
                 continue
 
             cliente = self.__repositorio.pega_cliente(cpf)
-            
+
             while True:
                 if isinstance(cliente, Destinatario):
                     evento, valores = self.__tela.pega_dados_de_cliente(
-                        cliente.nome, cliente.endereco.cep, cliente.endereco.estado,
-                        cliente.endereco.cidade, cliente.endereco.bairro, cliente.endereco.rua, cliente.endereco.numero
+                        cliente.nome,
+                        cliente.endereco.cep,
+                        cliente.endereco.estado,
+                        cliente.endereco.cidade,
+                        cliente.endereco.bairro,
+                        cliente.endereco.rua,
+                        cliente.endereco.numero,
                     )
                 else:
-                    evento, valores = self.__tela.pega_dados_de_cliente(
-                        cliente.nome
-                    )
+                    evento, valores = self.__tela.pega_dados_de_cliente(cliente.nome)
 
                 if evento == None:
                     break
-                
+
                 if evento == "Confirmar" and valores == None:
                     continue
 
@@ -182,7 +195,7 @@ class ControladorCliente:
             if self.alterar_cliente(cpf, nome, endereco):
                 return
 
-    def alterar_cliente(self, cpf: str, nome: str, endereco: Endereco = None):
+    def alterar_cliente(self, cpf: str, nome: str, endereco: Endereco | None = None):
         if endereco is None:
             cliente = Remetente(cpf, nome)
         else:
@@ -193,14 +206,18 @@ class ControladorCliente:
                 self.__mensagem("CEP Inválido!")
                 return False
 
-        cliente_foi_atualizado, msg_error = self.__repositorio.atualizar_dados_de_cliente(cliente)
+        cliente_foi_atualizado, msg_error = (
+            self.__repositorio.atualizar_dados_de_cliente(cliente)
+        )
         if cliente_foi_atualizado:
             self.__mensagem("Cliente atualizado com sucesso!")
             return cliente
         else:
-            self.__mensagem(f"Não foi possível atualizar os dados do cliente.\n{msg_error}")
+            self.__mensagem(
+                f"Não foi possível atualizar os dados do cliente.\n{msg_error}"
+            )
             return False
-        
+
     def listar_clientes(self):
         clientes = self.__repositorio.pega_todos_os_clientes()
         if clientes:
@@ -213,24 +230,25 @@ class ControladorCliente:
         return cliente
 
     def cpf_existe(self, cpf: str):
-        if self.__repositorio.pega_cliente(cpf) == None:
+        if self.__repositorio.pega_cliente(cpf) is None:
             return False
         else:
             return True
-        
-    def __cep_existe(self, cep: str):
-        url = f'https://viacep.com.br/ws/{cep}/json'
-        headers = { 'User-Agent': 'Autociencia/1.0' }
-        req = urllib.request.Request(url=url, headers=headers, method='GET')
-        client = urllib.request.urlopen(req)
-        content = client.read().decode('utf-8')
-        address = json.loads(content)
-        client.close()
 
-        return "cep" in address
+    def __cep_existe(self, cep: str):
+        try:
+            url = f"https://viacep.com.br/ws/{cep}/json"
+            headers = {"User-Agent": "Autociencia/1.0"}
+            req = urllib.request.Request(url=url, headers=headers, method="GET")
+            client = urllib.request.urlopen(req)
+            content = client.read().decode("utf-8")
+            address = json.loads(content)
+            client.close()
+
+            return "cep" in address
+        except:
+            return None
 
     def __mensagem(self, msg):
-        try:
+        if self.__tela:
             self.__tela.mensagem(msg)
-        except AttributeError:
-            pass
