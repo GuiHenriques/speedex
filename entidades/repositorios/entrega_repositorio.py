@@ -1,4 +1,5 @@
 from entidades.modelos.entrega import Entrega
+from entidades.modelos.encomenda import Encomenda
 
 from psycopg2 import extensions
 
@@ -10,9 +11,11 @@ class EntregaRepositorio:
     def registrar_entrega(self, entrega: Entrega):
         try:
             self.__cursor.execute(
-                f"INSERT INTO entregas(remetente_cpf, destinatario_cpf, encomenda_id, tipo_de_entrega_id, funcionario_cpf, distancia) \
-                    VALUES ({entrega.remetente.cpf}, {entrega.destinatario.cpf}, {entrega.encomenda.id}, {entrega.tipo_de_entrega.id},\
-                            {entrega.funcionario.cpf}, {entrega.distancia});"
+                f"INSERT INTO entregas(remetente_cpf, remetente_nome, destinatario_cpf, destinatario_nome, \
+                    funcionario_cpf, funcionario_nome, encomenda_id, tipo_de_entrega_id, distancia) \
+                    VALUES ('{entrega.remetente.cpf}', '{entrega.remetente.nome}', '{entrega.destinatario.cpf}', '{entrega.destinatario.nome}', \
+                    '{entrega.funcionario.cpf}', '{entrega.funcionario.nome}', {entrega.encomenda.id}, {entrega.tipo_de_entrega.id}, \
+                    '{entrega.tipo_de_entrega.nome}', {entrega.tipo_de_entrega.taxa}, {entrega.distancia});"
             )
 
         except Exception as e:
@@ -21,15 +24,18 @@ class EntregaRepositorio:
 
         return True, ""
 
-    def registrar_encomenda(self, encomenda):
+    def registrar_encomenda(self, encomenda: Encomenda):
         if encomenda.tipo_de_caixa.id is None:
-            encomenda.tipo_de_caixa = "NULL"
-        else:
-            encomenda.tipo_de_caixa = encomenda.tipo_de_caixa.id
+            encomenda.tipo_de_caixa.id = "NULL"
+            encomenda.tipo_de_caixa.taxa = "NULL"
+
         try:
             self.__cursor.execute(
-                f"INSERT INTO encomendas(conteudo, peso, tipo_de_caixa_id) \
-                  VALUES ('{encomenda.conteudo}', {encomenda.peso}, {encomenda.tipo_de_caixa});"
+                f"INSERT INTO encomendas(conteudo, peso, tipo_de_caixa_id, tipo_de_caixa_nome,\
+                    tipo_de_caixa_taxa, tipo_de_caixa_altura, tipo_de_caixa_largura, tipo_de_caixa_comprimento) \
+                    VALUES ('{encomenda.conteudo}', {encomenda.peso}, {encomenda.tipo_de_caixa.id},\
+                    '{encomenda.tipo_de_caixa.nome}', {encomenda.tipo_de_caixa.taxa}, {encomenda.tipo_de_caixa.dimensoes.altura},\
+                     {encomenda.tipo_de_caixa.dimensoes.largura}, {encomenda.tipo_de_caixa.dimensoes.comprimento});"
             )
         except Exception as e:
             print(e)
