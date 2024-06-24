@@ -1,4 +1,5 @@
 import re
+import datetime
 
 def cpf_validador(cpf: str) -> bool:
     numbers = [int(digit) for digit in cpf if digit.isdigit()]
@@ -33,3 +34,11 @@ def campo_numerico_validador(valores: dict) -> bool:
     if all(val.isnumeric() for val in valores.values()):
         return True
     return False
+
+
+def data_validador(data):
+    try:
+        datetime.strptime(data, "%d/%m/%Y")
+        return True
+    except ValueError:
+        return False
