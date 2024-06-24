@@ -6,6 +6,10 @@ class ControladorRelatorio:
         self.__controlador_sistema = controlador_sistema
         self.__tela: TelaRelatorio = TelaRelatorio()
 
+    @property
+    def tela(self) -> TelaRelatorio:
+        return self.__tela
+
     def abre_tela(self):
         lista_opcoes = {
             1: self.relatorio_de_entrega,
@@ -21,7 +25,23 @@ class ControladorRelatorio:
             opcao_escolhida = lista_opcoes[opcao]
             opcao_escolhida()
 
-    def relatorio_de_entrega(self): ...
+    def relatorio_de_entrega(self):
+        while True:
+            evento, valores = self.__tela.pega_dados_relatorio_entrega()
+
+            if evento is None: return
+                        
+            # Verifica se o CPF do remetente existe
+            if valores["cliente"]:
+                if not self.__controlador_sistema.controlador_cliente.cpf_existe(valores["cpf"]):
+                    self.tela.mensagem("CPF não encontrado")
+                    continue
+
+                
+
+            print("OK")
+
+
     def relatorio_de_tipos_de_caixa(self): ...
 
     def relatorio_de_tipos_de_entrega(self):

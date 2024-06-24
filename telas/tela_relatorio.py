@@ -65,7 +65,6 @@ class TelaRelatorio(TelaAbstrata):
         self.fechar_janela()
 
         if evento == "Confirmar":
-
             if valores["cliente"]:
                 if cpf_validador(valores["cpf"]):
                     return evento, valores
@@ -79,3 +78,5 @@ class TelaRelatorio(TelaAbstrata):
                 else:
                     self.mensagem("Data inválida")
                     return "Data inválida", None
+        else:
+            return None, None
