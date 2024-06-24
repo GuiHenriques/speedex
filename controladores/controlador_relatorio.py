@@ -1,10 +1,12 @@
-from controladores.controlador_sistema import ControladorSistema
+from controladores import controlador_sistema
 from telas.tela_relatorio import TelaRelatorio
 
 
 class ControladorRelatorio:
     def __init__(self, controlador_sistema) -> None:
-        self.__controlador_sistema: ControladorSistema = controlador_sistema
+        self.__controlador_sistema: "controlador_sistema.ControladorSistema" = (
+            controlador_sistema
+        )
         self.__tela: TelaRelatorio = TelaRelatorio()
 
     @property
