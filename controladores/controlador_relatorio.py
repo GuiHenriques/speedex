@@ -8,7 +8,7 @@ class ControladorRelatorio:
 
     def abre_tela(self):
         lista_opcoes = {
-            1: self.relatorio_de_encomendas,
+            1: self.relatorio_de_entrega,
             2: self.relatorio_de_tipos_de_caixa,
             3: self.relatorio_de_tipos_de_entrega,
         }
@@ -21,7 +21,7 @@ class ControladorRelatorio:
             opcao_escolhida = lista_opcoes[opcao]
             opcao_escolhida()
 
-    def relatorio_de_encomendas(self): ...
+    def relatorio_de_entrega(self): ...
     def relatorio_de_tipos_de_caixa(self): ...
 
     def relatorio_de_tipos_de_entrega(self):
