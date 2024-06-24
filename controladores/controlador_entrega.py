@@ -9,20 +9,23 @@ from entidades.modelos.encomenda import Encomenda
 
 class ControladorEntrega:
     def __init__(self, controlador_sistema):
-        self.__tela = (TelaEntrega() if not controlador_sistema.development_mode else None)
+        self.__tela = (
+            TelaEntrega() if not controlador_sistema.development_mode else None
+        )
         self.__repositorio = EntregaRepositorio(controlador_sistema)
         self.__controlador_sistema = controlador_sistema
 
     @property
-    def tela(self):
-        return self.__tela
+    def tela(self) -> TelaEntrega | None:
+        if self.__tela is not None:
+            return self.__tela
 
     def dados_entrega(self):
         # Verifica se há tipos de entrega cadastrados
         if not self.__controlador_sistema.controlador_tipo_de_entrega.tipos_de_entrega():
             self.tela.mensagem("Não há tipos de entrega cadastrados")
             return
-        
+
         # Obtém os dados da encomenda
         dados = self.dados_encomenda()
         if not dados:
@@ -84,15 +87,13 @@ class ControladorEntrega:
         )
         self.cadastrar_entrega(entrega)
 
-        # tela de entrega cadastrada 
+        # tela de entrega cadastrada
         self.tela.entrega_cadastrada(entrega, valor_total)
 
     def dados_encomenda(self):
         while True:
             # Obtém os nomes dos tipos de entrega
-            nome_dos_tipos_de_entrega = (
-                self.__controlador_sistema.controlador_tipo_de_entrega.nome_tipos_de_entrega()
-            )
+            nome_dos_tipos_de_entrega = self.__controlador_sistema.controlador_tipo_de_entrega.nome_tipos_de_entrega()
             # Exibe a tela para obter os dados da encomenda
             evento, valores = self.tela.tela_encomenda(nome_dos_tipos_de_entrega)
 
@@ -121,7 +122,7 @@ class ControladorEntrega:
             return valores
 
     def dados_tipo_caixa(self, possui_caixa):
-        if possui_caixa: # caixa do cliente
+        if possui_caixa:  # caixa do cliente
             valores_caixa = self.tela.tela_possui_caixa()
 
             if valores_caixa is None:
@@ -132,12 +133,12 @@ class ControladorEntrega:
                 valores_caixa
             )
 
-        else: # caixa da SPEEDEX
+        else:  # caixa da SPEEDEX
             # Verifica se há tipos de caixa
             if not self.__controlador_sistema.controlador_tipo_de_caixa.tipos_de_caixa():
                 self.tela.mensagem("Não há tipos de caixa cadastrados")
                 return False
-            
+
             tipos_de_caixa = (
                 self.__controlador_sistema.controlador_tipo_de_caixa.tipos_de_caixa()
             )

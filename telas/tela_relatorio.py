@@ -3,6 +3,7 @@ from telas.telaAbstrata import TelaAbstrata
 
 from utils.valildadores import data_validador, cpf_validador
 
+
 class TelaRelatorio(TelaAbstrata):
     def __init__(self):
         super().__init__()
@@ -30,8 +31,13 @@ class TelaRelatorio(TelaAbstrata):
 
     def pega_periodo(self):
         layout = [
-            [sg.Text("Período")],
-            [sg.Input],
+            [sg.Text("Período (dd/mm/aaaa)")],
+            [
+                sg.Text("De: "),
+                sg.Input(key="data_inicio", size=(12, 1)),
+                sg.Text("Até: "),
+                sg.Input(key="data_fim", size=(12, 1)),
+            ],
             [sg.Button("Confirmar")],
         ]
 
@@ -41,6 +47,10 @@ class TelaRelatorio(TelaAbstrata):
         self.fechar_janela()
 
         if evento == "Confirmar":
+            if not self.__validar_periodo(valores["data_inicio"], valores["data_fim"]):
+                self.mensagem("Data inválida!")
+                return evento, None
+
             return evento, valores
 
         return evento, None
@@ -73,10 +83,18 @@ class TelaRelatorio(TelaAbstrata):
                     return "CPF inválido", None
 
             elif valores["periodo"]:
-                if data_validador(valores["data_inicio"]) and data_validador(valores["data_fim"]):
+                if data_validador(valores["data_inicio"]) and data_validador(
+                    valores["data_fim"]
+                ):
                     return evento, valores
                 else:
                     self.mensagem("Data inválida")
                     return "Data inválida", None
         else:
             return None, None
+
+    def __validar_periodo(self, inicio, fim):
+        if data_validador(inicio) and data_validador(fim):
+            return True
+        else:
+            return False

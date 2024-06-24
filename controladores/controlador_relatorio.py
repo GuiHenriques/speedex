@@ -1,9 +1,10 @@
+from controladores.controlador_sistema import ControladorSistema
 from telas.tela_relatorio import TelaRelatorio
 
 
 class ControladorRelatorio:
     def __init__(self, controlador_sistema) -> None:
-        self.__controlador_sistema = controlador_sistema
+        self.__controlador_sistema: ControladorSistema = controlador_sistema
         self.__tela: TelaRelatorio = TelaRelatorio()
 
     @property
@@ -29,20 +30,30 @@ class ControladorRelatorio:
         while True:
             evento, valores = self.__tela.pega_dados_relatorio_entrega()
 
-            if evento is None: return
-                        
+            if evento is None or valores is None:
+                return
+
             # Verifica se o CPF do remetente existe
             if valores["cliente"]:
-                if not self.__controlador_sistema.controlador_cliente.cpf_existe(valores["cpf"]):
+                if not self.__controlador_sistema.controlador_cliente.cpf_existe(
+                    valores["cpf"]
+                ):
                     self.tela.mensagem("CPF não encontrado")
                     continue
 
-                
-
             print("OK")
-
 
     def relatorio_de_tipos_de_caixa(self): ...
 
     def relatorio_de_tipos_de_entrega(self):
-        self.__tela.pega_periodo()
+        while True:
+            evento, valores = self.__tela.pega_periodo()
+
+            if evento is None or valores is None:
+                return
+
+            inicio = valores["data_inicio"]
+            fim = valores["data_fim"]
+            self.__controlador_sistema.controlador_tipo_de_entrega.relatorio_de_tipos_de_entrega_mais_utilizados(
+                inicio, fim
+            )
