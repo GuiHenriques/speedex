@@ -1,5 +1,5 @@
 import re
-import datetime
+from datetime import datetime
 
 def cpf_validador(cpf: str) -> bool:
     numbers = [int(digit) for digit in cpf if digit.isdigit()]
