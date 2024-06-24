@@ -3,6 +3,8 @@ from telas.telaAbstrata import TelaAbstrata
 
 from utils.valildadores import data_validador, cpf_validador
 
+BUTTON_SIZE = (8, 1)
+
 
 class TelaRelatorio(TelaAbstrata):
     def __init__(self):
@@ -92,6 +94,25 @@ class TelaRelatorio(TelaAbstrata):
                     return "Data inválida", None
         else:
             return None, None
+
+    def tela_relatorio_de_entrega(self, dados_tipo_de_entrega):
+        if dados_tipo_de_entrega is None or len(dados_tipo_de_entrega) == 0:
+            self.mensagem("Nenhum tipo de entrega utilizado neste período.")
+            return
+
+        header = ["Nome", "Taxa", "Quantidade de usos"]
+        layout = [
+            [sg.Table(dados_tipo_de_entrega, header)],
+            [sg.Button("Ok", size=BUTTON_SIZE)],
+        ]
+
+        self.janela = sg.Window(
+            "Relatório de Tipos de Entrega", layout, element_justification="c"
+        )
+
+        self.abrir_janela()
+        self.fechar_janela()
+        return True
 
     def __validar_periodo(self, inicio, fim):
         if data_validador(inicio) and data_validador(fim):

@@ -56,6 +56,9 @@ class ControladorRelatorio:
 
             inicio = valores["data_inicio"]
             fim = valores["data_fim"]
-            self.__controlador_sistema.controlador_tipo_de_entrega.relatorio_de_tipos_de_entrega_mais_utilizados(
+            dados_tipo_de_entrega = self.__controlador_sistema.controlador_entrega.relatorio_de_tipos_de_entrega_mais_utilizados(
                 inicio, fim
             )
+
+            if self.__tela.tela_relatorio_de_entrega(dados_tipo_de_entrega):
+                return

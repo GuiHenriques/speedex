@@ -129,10 +129,3 @@ class ControladorTipoDeEntrega:
         tipos_de_entrega = self.__repositorio.listar_tipos_de_entrega()
 
         return tipos_de_entrega
-
-    def relatorio_de_tipos_de_entrega_mais_utilizados(self, inicio, fim):
-        todos_tipos_de_entrega = (
-            self.__repositorio.tipos_de_entrega_mais_utilizados_por_periodo(inicio, fim)
-        )
-
-        return todos_tipos_de_entrega

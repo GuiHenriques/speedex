@@ -49,7 +49,7 @@ class EntregaRepositorio:
         try:
             self.__cursor.execute(
                 f"SELECT * FROM entregas \
-                WHERE data {inicio} between {fim};"
+                WHERE created_at BETWEEN '{inicio}' AND '{fim}';"
             )
             tipos_de_entrega_filtrados = self.__cursor.fetchall()
             return tipos_de_entrega_filtrados
