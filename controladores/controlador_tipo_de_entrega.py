@@ -32,9 +32,7 @@ class ControladorTipoDeEntrega:
     def __mensagem(self, mensagem):
         try:
             self.__tela.mensagem(mensagem)
-        except (
-            AttributeError
-        ) as e:  # Quando em ambiente de teste, já que None vai chamar o método mensagem.
+        except AttributeError as e:  # Quando em ambiente de teste, já que None vai chamar o método mensagem.
             pass
 
     def pegar_tipo_de_entrega_por_id(self, id):
@@ -126,8 +124,11 @@ class ControladorTipoDeEntrega:
         nome_dos_tipos_de_entrega = self.__repositorio.listar_nome_tipos_de_entrega()
 
         return nome_dos_tipos_de_entrega
-    
+
     def tipos_de_entrega(self):
         tipos_de_entrega = self.__repositorio.listar_tipos_de_entrega()
-        
+
         return tipos_de_entrega
+
+    def relatorio_de_tipos_de_entrega_mais_utilizados(self):
+        todos_tipos_de_entrega = self.tipos_de_entrega()

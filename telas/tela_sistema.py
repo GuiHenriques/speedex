@@ -10,7 +10,7 @@ class TelaSistema(TelaAbstrata):
     def abre_tela(self):
         self.tela_principal()
         evento, valores = self.abrir_janela()
-        
+
         if evento is None:
             return 0
 

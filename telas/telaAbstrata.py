@@ -17,14 +17,14 @@ class TelaAbstrata(ABC):
 
     def layout_button(self, elementos):
         layout = [
-            [sg.Button(elemento, size=(15, -5), pad=(10), key=key + 1)]
+            [sg.Button(elemento, size=(23, 1), pad=(10), key=key + 1)]
             for key, elemento in enumerate(elementos)
         ]
         layout.append(
             [
                 sg.Button(
                     "Sair",
-                    size=(15, 1),
+                    size=(20, 1),
                     pad=(10),
                     key=0,
                     button_color=("white", "#FF403F"),
