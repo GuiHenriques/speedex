@@ -8,7 +8,6 @@ class EntregaRepositorio:
         self.__cursor: extensions.cursor = controlador_sistema.database.cursor()
 
     def registrar_entrega(self, entrega: Entrega):
-
         try:
             self.__cursor.execute(
                 f"INSERT INTO entregas(remetente_cpf, destinatario_cpf, encomenda_id, tipo_de_entrega_id, funcionario_cpf, distancia) \
@@ -45,3 +44,15 @@ class EntregaRepositorio:
         except Exception as e:
             print(e)
             return False, "Erro interno no banco de dados."
+
+    def tipos_de_entrega_mais_utilizados_por_periodo(self, inicio, fim):
+        try:
+            self.__cursor.execute(
+                f"SELECT * FROM entregas \
+                WHERE data {inicio} between {fim};"
+            )
+            tipos_de_entrega_filtrados = self.__cursor.fetchall()
+            return tipos_de_entrega_filtrados
+        except Exception as e:
+            print(e)
+            return None
