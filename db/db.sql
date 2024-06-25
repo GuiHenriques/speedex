@@ -52,7 +52,7 @@ CREATE TABLE entregas (
   destinatario_cpf VARCHAR(11) REFERENCES clientes(cpf),
   destinatario_nome VARCHAR(255) NOT NULL,
   funcionario_cpf VARCHAR(11) REFERENCES funcionarios(cpf),
-  functionario_nome VARCHAR(255) NOT NULL,
+  funcionario_nome VARCHAR(255) NOT NULL,
   encomenda_id INTEGER REFERENCES encomendas(id),
   tipo_de_entrega_id INTEGER REFERENCES tipos_de_entrega(id),
   tipo_de_entrega_nome VARCHAR(255) NOT NULL,

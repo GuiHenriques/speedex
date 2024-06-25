@@ -12,7 +12,8 @@ class EntregaRepositorio:
         try:
             self.__cursor.execute(
                 f"INSERT INTO entregas(remetente_cpf, remetente_nome, destinatario_cpf, destinatario_nome, \
-                    funcionario_cpf, funcionario_nome, encomenda_id, tipo_de_entrega_id, distancia) \
+                    funcionario_cpf, funcionario_nome, encomenda_id, tipo_de_entrega_id, tipo_de_entrega_nome,\
+                    tipo_de_entrega_taxa, distancia)\
                     VALUES ('{entrega.remetente.cpf}', '{entrega.remetente.nome}', '{entrega.destinatario.cpf}', '{entrega.destinatario.nome}', \
                     '{entrega.funcionario.cpf}', '{entrega.funcionario.nome}', {entrega.encomenda.id}, {entrega.tipo_de_entrega.id}, \
                     '{entrega.tipo_de_entrega.nome}', {entrega.tipo_de_entrega.taxa}, {entrega.distancia});"
@@ -27,7 +28,7 @@ class EntregaRepositorio:
     def registrar_encomenda(self, encomenda: Encomenda):
         if encomenda.tipo_de_caixa.id is None:
             encomenda.tipo_de_caixa.id = "NULL"
-            encomenda.tipo_de_caixa.taxa = "NULL"
+            encomenda.tipo_de_caixa.taxa = 0
 
         try:
             self.__cursor.execute(
