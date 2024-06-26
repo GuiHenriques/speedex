@@ -56,7 +56,19 @@ class ControladorRelatorio:
 
             self.tela.relatorio_de_entregas(entregas)
 
-    def relatorio_de_tipos_de_caixa(self): ...
+    def relatorio_de_tipos_de_caixa(self):
+        while True:
+            evento, valores = self.__tela.pega_periodo()
+
+            if evento is None or valores is None:
+                return
+
+            inicio = str_para_datetime(valores["data_inicio"])
+            fim = str_para_datetime(valores["data_fim"])
+            
+            tipos_de_caixa = self.__repositorio.relatorio_tipo_de_caixa(inicio, fim)
+            
+            self.tela.relatorio_de_tipo_de_caixa(tipos_de_caixa)
 
     def relatorio_de_tipos_de_entrega(self):
         while True:

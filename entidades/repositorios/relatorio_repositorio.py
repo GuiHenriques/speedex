@@ -61,7 +61,8 @@ class RelatorioRepositorio:
         try:
             self.__cursor.execute(
                 f"SELECT tipo_de_entrega_id, tipo_de_entrega_nome, tipo_de_entrega_taxa, COUNT(*) \
-                    FROM entregas GROUP BY tipo_de_entrega_id, tipo_de_entrega_nome, tipo_de_entrega_taxa \
+                    FROM entregas WHERE created_at BETWEEN '{inicio}' AND '{fim}' \
+                    GROUP BY tipo_de_entrega_id, tipo_de_entrega_nome, tipo_de_entrega_taxa \
                     ORDER BY COUNT(*) DESC;"
             )
             tipos_de_entrega_filtrados = self.__cursor.fetchall()
@@ -70,4 +71,17 @@ class RelatorioRepositorio:
             print(e)
             return None
 
-    def relatorio_tipo_de_caixa(self): ...
+    def relatorio_tipo_de_caixa(self, inicio, fim):
+        try:
+            self.__cursor.execute(
+                f"SELECT tipo_de_caixa_id, tipo_de_caixa_nome, tipo_de_caixa_taxa, COUNT(*) AS quantidade_usada \
+                FROM encomendas \
+                WHERE created_at BETWEEN '{inicio}' AND '{fim}' \
+                GROUP BY tipo_de_caixa_id, tipo_de_caixa_nome, tipo_de_caixa_taxa \
+                ORDER BY quantidade_usada DESC;"
+            )
+            tipos_de_caixa_filtrados = self.__cursor.fetchall()
+            return tipos_de_caixa_filtrados
+        except Exception as e:
+            print(e)
+            return None

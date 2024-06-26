@@ -97,7 +97,7 @@ class TelaRelatorio(TelaAbstrata):
         if entregas is None or len(entregas) == 0:
             self.mensagem("Nenhuma entrega encontrada.")
             return
-        
+
         header = (
             "ID",
             "CPF Remet.",
@@ -145,6 +145,22 @@ class TelaRelatorio(TelaAbstrata):
         self.abrir_janela()
         self.fechar_janela()
         return True
+
+    def relatorio_de_tipo_de_caixa(self, dados_tipo_de_caixa):
+        if dados_tipo_de_caixa is None or len(dados_tipo_de_caixa) == 0:
+            self.mensagem("Nenhum tipo de caixa utilizado neste período.")
+            return
+
+        header = ["ID", "Nome", "Taxa", "Quantidade de usos"]
+        layout = [
+            [sg.Table(dados_tipo_de_caixa, header)],
+            [sg.Button("Ok", size=BUTTON_SIZE)],
+        ]
+
+        self.janela = sg.Window("Relatório de Tipos de Caixa", layout, element_justification="c")
+
+        self.abrir_janela()
+        self.fechar_janela()
 
     def __validar_periodo(self, inicio, fim):
         if data_validador(inicio) and data_validador(fim):
