@@ -1,4 +1,3 @@
-from warnings import catch_warnings
 from telas.tela_cliente import TelaCliente
 from entidades.repositorios.cliente_repositorio import ClienteRepositorio
 from entidades.modelos.remetente import Remetente
@@ -22,8 +21,8 @@ class ControladorCliente:
     def abre_tela(self):
         lista_opcoes = {
             1: self.menu_cadastro_de_cliente,
-            2: self.menu_alterar_cliente,
-            3: self.menu_excluir_cliente,
+            2: self.menu_excluir_cliente,
+            3: self.menu_alterar_cliente,
             4: self.listar_clientes,
             0: "Retornar para o menu principal",
         }

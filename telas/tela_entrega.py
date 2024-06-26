@@ -100,10 +100,10 @@ class TelaEntrega(TelaAbstrata):
 
         evento, valores = self.abrir_janela()
         self.fechar_janela()
-        
+
         if evento == "Proximo":
             if self.__campos_sao_validos_possui_caixa(valores):
-                valores_int = { chave: int(valor) for chave, valor in valores.items() }
+                valores_int = {chave: int(valor) for chave, valor in valores.items()}
                 return valores_int
 
         return None
@@ -119,11 +119,6 @@ class TelaEntrega(TelaAbstrata):
                 )
             ],
         ]
-        # loop para cada caixa
-        # [
-        #     sg.Radio("Pequena", "tamanho_caixa", key="pequena", size=(8, 1)),
-        #     sg.Text(f"{10}x{10}x{10} - R$ {10}"),
-        # ],
 
         for caixa in tipos_de_caixa:
             layout.append(
@@ -179,7 +174,6 @@ class TelaEntrega(TelaAbstrata):
         return None
 
     def __campos_sao_validos_encomenda(self, valores):
-
         # verificar se todos os campos foram preenchidos
         if algum_campo_e_vazio(valores):
             self.mensagem("Por favor, preencha todos os campos.")
@@ -207,7 +201,6 @@ class TelaEntrega(TelaAbstrata):
         return True
 
     def __campos_sao_validos_possui_caixa(self, valores_caixa):
-
         # verificar se todos os campos foram preenchidos
         if algum_campo_e_vazio(valores_caixa):
             self.mensagem("Por favor, preencha todos os campos.")
