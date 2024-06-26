@@ -163,11 +163,11 @@ class ControladorEntrega:
         # Registra a encomenda no repositório
         cadastrado, msg_error = self.__repositorio.registrar_encomenda(encomenda)
 
-        if cadastrado:
-            return True
-        else:
+        if not cadastrado:
             self.tela.mensagem(f"Não foi possível cadastrar a encomenda:\n{msg_error}")
             return False
+        else:
+            return True
 
     def cadastrar_entrega(self, entrega):
         # Registra a entrega no repositório

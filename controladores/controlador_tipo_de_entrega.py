@@ -45,9 +45,9 @@ class ControladorTipoDeEntrega:
             return None
 
     def pegar_tipo_de_entrega_por_nome(self, nome):
-        nome = self.__repositorio.pegar_tipo_de_entrega_por_nome(nome)
-        if nome:
-            return nome
+        tipoDeEntrega = self.__repositorio.pegar_tipo_de_entrega_por_nome(nome)
+        if tipoDeEntrega:
+            return tipoDeEntrega
         else:
             self.__mensagem("Tipo de entrega não encontrado para o nome fornecido.")
             return None
