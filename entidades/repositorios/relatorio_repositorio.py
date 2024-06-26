@@ -7,32 +7,10 @@ class RelatorioRepositorio:
 
     def pega_entregas_por_cpf(self, cpf) -> list:
         try:
-            header = (
-                "ID",
-                "CPF Remet.",
-                "Remetente",
-                "CPF Destinat.",
-                "Destinatario",
-                "CPF Func.",
-                "Funcionario",
-                "Altura",
-                "Largura",
-                "Comprim.",
-                "Tipo de Cx",
-                "Conteudo",
-                "Taxa Cx",
-                "Tipo Entrega",
-                "Taxa E.",
-                "CEP",
-                "Data",
-                "Distancia",
-                "Valor",
-            )
-
             self.__cursor.execute(
                 f"SELECT et.id, et.remetente_cpf, et.remetente_nome, et.destinatario_cpf, et.destinatario_nome, et.funcionario_cpf, et.funcionario_nome, \
                     ec.tipo_de_caixa_altura, ec.tipo_de_caixa_largura, ec.tipo_de_caixa_comprimento, ec.tipo_de_caixa_nome, ec.conteudo, ec.tipo_de_caixa_taxa, \
-                    et.tipo_de_entrega_nome, et.tipo_de_entrega_taxa, c.cep, et.created_at, et.distancia, et.valor \
+                    et.tipo_de_entrega_nome, et.tipo_de_entrega_taxa, c.cep, et.created_at, et.distancia, et.tempo, et.valor \
                     FROM entregas et JOIN encomendas ec ON et.encomenda_id = ec.id JOIN clientes c ON et.destinatario_cpf = c.cpf \
                     WHERE remetente_cpf='{cpf}' OR destinatario_cpf='{cpf}';"
             )
@@ -47,7 +25,7 @@ class RelatorioRepositorio:
             self.__cursor.execute(
                 f"SELECT et.id, et.remetente_cpf, et.remetente_nome, et.destinatario_cpf, et.destinatario_nome, et.funcionario_cpf, et.funcionario_nome, \
                     ec.tipo_de_caixa_altura, ec.tipo_de_caixa_largura, ec.tipo_de_caixa_comprimento, ec.tipo_de_caixa_nome, ec.conteudo, ec.tipo_de_caixa_taxa, \
-                    et.tipo_de_entrega_nome, et.tipo_de_entrega_taxa, c.cep, et.created_at, et.distancia, et.valor \
+                    et.tipo_de_entrega_nome, et.tipo_de_entrega_taxa, c.cep, et.created_at, et.distancia, et.tempo, et.valor \
                     FROM entregas et JOIN encomendas ec ON et.encomenda_id = ec.id JOIN clientes c ON et.destinatario_cpf = c.cpf \
                     WHERE created_at BETWEEN '{inicio}' AND '{fim}';"
             )

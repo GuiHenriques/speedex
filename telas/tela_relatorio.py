@@ -117,6 +117,7 @@ class TelaRelatorio(TelaAbstrata):
             "CEP",
             "Data",
             "Distancia",
+            "Tempo de Entrega",
             "Valor"
         )
 

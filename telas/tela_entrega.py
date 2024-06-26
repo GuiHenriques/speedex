@@ -161,8 +161,8 @@ class TelaEntrega(TelaAbstrata):
             [sg.Text(f"Origem: Agência SPEEDEX - Trindade")],
             [sg.Text(f"Destino: {entrega.destinatario.endereco}")],
             [sg.Text(f"Distância: {entrega.distancia} m")],
-            [sg.Text(f"Tempo de Entrega: {entrega.tipo_de_entrega.nome}")],
-            [sg.Text(f"Valor Total: R$ {total}")],
+            [sg.Text(f"Tempo de Entrega: {entrega.tempo}")],
+            [sg.Text(f"Valor Total: R$ {entrega.valor}")],
             [sg.Button("Fechar", size=(10, 1))],
         ]
 
