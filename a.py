@@ -1,5 +1,12 @@
-n = 40.0
+from utils.apis import get_distancia
+from datetime import timedelta
 
-print(int(n))
+d = get_distancia("09530210", 1)
 
-print(type(f"{n:}"))
+distancia = d["distance"]["value"]
+segundos = d["duration"]["value"]
+time = d["duration"]["text"]
+
+
+# print(tempo)
+print(time)

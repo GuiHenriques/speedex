@@ -66,6 +66,7 @@ class ControladorEntrega:
             destinatario.endereco.cep, tipo_de_entrega.velocidade
         )
         distancia = dados_distancia["distance"]["value"]
+        tempo = dados_distancia["duration"]["text"]
 
         # Calcula o valor total do frete
         valor_total = calcula_valor_total(
@@ -85,6 +86,7 @@ class ControladorEntrega:
             funcionario,
             distancia,
             valor_total,
+            tempo
         )
         self.cadastrar_entrega(entrega)
 

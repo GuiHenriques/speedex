@@ -1,9 +1,10 @@
 import os
 import requests
 
+from .conversores import seconds_para_tempo
 from dotenv import load_dotenv
-
 load_dotenv()
+
 
 
 def get_distancia(cep_destino, mode_idx):
@@ -25,6 +26,10 @@ def get_distancia(cep_destino, mode_idx):
     response = requests.get(base_url, params=params).json()
 
     if response["status"] == "OK":
+        segundos = response["rows"][0]["elements"][0]["duration"]["value"]
+        tempo = seconds_para_tempo(segundos)
+        response["rows"][0]["elements"][0]["duration"]["text"] = tempo
+
         return response["rows"][0]["elements"][0]
     else:
         raise Exception(response["error_message"])

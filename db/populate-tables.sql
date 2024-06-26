@@ -24,6 +24,6 @@ INSERT INTO encomendas (conteudo, peso, tipo_de_caixa_id, tipo_de_caixa_nome, ti
 ('Roupas', 5, 2, 'Caixa Grande', 20.0, 60.0, 40.0, 30.0);
 
 -- Insert into entregas
-INSERT INTO entregas (remetente_cpf, remetente_nome, destinatario_cpf, destinatario_nome, funcionario_cpf, funcionario_nome, encomenda_id, tipo_de_entrega_id, tipo_de_entrega_nome, tipo_de_entrega_taxa, distancia, valor, created_at) VALUES
-('12345678909', 'Joao Silva', '98765432100', 'Maria Oliveira', '12345678909', 'Joao Silva', 1, 1, 'Entrega Rapida', '15.0', 100.0, 10000, CURRENT_TIMESTAMP),
-('98765432100', 'Maria Oliveira', '12345678909', 'Joao Silva', '98765432100', 'Maria Oliveira', 2, 2, 'Entrega Economica', '5.0', 500.0, 200000, CURRENT_TIMESTAMP);
+INSERT INTO entregas (remetente_cpf, remetente_nome, destinatario_cpf, destinatario_nome, funcionario_cpf, funcionario_nome, encomenda_id, tipo_de_entrega_id, tipo_de_entrega_nome, tipo_de_entrega_taxa, distancia, valor, tempo, created_at) VALUES
+('12345678909', 'Joao Silva', '98765432100', 'Maria Oliveira', '12345678909', 'Joao Silva', 1, 1, 'Entrega Rapida', '15.0', 100.0, 10000, '1 dia e 20 horas e 39 minutos', CURRENT_TIMESTAMP),
+('98765432100', 'Maria Oliveira', '12345678909', 'Joao Silva', '98765432100', 'Maria Oliveira', 2, 2, 'Entrega Economica', '5.0', 500.0, 200000, '5 dias e 22 horas e 39 minutos', CURRENT_TIMESTAMP);

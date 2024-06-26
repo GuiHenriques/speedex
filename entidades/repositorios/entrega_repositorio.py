@@ -13,10 +13,10 @@ class EntregaRepositorio:
             self.__cursor.execute(
                 f"INSERT INTO entregas(remetente_cpf, remetente_nome, destinatario_cpf, destinatario_nome, \
                     funcionario_cpf, funcionario_nome, encomenda_id, tipo_de_entrega_id, tipo_de_entrega_nome,\
-                    tipo_de_entrega_taxa, distancia, valor)\
+                    tipo_de_entrega_taxa, distancia, valor, tempo)\
                     VALUES ('{entrega.remetente.cpf}', '{entrega.remetente.nome}', '{entrega.destinatario.cpf}', '{entrega.destinatario.nome}', \
                     '{entrega.funcionario.cpf}', '{entrega.funcionario.nome}', {entrega.encomenda.id}, {entrega.tipo_de_entrega.id}, \
-                    '{entrega.tipo_de_entrega.nome}', {entrega.tipo_de_entrega.taxa}, {entrega.distancia}, {entrega.valor});"
+                    '{entrega.tipo_de_entrega.nome}', {entrega.tipo_de_entrega.taxa}, {entrega.distancia}, {entrega.valor}, '{entrega.tempo}');"
             )
 
         except Exception as e:

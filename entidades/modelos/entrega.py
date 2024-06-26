@@ -15,6 +15,7 @@ class Entrega:
         funcionario: Funcionario,
         distancia: float,
         valor: float,
+        tempo: str,
     ):
         self.__id = None
         self.__remetente = remetente
@@ -24,6 +25,7 @@ class Entrega:
         self.__funcionario = funcionario
         self.__distancia = distancia
         self.__valor = valor
+        self.__tempo = tempo
 
     @property
     def id(self):
@@ -88,6 +90,14 @@ class Entrega:
     @valor.setter
     def valor(self, valor):
         self.__valor = valor
+
+    @property
+    def tempo(self):
+        return self.__tempo
+    
+    @tempo.setter
+    def tempo(self, tempo):
+        self.__tempo = tempo
 
     def __str__(self):
         return f"ENTREGA = Remetente: {self.remetente.nome} - Destinatário: {self.destinatario.nome} - Encomenda: {self.encomenda} - Tipo de entrega: {self.tipo_de_entrega} - Funcionário: {self.funcionario} - Distância: {self.distancia}"

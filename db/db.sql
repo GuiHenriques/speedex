@@ -58,6 +58,7 @@ CREATE TABLE entregas (
   tipo_de_entrega_nome VARCHAR(255) NOT NULL,
   tipo_de_entrega_taxa VARCHAR(255) NOT NULL,
   distancia FLOAT NOT NULL,
-  valor_total FLOAT NOT NULL,
+  valor FLOAT NOT NULL,
+  tempo VARCHAR(255) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
