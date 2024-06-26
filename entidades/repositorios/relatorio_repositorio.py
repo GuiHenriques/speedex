@@ -75,7 +75,7 @@ class RelatorioRepositorio:
         try:
             self.__cursor.execute(
                 f"SELECT tipo_de_caixa_id, tipo_de_caixa_nome, tipo_de_caixa_taxa, COUNT(*) AS quantidade_usada \
-                FROM encomendas \
+                FROM encomendas JOIN entregas ON encomendas.id = entregas.encomenda_id\
                 WHERE created_at BETWEEN '{inicio}' AND '{fim}' \
                 GROUP BY tipo_de_caixa_id, tipo_de_caixa_nome, tipo_de_caixa_taxa \
                 ORDER BY quantidade_usada DESC;"
