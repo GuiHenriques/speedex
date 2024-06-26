@@ -51,15 +51,3 @@ class EntregaRepositorio:
         except Exception as e:
             print(e)
             return False, "Erro interno no banco de dados."
-
-    def tipos_de_entrega_mais_utilizados_por_periodo(self, inicio, fim):
-        try:
-            self.__cursor.execute(
-                f"SELECT * FROM entregas \
-                WHERE created_at BETWEEN '{inicio}' AND '{fim}';"
-            )
-            tipos_de_entrega_filtrados = self.__cursor.fetchall()
-            return tipos_de_entrega_filtrados
-        except Exception as e:
-            print(e)
-            return None

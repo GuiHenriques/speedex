@@ -134,15 +134,13 @@ class TelaRelatorio(TelaAbstrata):
             self.mensagem("Nenhum tipo de entrega utilizado neste período.")
             return
 
-        header = ["Nome", "Taxa", "Quantidade de usos"]
+        header = ["ID", "Nome", "Taxa", "Quantidade de usos"]
         layout = [
             [sg.Table(dados_tipo_de_entrega, header)],
             [sg.Button("Ok", size=BUTTON_SIZE)],
         ]
 
-        self.janela = sg.Window(
-            "Relatório de Tipos de Entrega", layout, element_justification="c"
-        )
+        self.janela = sg.Window("Relatório de Tipos de Entrega", layout, element_justification="c")
 
         self.abrir_janela()
         self.fechar_janela()

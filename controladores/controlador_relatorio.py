@@ -47,14 +47,13 @@ class ControladorRelatorio:
                     continue
 
                 entregas = self.__repositorio.pega_entregas_por_cpf(cpf)
-            
+
             else:
                 inicio = str_para_datetime(valores["data_inicio"])
                 fim = str_para_datetime(valores["data_fim"])
- 
+
                 entregas = self.__repositorio.pega_entrega_por_periodo(inicio, fim)
 
-            print(entregas)
             self.tela.relatorio_de_entregas(entregas)
 
     def relatorio_de_tipos_de_caixa(self): ...
@@ -66,11 +65,9 @@ class ControladorRelatorio:
             if evento is None or valores is None:
                 return
 
-            inicio = valores["data_inicio"]
-            fim = valores["data_fim"]
-            dados_tipo_de_entrega = self.__controlador_sistema.controlador_entrega.relatorio_de_tipos_de_entrega_mais_utilizados(
-                inicio, fim
-            )
-
-            if self.__tela.tela_relatorio_de_entrega(dados_tipo_de_entrega):
-                return
+            inicio = str_para_datetime(valores["data_inicio"])
+            fim = str_para_datetime(valores["data_fim"])
+            
+            tipos_de_entrega = self.__repositorio.relatorio_tipo_de_entrega(inicio, fim)
+            
+            self.tela.relatorio_de_tipo_de_entrega(tipos_de_entrega)

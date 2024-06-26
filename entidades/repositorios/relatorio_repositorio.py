@@ -57,6 +57,17 @@ class RelatorioRepositorio:
             print(e)
             return None
 
-    def relatorio_tipo_de_entrega(self): ...
+    def relatorio_tipo_de_entrega(self, inicio, fim):
+        try:
+            self.__cursor.execute(
+                f"SELECT tipo_de_entrega_id, tipo_de_entrega_nome, tipo_de_entrega_taxa, COUNT(*) \
+                    FROM entregas GROUP BY tipo_de_entrega_id, tipo_de_entrega_nome, tipo_de_entrega_taxa \
+                    ORDER BY COUNT(*) DESC;"
+            )
+            tipos_de_entrega_filtrados = self.__cursor.fetchall()
+            return tipos_de_entrega_filtrados
+        except Exception as e:
+            print(e)
+            return None
 
     def relatorio_tipo_de_caixa(self): ...
