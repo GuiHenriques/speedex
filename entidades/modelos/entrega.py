@@ -14,6 +14,7 @@ class Entrega:
         tipo_de_entrega: tipoDeEntrega,
         funcionario: Funcionario,
         distancia: float,
+        valor: float,
     ):
         self.__id = None
         self.__remetente = remetente
@@ -22,6 +23,7 @@ class Entrega:
         self.__tipo_de_entrega = tipo_de_entrega
         self.__funcionario = funcionario
         self.__distancia = distancia
+        self.__valor = valor
 
     @property
     def id(self):
@@ -78,6 +80,14 @@ class Entrega:
     @distancia.setter
     def distancia(self, distancia):
         self.__distancia = distancia
+
+    @property
+    def valor(self):
+        return self.__valor
+    
+    @valor.setter
+    def valor(self, valor):
+        self.__valor = valor
 
     def __str__(self):
         return f"ENTREGA = Remetente: {self.remetente.nome} - Destinatário: {self.destinatario.nome} - Encomenda: {self.encomenda} - Tipo de entrega: {self.tipo_de_entrega} - Funcionário: {self.funcionario} - Distância: {self.distancia}"

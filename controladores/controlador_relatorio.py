@@ -1,5 +1,7 @@
 from controladores import controlador_sistema
 from telas.tela_relatorio import TelaRelatorio
+from entidades.repositorios.relatorio_repositorio import RelatorioRepositorio
+from utils.conversores import str_para_datetime
 
 
 class ControladorRelatorio:
@@ -8,6 +10,7 @@ class ControladorRelatorio:
             controlador_sistema
         )
         self.__tela: TelaRelatorio = TelaRelatorio()
+        self.__repositorio = RelatorioRepositorio(controlador_sistema)
 
     @property
     def tela(self) -> TelaRelatorio:
@@ -37,15 +40,35 @@ class ControladorRelatorio:
 
             # Verifica se o CPF do remetente existe
             if valores["cliente"]:
-                if not self.__controlador_sistema.controlador_cliente.cpf_existe(
-                    valores["cpf"]
-                ):
+                cpf = valores["cpf"]
+
+                if not self.__controlador_sistema.controlador_cliente.cpf_existe(cpf):
                     self.tela.mensagem("CPF não encontrado")
                     continue
 
-            print("OK")
+                entregas = self.__repositorio.pega_entregas_por_cpf(cpf)
 
-    def relatorio_de_tipos_de_caixa(self): ...
+            else:
+                inicio = str_para_datetime(valores["data_inicio"])
+                fim = str_para_datetime(valores["data_fim"])
+
+                entregas = self.__repositorio.pega_entrega_por_periodo(inicio, fim)
+
+            self.tela.relatorio_de_entregas(entregas)
+
+    def relatorio_de_tipos_de_caixa(self):
+        while True:
+            evento, valores = self.__tela.pega_periodo()
+
+            if evento is None or valores is None:
+                return
+
+            inicio = str_para_datetime(valores["data_inicio"])
+            fim = str_para_datetime(valores["data_fim"])
+            
+            tipos_de_caixa = self.__repositorio.relatorio_tipo_de_caixa(inicio, fim)
+            
+            self.tela.relatorio_de_tipo_de_caixa(tipos_de_caixa)
 
     def relatorio_de_tipos_de_entrega(self):
         while True:
@@ -54,11 +77,9 @@ class ControladorRelatorio:
             if evento is None or valores is None:
                 return
 
-            inicio = valores["data_inicio"]
-            fim = valores["data_fim"]
-            dados_tipo_de_entrega = self.__controlador_sistema.controlador_entrega.relatorio_de_tipos_de_entrega_mais_utilizados(
-                inicio, fim
-            )
-
-            if self.__tela.tela_relatorio_de_entrega(dados_tipo_de_entrega):
-                return
+            inicio = str_para_datetime(valores["data_inicio"])
+            fim = str_para_datetime(valores["data_fim"])
+            
+            tipos_de_entrega = self.__repositorio.relatorio_tipo_de_entrega(inicio, fim)
+            
+            self.tela.relatorio_de_tipo_de_entrega(tipos_de_entrega)

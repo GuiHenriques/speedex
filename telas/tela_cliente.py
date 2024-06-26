@@ -136,8 +136,8 @@ class TelaCliente(TelaAbstrata):
         layout = self.layout_button(
             [
                 "Cadastrar cliente",
-                "Alterar dados de cliente",
                 "Excluir cliente",
+                "Alterar dados de cliente",
                 "Listar clientes",
             ]
         )

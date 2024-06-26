@@ -85,9 +85,7 @@ class TelaRelatorio(TelaAbstrata):
                     return "CPF inválido", None
 
             elif valores["periodo"]:
-                if data_validador(valores["data_inicio"]) and data_validador(
-                    valores["data_fim"]
-                ):
+                if self.__validar_periodo(valores["data_inicio"], valores["data_fim"]):
                     return evento, valores
                 else:
                     self.mensagem("Data inválida")
@@ -95,24 +93,74 @@ class TelaRelatorio(TelaAbstrata):
         else:
             return None, None
 
-    def tela_relatorio_de_entrega(self, dados_tipo_de_entrega):
+    def relatorio_de_entregas(self, entregas):
+        if entregas is None or len(entregas) == 0:
+            self.mensagem("Nenhuma entrega encontrada.")
+            return
+
+        header = (
+            "ID",
+            "CPF Remet.",
+            "Remetente",
+            "CPF Destinat.",
+            "Destinatario",
+            "CPF Func.",
+            "Funcionario",
+            "Altura",
+            "Largura",
+            "Comprim.",
+            "Tipo de Cx",
+            "Conteudo",
+            "Taxa Cx",
+            "Tipo Entrega",
+            "Taxa E.",
+            "CEP",
+            "Data",
+            "Distancia",
+            "Valor"
+        )
+
+        layout = [
+            [sg.Table(entregas, header)],
+            [sg.Button("Ok", size=BUTTON_SIZE)],
+        ]
+
+        self.janela = sg.Window("Relatório de Entregas", layout, element_justification="c")
+        self.abrir_janela()
+        self.fechar_janela()
+
+    def relatorio_de_tipo_de_entrega(self, dados_tipo_de_entrega):
         if dados_tipo_de_entrega is None or len(dados_tipo_de_entrega) == 0:
             self.mensagem("Nenhum tipo de entrega utilizado neste período.")
             return
 
-        header = ["Nome", "Taxa", "Quantidade de usos"]
+        header = ["ID", "Nome", "Taxa", "Quantidade de usos"]
         layout = [
             [sg.Table(dados_tipo_de_entrega, header)],
             [sg.Button("Ok", size=BUTTON_SIZE)],
         ]
 
-        self.janela = sg.Window(
-            "Relatório de Tipos de Entrega", layout, element_justification="c"
-        )
+        self.janela = sg.Window("Relatório de Tipos de Entrega", layout, element_justification="c")
 
         self.abrir_janela()
         self.fechar_janela()
         return True
+
+    def relatorio_de_tipo_de_caixa(self, dados_tipo_de_caixa):
+        if dados_tipo_de_caixa is None or len(dados_tipo_de_caixa) == 0:
+            self.mensagem("Nenhum tipo de caixa utilizado neste período.")
+            return
+
+        header = ["ID", "Nome", "Taxa", "Quantidade de usos"]
+        layout = [
+            [sg.Table(dados_tipo_de_caixa, header)],
+            [sg.Button("Ok", size=BUTTON_SIZE)],
+        ]
+
+        self.janela = sg.Window("Relatório de Tipos de Caixa", layout, element_justification="c")
+
+        self.abrir_janela()
+        self.fechar_janela()
 
     def __validar_periodo(self, inicio, fim):
         if data_validador(inicio) and data_validador(fim):
