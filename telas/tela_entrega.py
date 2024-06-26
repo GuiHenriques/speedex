@@ -127,7 +127,7 @@ class TelaEntrega(TelaAbstrata):
                         caixa[1],
                         "tamanho_caixa",
                         key=caixa[0],
-                        size=(8, 1),
+                        size=(14, 1),
                         default=True,
                     ),
                     sg.Text(f"{caixa[3]} x {caixa[4]} x {caixa[5]}"),

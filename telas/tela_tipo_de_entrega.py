@@ -52,15 +52,15 @@ class TelaTiposDeEntrega(TelaAbstrata):
                 return False
 
         layout = [
-            [sg.Text("Nome: "), sg.InputText("", key="nome")],
-            [sg.Text("Taxa: "), sg.InputText("", key="taxa")],
-            [sg.Text("Descrição: "), sg.InputText("", key="descricao")],
+            [sg.Text("Nome: ", size=(11, 1)), sg.InputText("", key="nome")],
+            [sg.Text("Taxa (0-100%): ", size=(11, 1)), sg.InputText("", key="taxa")],
+            [sg.Text("Descrição: ", size=(11, 1)), sg.InputText("", key="descricao")],
             [sg.Text("Selecione uma velocidade de entrega: ")],
             [sg.Radio("Entrega econômica", "Radio1", key="0", default=True)],
             [sg.Radio("Entrega normal", "Radio1", key="1")],
             [sg.Radio("Entrega rápida", "Radio1", key="2")],
             [sg.Radio("Entrega expressa", "Radio1", key="3")],
-            [sg.Push(), sg.Button("Cadastrar"), sg.Cancel("Cancelar")]
+            [sg.Push(), sg.Button("Cadastrar"), sg.Cancel("Cancelar")],
         ]
 
         self.janela = sg.Window("Cadastro de tipos de entrega", layout)
@@ -93,7 +93,7 @@ class TelaTiposDeEntrega(TelaAbstrata):
                 if valores.get(velocidade) is True:
                     indice = velocidade
                     break
-            
+
             return {
                 "nome": valores["nome"],
                 "taxa": float(valores["taxa"]),
@@ -129,7 +129,7 @@ class TelaTiposDeEntrega(TelaAbstrata):
             string_resultados = "Nenhum tipo de entrega cadastrado!"
         else:
             for row in resultados:
-                string_resultados += f"Código:{row[0]} \nNome: {row[1]} \nTaxa: {row[2]} \nDescrição: {row[3]}\n \n"
+                string_resultados += f"Código:{row[0]} \nNome: {row[1]} \nTaxa: {row[2]}% \nDescrição: {row[3]}\n \n"
 
         width_size = 50
         height_size = 20

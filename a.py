@@ -1,3 +1,5 @@
-from utils.apis import get_distancia
+n = 40.0
 
-print(get_distancia("20040030", 1))
+print(int(n))
+
+print(type(f"{n:}"))

@@ -9,9 +9,7 @@ class TelaTiposDeCaixa(TelaAbstrata):
     def abre_tela(self):
         self.tela_principal()
         evento, valores = self.abrir_janela()
-        ###
         self.fechar_janela()
-        ###
 
         if evento in (None, "Cancelar") or valores["0"]:
             opcao_escolhida = 0
@@ -41,9 +39,8 @@ class TelaTiposDeCaixa(TelaAbstrata):
         ]
         self.janela = sg.Window("Menu de tipos de caixa", layout, finalize=True)
 
-    
     def pega_dados_tipo_de_caixa(self):
-        
+
         def is_float(value):
             try:
                 float(value)
@@ -52,12 +49,12 @@ class TelaTiposDeCaixa(TelaAbstrata):
                 return False
 
         layout = [
-            [sg.Text("Nome: "), sg.InputText("", key="nome")],
-            [sg.Text("Taxa: "), sg.InputText("", key="taxa")],
-            [sg.Text("Altura em metros: "), sg.InputText("", key="altura")],
-            [sg.Text("Largura em metros: "), sg.InputText("", key="largura")],
-            [sg.Text("Comprimento em metros: "), sg.InputText("", key="comprimento")],
-            [sg.Push(), sg.Button("Cadastrar"), sg.Cancel("Cancelar")]
+            [sg.Text("Nome: ", size=(15, 1)), sg.InputText("", key="nome", size=(30, 1))],
+            [sg.Text("Taxa: ", size=(15, 1)), sg.InputText("", key="taxa", size=(30, 1))],
+            [sg.Text("Altura (cm): ", size=(15, 1)), sg.InputText("", key="altura", size=(30, 1))],
+            [sg.Text("Largura (cm): ", size=(15, 1)), sg.InputText("", key="largura", size=(30, 1))],
+            [sg.Text("Comprimento (cm): ", size=(15, 1)), sg.InputText("", key="comprimento", size=(30, 1))],
+            [sg.Push(), sg.Button("Cadastrar"), sg.Cancel("Cancelar")],
         ]
 
         self.janela = sg.Window("Cadastro de tipos de caixa", layout)
@@ -67,34 +64,32 @@ class TelaTiposDeCaixa(TelaAbstrata):
         if evento in (None, "Cancelar"):
             self.fechar_janela()
             return
-        
-
 
         if not all(valores.values()):
             sg.popup("Você deve preencher todos os campos!")
             self.fechar_janela()
             entrada_invalida = True
             return
-        
+
         if not is_float(valores["taxa"]):
             sg.popup("A taxa deve ser um número válido!")
             self.fechar_janela()
             entrada_invalida = True
             return
-        
+
         if not is_float(valores["altura"]) or not is_float(valores["largura"]) or not is_float(valores["comprimento"]):
             sg.popup("Altura, largura e comprimento devem ser números válidos!")
             self.fechar_janela()
             entrada_invalida = True
             return
 
-        if float(valores["altura"]) > 1 or float(valores["largura"]) > 1 or float(valores["comprimento"]) > 1:
+        if float(valores["altura"]) > 100 or float(valores["largura"]) > 100 or float(valores["comprimento"]) > 100:
             sg.popup("Altura, largura e comprimento não podem ser maiores que 1m individualmente!")
             self.fechar_janela()
             entrada_invalida = True
             return
 
-        if (float(valores["altura"]) + float(valores["largura"])  + float(valores["comprimento"])) > 2:
+        if (float(valores["altura"]) + float(valores["largura"])  + float(valores["comprimento"])) > 200:
             sg.popup("A soma de altura, largura e comprimento não pode exceder 2m!")
             self.fechar_janela()
             entrada_invalida = True
@@ -112,10 +107,10 @@ class TelaTiposDeCaixa(TelaAbstrata):
                 "comprimento": float(valores["comprimento"]),
 
             }
-        
+
     def seleciona_codigo_tipo_de_caixa(self):
         layout = [
-            [sg.Text("Código: "), sg.InputText("", key="codigo")],
+            [sg.Text("Código: ", size=(15, 1)), sg.InputText("", key="codigo", size=(30, 1))],
             [sg.Push(), sg.Button("Confirmar"), sg.Cancel("Cancelar")],
         ]
         self.janela = sg.Window("Selecionar código de um tipo de caixa", layout)
@@ -134,7 +129,6 @@ class TelaTiposDeCaixa(TelaAbstrata):
 
         self.fechar_janela()
         return valores["codigo"]
-    
 
     def mostra_tipo_de_caixa(self, resultados):
         string_resultados=""
@@ -142,7 +136,7 @@ class TelaTiposDeCaixa(TelaAbstrata):
             string_resultados = "Nenhum tipo de caixa cadastrado!"
         else:
             for row in resultados:
-                string_resultados += f"Código:{row[0]} \nNome: {row[1]} \nTaxa: {row[2]} \nAltura: {row[4]}m \nLargura: {row[3]}m\nComprimento: {row[5]}m\n\n"
+                string_resultados += f"Código:{row[0]} \nNome: {row[1]} \nTaxa: R${row[2]} \nAltura: {int(row[4])}cm \nLargura: {int(row[3])}cm\nComprimento: {int(row[5])}cm\n\n"
 
         width_size = 50
         height_size = 20
