@@ -52,7 +52,7 @@ class TelaRelatorio(TelaAbstrata):
             if not self.__validar_periodo(valores["data_inicio"], valores["data_fim"]):
                 self.mensagem("Data inválida!")
                 return evento, None
-
+            
             return evento, valores
 
         return evento, None
@@ -85,9 +85,7 @@ class TelaRelatorio(TelaAbstrata):
                     return "CPF inválido", None
 
             elif valores["periodo"]:
-                if data_validador(valores["data_inicio"]) and data_validador(
-                    valores["data_fim"]
-                ):
+                if self.__validar_periodo(valores["data_inicio"], valores["data_fim"]):
                     return evento, valores
                 else:
                     self.mensagem("Data inválida")

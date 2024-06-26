@@ -62,9 +62,11 @@ class ControladorEntrega:
         )
 
         # Calcula a distância usando uma API
+        print(destinatario.endereco.cep, tipo_de_entrega.velocidade)
         dados_distancia = get_distancia(
             destinatario.endereco.cep, tipo_de_entrega.velocidade
         )
+        print(dados_distancia)
         distancia = dados_distancia["distance"]["value"]
 
         # Calcula o valor total do frete
