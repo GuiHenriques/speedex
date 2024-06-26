@@ -63,9 +63,9 @@ class ControladorSistema:
         return self.__controlador_cliente
 
     def inicializa_sistema(self):
-        self.__session = self.login()
-        if not self.__session:
-            return
+        # self.__session = self.login()
+        # if not self.__session:
+        #     return
 
         self.abre_tela()
 

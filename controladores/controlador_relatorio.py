@@ -2,6 +2,8 @@ from controladores import controlador_sistema
 from telas.tela_relatorio import TelaRelatorio
 from entidades.repositorios.relatorio_repositorio import RelatorioRepositorio
 from utils.conversores import str_para_datetime
+
+
 class ControladorRelatorio:
     def __init__(self, controlador_sistema) -> None:
         self.__controlador_sistema: "controlador_sistema.ControladorSistema" = (
@@ -45,16 +47,15 @@ class ControladorRelatorio:
                     continue
 
                 entregas = self.__repositorio.pega_entregas_por_cpf(cpf)
-                print(entregas)
             
             else:
                 inicio = str_para_datetime(valores["data_inicio"])
                 fim = str_para_datetime(valores["data_fim"])
  
                 entregas = self.__repositorio.pega_entrega_por_periodo(inicio, fim)
-                print(entregas)
 
-            print("OK")
+            print(entregas)
+            self.tela.relatorio_de_entregas(entregas)
 
     def relatorio_de_tipos_de_caixa(self): ...
 

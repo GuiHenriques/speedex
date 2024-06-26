@@ -52,7 +52,7 @@ class TelaRelatorio(TelaAbstrata):
             if not self.__validar_periodo(valores["data_inicio"], valores["data_fim"]):
                 self.mensagem("Data inválida!")
                 return evento, None
-            
+
             return evento, valores
 
         return evento, None
@@ -93,7 +93,43 @@ class TelaRelatorio(TelaAbstrata):
         else:
             return None, None
 
-    def tela_relatorio_de_entrega(self, dados_tipo_de_entrega):
+    def relatorio_de_entregas(self, entregas):
+        if entregas is None or len(entregas) == 0:
+            self.mensagem("Nenhuma entrega encontrada.")
+            return
+        
+        header = (
+            "ID",
+            "CPF Remet.",
+            "Remetente",
+            "CPF Destinat.",
+            "Destinatario",
+            "CPF Func.",
+            "Funcionario",
+            "Altura",
+            "Largura",
+            "Comprim.",
+            "Tipo de Cx",
+            "Conteudo",
+            "Taxa Cx",
+            "Tipo Entrega",
+            "Taxa E.",
+            "CEP",
+            "Data",
+            "Distancia",
+            "Valor"
+        )
+
+        layout = [
+            [sg.Table(entregas, header)],
+            [sg.Button("Ok", size=BUTTON_SIZE)],
+        ]
+
+        self.janela = sg.Window("Relatório de Entregas", layout, element_justification="c")
+        self.abrir_janela()
+        self.fechar_janela()
+
+    def relatorio_de_tipo_de_entrega(self, dados_tipo_de_entrega):
         if dados_tipo_de_entrega is None or len(dados_tipo_de_entrega) == 0:
             self.mensagem("Nenhum tipo de entrega utilizado neste período.")
             return
